@@ -3,6 +3,7 @@ unit KM_Main;
 interface
 uses
   {$IFDEF MSWindows} Windows, {$ENDIF}
+  {$IFDEF FPC}Types,{$ENDIF}
   KM_FormMain, KM_FormLoading, KM_Maps,
   KM_Settings, KM_Resolutions;
 

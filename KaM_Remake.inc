@@ -20,7 +20,10 @@
   //Set FPC to work in Delphi mode
   {$MODE Delphi}
 
-  {$IF FPC_FULLVERSION >= 20701}
+  {$IF Defined(VER2_2) OR
+       Defined(VER2_4) OR
+       Defined(VER2_6) OR
+       Defined(VER3)}
     {$DEFINE USE_FORMATSETTINGS}
   {$ENDIF}
 
