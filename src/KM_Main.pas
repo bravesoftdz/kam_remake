@@ -75,6 +75,7 @@ implementation
 uses
   Classes, Forms,
   {$IFDEF MSWindows} MMSystem, {$ENDIF}
+  {$IFDEF FPC} Dialogs, LCLType, Controls, {$ENDIF}
   {$IFDEF USE_MAD_EXCEPT} KM_Exceptions, {$ENDIF}
   SysUtils, StrUtils, Math, KromUtils,
   KM_GameApp,
