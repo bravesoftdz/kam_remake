@@ -69,7 +69,7 @@ uses
   procedure KMSwapInt(var A,B: Cardinal); overload;
 
   procedure KMSwapFloat(var A,B: Single); overload;
-  procedure KMSwapFloat(var A,B: Double); overload;
+  {$IFDEF WDC}procedure KMSwapFloat(var A,B: Double); overload;{$ENDIF}
   procedure KMSwapFloat(var A,B: Extended); overload;
 
   procedure KMSummArr(aArr1, aArr2: PKMCardinalArray);
@@ -187,11 +187,13 @@ begin
   S:=A; A:=B; B:=S;
 end;
 
+{$IFDEF WDC}
 procedure KMSwapFloat(var A,B: Double);
 var S: Double;
 begin
   S:=A; A:=B; B:=S;
 end;
+{$ENDIF}
 
 procedure KMSwapFloat(var A,B: Extended);
 var S: Extended;

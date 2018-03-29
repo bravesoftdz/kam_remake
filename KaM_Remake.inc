@@ -20,6 +20,10 @@
   //Set FPC to work in Delphi mode
   {$MODE Delphi}
 
+  {$IF FPC_FULLVERSION >= 20701}
+    {$DEFINE USE_FORMATSETTINGS}
+  {$ENDIF}
+
   //Currently FPC does not define UNICODE define because in Delphi it means more than just a
   //default string type but a full RTL implementation : using Windows 'W' functions instead of 'A',
   //another class declarations(TStringStream for example).
@@ -32,6 +36,7 @@
 {$IFDEF WDC}
   //Project can be compiled without madExcept features (if you dont have madExcept installed)
   {$DEFINE USE_MAD_EXCEPT}
+  {$DEFINE USE_FORMATSETTINGS}
 {$ENDIF}
 
 //Use secure authentication unit (KM_NetAuthSecure)

@@ -76,7 +76,7 @@ begin
   S := Trim(Copy(S, 3, Length(S)));
   P := Pos(' ', S);
   P2 := PosEx(' ', S, P+1);
-  S := StringReplace(S, '.', {$IFDEF WDC}FormatSettings.{$ENDIF}DecimalSeparator, [rfReplaceAll]);
+  S := StringReplace(S, '.', {$IFDEF USE_FORMATSETTINGS}FormatSettings.{$ENDIF}DecimalSeparator, [rfReplaceAll]);
 
   C.X :=-StrToFloat(Copy(S, 1, P-1));
   C.Y :=-StrToFloat(Copy(S, P+1, P2-P-1));
@@ -93,7 +93,7 @@ var P, P2 : Integer;
 begin
   P := Pos(' ', S);
   P2 := PosEx(' ', S, P+1);
-  S := StringReplace(S, '.', {$IFDEF WDC}FormatSettings.{$ENDIF}DecimalSeparator, [rfReplaceAll]);
+  S := StringReplace(S, '.', {$IFDEF USE_FORMATSETTINGS}FormatSettings.{$ENDIF}DecimalSeparator, [rfReplaceAll]);
 
   Result.U :=StrToFloat(Copy(S, P+1, P2-P-1));
   Result.V :=StrToFloat(Copy(S, P2+1, Length(S)));
@@ -255,4 +255,4 @@ begin
 end;
 
 
-end.
+end.
