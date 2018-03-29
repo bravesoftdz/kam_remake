@@ -155,9 +155,9 @@ type
     fUpdating: Boolean;
     fMissionDefOpenPath: UnicodeString;
     procedure FormKeyDownProc(aKey: Word; aShift: TShiftState);
-    procedure FormKeyUpProc(aKey: Word; aShift: TShiftState);
-    {$IFDEF MSWindows}
+    procedure FormKeyUpProc(aKey: Word; aShift: TShiftState); 
     function GetWindowParams: TKMWindowParamsRecord;
+    {$IFDEF MSWindows}
     procedure WMSysCommand(var Msg: TWMSysCommand); message WM_SYSCOMMAND;
     procedure WMExitSizeMove(var Msg: TMessage) ; message WM_EXITSIZEMOVE;
     procedure WMAppCommand(var Msg: TMessage); message WM_APPCOMMAND;
