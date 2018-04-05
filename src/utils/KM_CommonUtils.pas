@@ -70,7 +70,9 @@ uses
 
   procedure KMSwapFloat(var A,B: Single); overload;
   procedure KMSwapFloat(var A,B: Double); overload;
+  {$IF NOT Defined(FPC) AND Defined(MSWindows)}
   procedure KMSwapFloat(var A,B: Extended); overload;
+  {$ENDIF}
 
   procedure KMSummArr(aArr1, aArr2: PKMCardinalArray);
   procedure KMSummAndEnlargeArr(aArr1, aArr2: PKMCardinalArray);
@@ -195,11 +197,13 @@ begin
 end;
 
 
+{$IF NOT Defined(FPC) AND Defined(MSWindows)}
 procedure KMSwapFloat(var A,B: Extended);
 var S: Extended;
 begin
   S:=A; A:=B; B:=S;
 end;
+{$ENDIF}
 
 
 procedure KMSummArr(aArr1, aArr2: PKMCardinalArray);

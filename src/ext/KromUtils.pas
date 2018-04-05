@@ -515,7 +515,7 @@ end;
 
 function Adler32CRC(S: TMemoryStream): Cardinal;
 var
-  I, A, B: Cardinal;
+  I, A, B: NativeUInt;
 begin
   A := 1;
   B := 0; // A is initialized to 1, B to 0
@@ -524,7 +524,7 @@ begin
   if S.Size <> 0 then
     for I := 0 to S.Size - 1 do
     begin
-      Inc(A, pbyte(Cardinal(S.Memory) + I)^);
+      Inc(A, PByte(NativeUInt(S.Memory) + I)^);
       B := (B + A) mod 65521; // 65521 (the largest prime number smaller than 2^16)
     end;
   A := A mod 65521;
