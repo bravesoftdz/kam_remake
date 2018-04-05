@@ -789,15 +789,13 @@ end;
 
 // Return current window params
 function TFormMain.GetWindowParams: TKMWindowParamsRecord;
+{$IFDEF MSWINDOWS}
   // FindTaskBar returns the Task Bar's position, and fills in
   // ARect with the current bounding rectangle.
   function FindTaskBar(var aRect: TRect): Integer;
-  {$IFDEF MSWINDOWS}
   var	AppData: TAppBarData;
-  {$ENDIF}
   begin
     Result := -1;
-    {$IFDEF MSWINDOWS}
     // 'Shell_TrayWnd' is the name of the task bar's window
     AppData.Hwnd := FindWindow('Shell_TrayWnd', nil);
     if AppData.Hwnd <> 0 then
@@ -813,51 +811,75 @@ function TFormMain.GetWindowParams: TKMWindowParamsRecord;
         aRect := AppData.rc;
       end;
     end;
-    {$ENDIF}
   end;
+{$ENDIF}
 var
+  {$IFDEF MSWINDOWS}
   Wp: TWindowPlacement;
-  BordersWidth, BordersHeight: SmallInt;
   Rect: TRect;
+  {$ENDIF}
+  {$IFDEF UNIX}
+  WpLeft, WpTop: Integer;
+  WsWidth, WsHeight: Integer;
+  {$ENDIF}
+  BordersWidth, BordersHeight: SmallInt;
 begin
   Result.State := WindowState;
+
   case WindowState of
     wsMinimized:  ;
-    wsNormal:     begin
-                    Result.Width := ClientWidth;
-                    Result.Height := ClientHeight;
-                    Result.Left := Left;
-                    Result.Top := Top;
-                  end;
-    wsMaximized:  begin
-                    Wp.length := SizeOf(TWindowPlacement);
-                    GetWindowPlacement(Handle, @Wp);
+    wsNormal:
+      begin
+        Result.Width  := ClientWidth;
+        Result.Height := ClientHeight;
+        Result.Left   := Left;
+        Result.Top    := Top;
+      end;
+    wsMaximized:
+      begin
+        // Get current borders width/height
+        BordersWidth  := Width  - ClientWidth;
+        BordersHeight := Height - ClientHeight;
 
-                    // Get current borders width/height
-                    BordersWidth := Width - ClientWidth;
-                    BordersHeight := Height - ClientHeight;
+       {$IFDEF MSWINDOWS}
+        Wp.length := SizeOf(TWindowPlacement);
+        GetWindowPlacement(Handle, @Wp);
 
-                    // rcNormalPosition do not have ClientWidth/ClientHeight
-                    // so we have to calc it manually via substracting borders width/height
-                    Result.Width := Wp.rcNormalPosition.Right - Wp.rcNormalPosition.Left - BordersWidth;
-                    Result.Height := Wp.rcNormalPosition.Bottom - Wp.rcNormalPosition.Top - BordersHeight;
+        // rcNormalPosition do not have ClientWidth/ClientHeight
+        // so we have to calc it manually via substracting borders width/height
+        Result.Width  := Wp.rcNormalPosition.Right  - Wp.rcNormalPosition.Left - BordersWidth;
+        Result.Height := Wp.rcNormalPosition.Bottom - Wp.rcNormalPosition.Top  - BordersHeight;
 
-                    // Adjustment of window position due to TaskBar position/size
-                    case FindTaskBar(Rect) of
-                      ABE_LEFT: begin
-                                  Result.Left := Wp.rcNormalPosition.Left + Rect.Right;
-                                  Result.Top := Wp.rcNormalPosition.Top;
-                                end;
-                      ABE_TOP:  begin
-                                  Result.Left := Wp.rcNormalPosition.Left;
-                                  Result.Top := Wp.rcNormalPosition.Top + Rect.Bottom;
-                                end
-                      else      begin
-                                  Result.Left := Wp.rcNormalPosition.Left;
-                                  Result.Top := Wp.rcNormalPosition.Top;
-                                end;
+        // Adjustment of window position due to TaskBar position/size
+        case FindTaskBar(Rect) of
+          ABE_LEFT: begin
+                      Result.Left := Wp.rcNormalPosition.Left + Rect.Right;
+                      Result.Top  := Wp.rcNormalPosition.Top;
                     end;
-                  end;
+          ABE_TOP:  begin
+                      Result.Left := Wp.rcNormalPosition.Left;
+                      Result.Top  := Wp.rcNormalPosition.Top + Rect.Bottom;
+                    end
+          else      begin
+                      Result.Left := Wp.rcNormalPosition.Left;
+                      Result.Top  := Wp.rcNormalPosition.Top;
+                    end;
+        end;
+      {$ENDIF}
+      {$IFDEF UNIX}
+      WpLeft   := -1;
+      WpTop    := -1;
+      WsWidth  := -1;
+      WsHeight := -1;
+      GetWindowRelativePosition(Handle, WpLeft, WpTop);
+      GetWindowSize(Handle, WsWidth, WsHeight);
+
+      Result.Width  := WsWidth  - BordersWidth;
+      Result.Height := WsHeight - BordersHeight;
+      Result.Left   := WpLeft;
+      Result.Top    := WpTop;
+      {$ENDIF}
+      end;
   end;
 end;
 
