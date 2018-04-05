@@ -160,7 +160,7 @@ begin
     SetCost(cmWine, 0, 336, 1, 0, gResTexts[TX_BUILD_WINE])
   else
   begin
-    house := TKMHouseType(TKMButton(Sender).Tag);
+    house := TKMHouseType(TKMButtonFlat(Sender).Tag);
     houseDat := gRes.Houses[house];
     SetCost(cmHouses, Byte(house), houseDat.GUIIcon, houseDat.WoodCost, houseDat.StoneCost, houseDat.HouseName);
   end;
