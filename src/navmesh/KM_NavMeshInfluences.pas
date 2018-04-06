@@ -161,7 +161,7 @@ begin
   if fCityFlood then
     gAIFields.Influences.OwnPoly[fOwner,aIdx] := Max(0, fHouseInfluence - (aDistance shl HOUSE_COEF))
   else
-    gAIFields.Influences.IncPresence[fOwner,aIdx,fGroupType] := Max(0, fUnitStrength - aDistance * fDecreaseCoef );
+    gAIFields.Influences.IncPresence[fOwner, aIdx, fGroupType] := Max(0, fUnitStrength - Integer(aDistance * fDecreaseCoef));
   inherited MarkAsVisited(aIdx, aDistance, aPoint);
 end;
 
