@@ -14,10 +14,13 @@ interface
 {$IFDEF MSWindows}
   {$DEFINE USELIBZPLAY}
 {$ENDIF}
+{$IFDEF UNIX}
+  {$DEFINE USEBASS}
+{$ENDIF}
 
 uses
   Types
-  {$IFDEF USEBASS}     , Bass {$ENDIF}
+  {$IFDEF USEBASS}     , Bass, Classes {$ENDIF}
   {$IFDEF USELIBZPLAY} , libZPlay {$ENDIF}
   ;
 
@@ -34,7 +37,10 @@ type
     //MIDITracks:array[1..256]of string;
     IsMusicInitialized: Boolean;
     MusicGain: Single;
-    {$IFDEF USEBASS} fBassStream, fBassOtherStream: Cardinal; {$ENDIF}
+    {$IFDEF USEBASS}
+    fBassStream, fBassOtherStream: Cardinal;
+    fFileMemStream: TMemoryStream;
+    {$ENDIF}
     {$IFDEF USELIBZPLAY} ZPlayer, ZPlayerOther: ZPlay; {$ENDIF} //I dislike that it's not TZPlay... Guess they don't know Delphi conventions.
     fFadeState: TKMFadeState;
     fFadeStarted: Cardinal;
@@ -98,8 +104,13 @@ begin
   {$ENDIF}
 
   {$IFDEF USEBASS}
+  fFileMemStream := TMemoryStream.Create;
   // Setup output - default device, 44100hz, stereo, 16 bits
+  {$IFDEF MSWINDOWS}
   if not BASS_Init(-1, 44100, 0, 0, nil) then
+  {$ELSE}
+  if not BASS_Init(-1, 44100, 0, nil, nil) then
+  {$ENDIF}
   begin
     gLog.AddTime('Failed to initialize the music playback device');
     IsMusicInitialized := False;
@@ -129,6 +140,7 @@ begin
   BASS_StreamFree(fBassStream);
   BASS_StreamFree(fBassOtherStream);
   BASS_Free; //Frees this usage of BASS, allowing it to be recreated successfully
+  fFileMemStream.Free;
   {$ENDIF}
 
   inherited;
@@ -156,7 +168,15 @@ begin
   {$ENDIF}
   {$IFDEF USEBASS}
   BASS_StreamFree(fBassStream); //Free the existing stream (will just return false if the stream is invalid)
-  fBassStream := BASS_StreamCreateFile(FALSE, PChar(FileName), 0, 0, BASS_STREAM_AUTOFREE {$IFDEF UNICODE} or BASS_UNICODE{$ENDIF});
+  fFileMemStream.Clear;
+  fFileMemStream.LoadFromFile(FileName);
+  fFileMemStream.Seek(0, soBeginning);
+  //fBassStream := BASS_StreamCreateFile(FALSE, PChar(FileName), 0, 0, BASS_STREAM_AUTOFREE {$IFDEF UNICODE} or BASS_UNICODE{$ENDIF});
+  fBassStream := BASS_StreamCreateFile(TRUE,
+                                       fFileMemStream.Memory,
+                                       0,
+                                       fFileMemStream.Size,
+                                       BASS_STREAM_AUTOFREE or BASS_STREAM_PRESCAN {$IFDEF UNICODE} or BASS_UNICODE{$ENDIF});
 
   BASS_ChannelPlay(fBassStream, True); //Start playback from the beggining
 
