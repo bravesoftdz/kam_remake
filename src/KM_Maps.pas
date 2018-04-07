@@ -250,7 +250,7 @@ constructor TKMapInfo.Create(const aFolder: string; aStrictParsing: Boolean; aMa
     Result := 0;
     FindFirst(aSearchFile, faAnyFile - faDirectory, SearchRec);
     repeat
-      if (SearchRec.Name <> '.') and (SearchRec.Name <> '..') then
+      if (SearchRec.Name <> '') and (SearchRec.Name <> '.') and (SearchRec.Name <> '..') then
         Result := Result xor Adler32CRC(ExtractFilePath(aSearchFile) + SearchRec.Name);
     until (FindNext(SearchRec) <> 0);
     FindClose(SearchRec);
