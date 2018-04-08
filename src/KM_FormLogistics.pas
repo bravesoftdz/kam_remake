@@ -21,9 +21,15 @@ var
   FormLogistics: TFormLogistics;
 
 implementation
-
-{$R *.dfm}
+{$IFDEF WDC}
+  {$R *.dfm}
+{$ENDIF}
 
 uses KM_HandLogistics;
+
+{$IFDEF FPC}
+initialization
+{$I KM_FormLogistics.lrs}
+{$ENDIF}
 
 end.
