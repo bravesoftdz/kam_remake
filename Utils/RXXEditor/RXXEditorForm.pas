@@ -4,7 +4,7 @@ interface
 uses
   Classes, Controls, Dialogs,
   ExtCtrls, Forms, Graphics, Spin, StdCtrls, SysUtils,
-  {$IFDEF FPC} LResources, {$ENDIF}
+  {$IFDEF FPC} LResources, Interfaces, {$ENDIF}
   KM_Defaults, KM_Log, KM_Pics, KM_PNG, KM_ResPalettes, KM_ResSprites, KM_ResSpritesEdit;
 
 
