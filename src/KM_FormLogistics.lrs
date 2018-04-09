@@ -1,0 +1,10 @@
+LazarusResources.Add('TFormLogistics','FORMDATA',[
+  'TPF0'#14'TFormLogistics'#13'FormLogistics'#4'Left'#2#0#6'Height'#3'g'#2#3'To'
+  +'p'#2#0#5'Width'#3#175#1#7'Caption'#6#13'FormLogistics'#12'ClientHeight'#3'g'
+  +#2#11'ClientWidth'#3#175#1#5'Color'#7#9'clBtnFace'#10'Font.Color'#7#12'clWin'
+  +'dowText'#11'Font.Height'#2#245#9'Font.Name'#6#6'Tahoma'#10'LCLVersion'#6#7
+  +'1.9.0.0'#0#9'TListView'#8'ListView'#4'Left'#2#0#6'Height'#3'g'#2#3'Top'#2#0
+  +#5'Width'#3#175#1#5'Align'#7#8'alClient'#7'Columns'#14#1#7'Caption'#6#7'Resu'
+  +'rce'#5'Width'#2'x'#0#1#7'Caption'#6#4'From'#5'Width'#2'x'#0#1#7'Caption'#6#2
+  +'To'#5'Width'#3#171#0#0#0#8'TabOrder'#2#0#9'ViewStyle'#7#8'vsReport'#0#0#0
+]);
