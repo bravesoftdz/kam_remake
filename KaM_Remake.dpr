@@ -13,12 +13,12 @@ uses
   Forms,
   {$IFDEF FPC} Interfaces, {$ENDIF}
   KM_FormMain in 'src\KM_FormMain.pas' {FormMain},
-	KM_FormLogistics in 'src\KM_FormLogistics.pas' {FormLogistics},
+  KM_FormLogistics in 'src\KM_FormLogistics.pas' {FormLogistics},
   KM_FormLoading in 'src\KM_FormLoading.pas' {FormLoading},
 
   KromOGLUtils in 'src\ext\KromOGLUtils.pas',
   KromUtils in 'src\ext\KromUtils.pas',
-	KromShellUtils in 'src\ext\KromShellUtils.pas',
+  KromShellUtils in 'src\ext\KromShellUtils.pas',
 
   KM_AI in 'src\ai\KM_AI.pas',
   KM_AIArmyEvaluation in 'src\ai\KM_AIArmyEvaluation.pas',
@@ -48,8 +48,8 @@ uses
 	
   KM_CommonClasses in 'src\common\KM_CommonClasses.pas',
   KM_CommonTypes in 'src\common\KM_CommonTypes.pas',
-	KM_Defaults in 'src\common\KM_Defaults.pas',
-	KM_Points in 'src\common\KM_Points.pas',
+  KM_Defaults in 'src\common\KM_Defaults.pas',
+  KM_Points in 'src\common\KM_Points.pas',
 	
   KM_Controls in 'src\KM_Controls.pas',
   {$IFDEF USE_MAD_EXCEPT}KM_Exceptions in 'src\KM_Exceptions.pas',{$ENDIF}
@@ -254,7 +254,7 @@ uses
 
   KM_ServerQuery in 'src\net\KM_ServerQuery.pas',
   KM_Settings in 'src\KM_Settings.pas',
-	KM_SoftShadows in 'src\KM_SoftShadows.pas',
+  KM_SoftShadows in 'src\KM_SoftShadows.pas',
   KM_Sound in 'src\KM_Sound.pas',
 
   KM_Terrain in 'src\terrain\KM_Terrain.pas',
@@ -284,7 +284,7 @@ uses
   KM_UnitTaskDie in 'src\units\KM_UnitTaskDie.pas',
   KM_UnitTaskGoEat in 'src\units\KM_UnitTaskGoEat.pas',
   KM_UnitTaskGoHome in 'src\units\KM_UnitTaskGoHome.pas',
-	KM_UnitTaskDismiss in 'src\units\KM_UnitTaskDismiss.pas',
+  KM_UnitTaskDismiss in 'src\units\KM_UnitTaskDismiss.pas',
   KM_UnitTaskGoOutShowHungry in 'src\units\KM_UnitTaskGoOutShowHungry.pas',
   KM_UnitTaskMining in 'src\units\KM_UnitTaskMining.pas',
   KM_UnitTaskSelfTrain in 'src\units\KM_UnitTaskSelfTrain.pas',
@@ -299,7 +299,6 @@ uses
   KM_Utils in 'src\utils\KM_Utils.pas',
   KM_FloodFill in 'src\utils\KM_FloodFill.pas',
 
-	
   KM_Viewport in 'src\KM_Viewport.pas',
   KM_WareDistribution in 'src\KM_WareDistribution.pas';
 
