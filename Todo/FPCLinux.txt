@@ -1,0 +1,18 @@
+Music:
++	Music does not play
+	Audio playback can be choppy/glitchy on crappy VMs/Systems
+
+Map loading/saving:
++	singleplayer seems to work fine, multiplayer hangs on choosing the map
++	saving a map seems to make it hang in a similar way (out of memory error)
+
+Cursor:
+	Cursor is broken when hovering an input field
+	Wrong cursors while scrolling gameplay interface
+	Scrolling to the right happens way before the cursor reaches the right edge of the window
+
+Debug menu:
++	Status bar does not show labels
++	Debug menu elements overlapping/hidden
+	GTK2 TTrackBar does not obey Tick rules and "slides freely", enabling TickStyle renders a tick value label on the top-right.
+	Cursor spasms around when debug menu is opened and the cursor is updated due to player input (Like hovering over a unit and giving a command), perhaps update rate of GUI elements
