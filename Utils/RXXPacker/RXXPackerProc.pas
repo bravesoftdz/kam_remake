@@ -45,10 +45,12 @@ begin
   //ruCustom sprite packs do not have a main RXX file so don't need packing
   if RXInfo[RT].Usage <> ruCustom then
   begin
-    RXName := ExeDir + 'SpriteResource\' + RXInfo[RT].FileName + '.rx';
+    RXName := ExeDir + 'SpriteResource' + DirectorySeparator + RXInfo[RT].FileName + '.rx';
     Assert((RT = rxTiles) or FileExists(RXName),
            'Cannot find ' + RXName + ' file.'+#10#13+
-           'Please copy the file from your KaM\data\gfx\res\ folder.');
+           'Please copy the file from your KaM'  + DirectorySeparator +
+           'data'  + DirectorySeparator + 'gfx'  + DirectorySeparator +
+           'res'  + DirectorySeparator + ' folder.');
 
     SpritePack := TKMSpritePackEdit.Create(RT, fPalettes);
     try
@@ -56,11 +58,11 @@ begin
       if RT <> rxTiles then
       begin
         SpritePack.LoadFromRXFile(RXName);
-        SpritePack.OverloadFromFolder(ExeDir + 'SpriteResource\');
+        SpritePack.OverloadFromFolder(ExeDir + 'SpriteResource' + DirectorySeparator);
       end
       else
-      if DirectoryExists(ExeDir + 'SpriteResource\') then
-        SpritePack.LoadFromFolder(ExeDir + 'SpriteResource\');
+      if DirectoryExists(ExeDir + 'SpriteResource' + DirectorySeparator) then
+        SpritePack.LoadFromFolder(ExeDir + 'SpriteResource' + DirectorySeparator);
 
       //Tiles must stay the same size as they can't use pivots
       if (RT <> rxTiles) and (gLog <> nil) then
@@ -80,7 +82,9 @@ begin
       //  SpritePack.SoftWater(nil);
 
       //Save
-      SpritePack.SaveToRXXFile(ExeDir + 'Data\Sprites\' + RXInfo[RT].FileName + '.rxx');
+      SpritePack.SaveToRXXFile(ExeDir + 'Data' + DirectorySeparator +
+                                        'Sprites' + DirectorySeparator +
+                                        RXInfo[RT].FileName + '.rxx');
 
       //Generate alpha shadows for the following sprite packs
       if RT in [rxHouses,rxUnits,rxGui,rxTrees] then
@@ -123,7 +127,9 @@ begin
         else
           SpritePack.SoftenShadows;
 
-        SpritePack.SaveToRXXFile(ExeDir + 'Data\Sprites\' + RXInfo[RT].FileName + '_a.rxx');
+        SpritePack.SaveToRXXFile(ExeDir + 'Data' + DirectorySeparator +
+                                          'Sprites' + DirectorySeparator +
+                                          RXInfo[RT].FileName + '_a.rxx');
       end;
     finally
       SpritePack.Free;

@@ -8,7 +8,6 @@ uses
   {$IFDEF FPC} LResources, LCLIntf, {$ENDIF}
   RXXPackerProc, KM_Defaults, KM_Log, KM_Pics, KM_ResPalettes, KM_ResSprites;
 
-
 type
   TRXXForm1 = class(TForm)
     btnPackRXX: TButton;
@@ -22,14 +21,18 @@ type
   private
     fPalettes: TKMResPalettes;
     fRxxPacker: TRXXPacker;
-
     procedure UpdateList;
   end;
 
+  {$IFDEF FPC}
+  TRXTypeRecord = record
+    Id: Integer;
+  end;
+  PRXTypeRecord = ^TRXTypeRecord;
+  {$ENDIF}
 
 var
   RXXForm1: TRXXForm1;
-
 
 implementation
 {$R *.dfm}
@@ -39,16 +42,28 @@ uses KM_ResHouses, KM_ResUnits, KM_Points;
 procedure TRXXForm1.UpdateList;
 var
   RT: TRXType;
+  {$IFDEF FPC}
+  CurRTR: PRXTypeRecord;
+  {$ENDIF}
 begin
   ListBox1.Items.Clear;
   for RT := Low(TRXType) to High(TRXType) do
     if (RT = rxTiles) //Tiles are always in the list
-      or FileExists(ExeDir + 'SpriteResource\' + RXInfo[RT].FileName + '.rx') then
+      or FileExists(ExeDir + 'SpriteResource' + DirectorySeparator + RXInfo[RT].FileName + '.rx') then
+      {$IFDEF WDC}
       ListBox1.Items.AddPair(GetEnumName(TypeInfo(TRXType), Integer(RT)), IntToStr(Integer(RT)));
+      {$ENDIF}
+      {$IFDEF FPC}
+      begin
+        New(CurRTR);
+        CurRTR.Id := Integer(RT);
+        ListBox1.Items.AddObject(GetEnumName(TypeInfo(TRXType), Integer(RT)), TObject(CurRTR));
+      end;
+      {$ENDIF}
 
   if ListBox1.Items.Count = 0 then
   begin
-    ShowMessage('No .RX file was found in'+#10+ExeDir + 'SpriteResource\');
+    ShowMessage('No .RX file was found in'+#10+ExeDir + 'SpriteResource' + DirectorySeparator);
     btnPackRXX.Enabled := false;
   end
   else
@@ -71,7 +86,7 @@ end;
 
 procedure TRXXForm1.FormCreate(Sender: TObject);
 begin
-  ExeDir := ExpandFileName(ExtractFilePath(ParamStr(0)) + '..\..\');
+  ExeDir := ExpandFileName(ExtractFilePath(ParamStr(0)) + '..' + DirectorySeparator + '..' + DirectorySeparator);
 
   Caption := 'RXX Packer (' + GAME_REVISION + ')';
 
@@ -79,15 +94,24 @@ begin
   gLog := TKMLog.Create(ExeDir + 'RXXPacker.log');
 
   fRXXPacker := TRXXPacker.Create;
-  fPalettes := TKMResPalettes.Create;
-  fPalettes.LoadPalettes(ExeDir + 'data\gfx\');
+  fPalettes  := TKMResPalettes.Create;
+  fPalettes.LoadPalettes(ExeDir + 'data' + DirectorySeparator + 'gfx' + DirectorySeparator);
 
   UpdateList;
 end;
 
 
 procedure TRXXForm1.FormDestroy(Sender: TObject);
+{$IFDEF WDC}
 begin
+{$ENDIF}
+{$IFDEF FPC}
+var
+  I: Integer;
+begin
+  for I := 0 to ListBox1.Items.Count - 1 do
+    Dispose(PRXTypeRecord(ListBox1.Items.Objects[I]));
+{$ENDIF}
   FreeAndNil(fPalettes);
   FreeAndNil(gLog);
   FreeAndNil(fRXXPacker);
@@ -103,19 +127,25 @@ begin
   btnPackRXX.Enabled := False;
   Tick := GetTickCount;
 
-  Assert(DirectoryExists(ExeDir + 'SpriteResource\'),
-         'Cannot find ' + ExeDir + 'SpriteResource\ folder.'+#10#13+
+  Assert(DirectoryExists(ExeDir + 'SpriteResource' + DirectorySeparator),
+         'Cannot find ' + ExeDir + 'SpriteResource' + DirectorySeparator + ' folder.'+#10#13+
          'Please make sure this folder exists.');
 
   for I := 0 to ListBox1.Items.Count - 1 do
     if ListBox1.Selected[I] then
     begin
+      {$IFDEF WDC}
       J := StrToInt(ListBox1.Items.ValueFromIndex[I]);
+      {$ENDIF}
+      {$IFDEF FPC}
+      J := PRXTypeRecord(ListBox1.Items.Objects[I]).Id;
+      {$ENDIF}
       RT := TRXType(J);
 
       fRxxPacker.Pack(RT, fPalettes);
 
       ListBox1.Selected[I] := False;
+      ListBox1.Update;
       ListBox1.Refresh;
     end;
 
