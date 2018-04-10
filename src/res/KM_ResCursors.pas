@@ -4,7 +4,7 @@ interface
 uses
   Classes, Forms,
   {$IFDEF MSWindows} Windows, {$ENDIF}
-  {$IFDEF Unix} LCLIntf, LCLType, {$ENDIF}
+  {$IFDEF Unix} LCLIntf, LCLType, Controls, {$ENDIF}
   Graphics, Math, SysUtils,
   KM_Points, KM_ResSprites;
 
@@ -115,10 +115,19 @@ begin
             Px.rgbReserved := $00
           else
             Px.rgbReserved := $FF;
-          // Here we have BGR, not RGB
-          Px.rgbBlue := (fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF0000) shr 16;
-          Px.rgbGreen := (fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF00) shr 8;
-          Px.rgbRed := fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF;
+
+          {$IFDEF WDC}
+            // Here we have BGR, not RGB
+            Px.rgbBlue  := (fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF0000) shr 16;
+            Px.rgbGreen := (fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF00) shr 8;
+            Px.rgbRed   := fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF;
+          {$ENDIF}
+          {$IFDEF FPC}
+            // Here we have RGB?
+            Px.rgbRed   := (fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF0000) shr 16;
+            Px.rgbGreen := (fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF00) shr 8;
+            Px.rgbBlue  := fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF;
+          {$ENDIF}
           inc(Px);
         end;
       end;
@@ -143,7 +152,7 @@ begin
     {$IFDEF Unix}
       bm2.Mask(clWhite);
       IconInfo.hbmMask  := bm2.MaskHandle;
-      Screen.Cursors[Byte(KMC) + COUNT_OFFSET] :=  CreateIconIndirect(@IconInfo);
+      Screen.Cursors[Byte(KMC) + COUNT_OFFSET] := CreateIconIndirect(@IconInfo);
     {$ENDIF}
   end;
 
