@@ -116,13 +116,13 @@ begin
           else
             Px.rgbReserved := $FF;
 
-          {$IFDEF WDC}
+          {$IFDEF MSWindows}
             // Here we have BGR, not RGB
             Px.rgbBlue  := (fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF0000) shr 16;
             Px.rgbGreen := (fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF00) shr 8;
             Px.rgbRed   := fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF;
           {$ENDIF}
-          {$IFDEF FPC}
+          {$IFDEF Unix}
             // Here we have RGB?
             Px.rgbRed   := (fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF0000) shr 16;
             Px.rgbGreen := (fRXData.RGBA[Cursors[KMC],y*sx+x] and $FF00) shr 8;
