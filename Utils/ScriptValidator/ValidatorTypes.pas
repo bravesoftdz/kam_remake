@@ -8,6 +8,7 @@ type
     Help,
     AllMaps,
     Campaign,
+    XmlApi,
     Version,
     Verbose:     Boolean;
   end;

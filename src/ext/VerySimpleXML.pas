@@ -100,6 +100,7 @@ type
     procedure Parse(Strings: TStringList);
     procedure Walk(Lines: TStringList; Prefix: String; Node: TXmlNode);
     function GetText: String;
+    procedure SetText(aText: String);
   public
     Root: TXmlNode; // There is only one Root Node
     Header: TXmlNode; // XML declarations are stored in here as Attributes
@@ -113,7 +114,7 @@ type
     procedure SaveToFile(const FileName: String); virtual;
     procedure DefaultOnNodeSetText(Sender: TObject; Node: TXmlNode; Text: String);
     procedure DefaultOnNodeSetName(Sender: TObject; Node: TXmlNode; Name: String);
-    property Text: String read GetText;
+    property Text: String read GetText write SetText;
     property OnNodeSetText: TXmlOnNodeSetText read FOnNodeSetText write FOnNodeSetText;
     property OnNodeSetName: TXmlOnNodeSetText read FOnNodeSetName write FOnNodeSetName;
   end;
@@ -440,20 +441,31 @@ begin
   Result := Lines.Text;
 end;
 
+procedure TXmlVerySimple.SetText(aText: String);
+var
+  Strings: TStringList;
+begin
+  Clear;
+  Strings      := TStringList.Create;
+  Strings.Text := aText;
+  Parse(Strings);
+  Strings.Free;
+end;
+
 { TXmlNode }
 
 function TXmlNode.AddChild(const Name: String): TXmlNode;
 begin
-  Result := TXmlNode.Create;
+  Result          := TXmlNode.Create;
   Result.NodeName := Name;
-  Result.Parent := Self;
+  Result.Parent   := Self;
   ChildNodes.Add(Result);
 end;
 
 constructor TXmlNode.Create;
 begin
-  ChildNodes := TXmlNodeList.Create;
-  Parent := NIL;
+  ChildNodes  := TXmlNodeList.Create;
+  Parent      := NIL;
   FAttributes := TXmlAttributeList.Create;
 end;
 
@@ -469,7 +481,8 @@ var
   I: Integer;
 begin
   Result := NIL;
-  Name := lowercase(Name);
+  Name   := lowercase(Name);
+
   for I:=0 to ChildNodes.Count-1 do
     if lowercase(TXmlNode(ChildNodes[I]).NodeName) = Name then
     begin

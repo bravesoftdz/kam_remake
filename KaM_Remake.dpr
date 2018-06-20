@@ -13,12 +13,12 @@ uses
   Forms,
   {$IFDEF FPC} Interfaces, {$ENDIF}
   KM_FormMain in 'src\KM_FormMain.pas' {FormMain},
-	KM_FormLogistics in 'src\KM_FormLogistics.pas' {FormLogistics},
+  KM_FormLogistics in 'src\KM_FormLogistics.pas' {FormLogistics},
   KM_FormLoading in 'src\KM_FormLoading.pas' {FormLoading},
 
   KromOGLUtils in 'src\ext\KromOGLUtils.pas',
   KromUtils in 'src\ext\KromUtils.pas',
-	KromShellUtils in 'src\ext\KromShellUtils.pas',
+  KromShellUtils in 'src\ext\KromShellUtils.pas',
 
   KM_AI in 'src\ai\KM_AI.pas',
   KM_AIArmyEvaluation in 'src\ai\KM_AIArmyEvaluation.pas',
@@ -45,17 +45,17 @@ uses
   KM_Alerts in 'src\KM_Alerts.pas',
   KM_BuildList in 'src\KM_BuildList.pas',
   KM_Campaigns in 'src\KM_Campaigns.pas',
-	
+
   KM_CommonClasses in 'src\common\KM_CommonClasses.pas',
   KM_CommonTypes in 'src\common\KM_CommonTypes.pas',
-	KM_Defaults in 'src\common\KM_Defaults.pas',
-	KM_Points in 'src\common\KM_Points.pas',
-	
+  KM_Defaults in 'src\common\KM_Defaults.pas',
+  KM_Points in 'src\common\KM_Points.pas',
+
   KM_Controls in 'src\KM_Controls.pas',
   {$IFDEF USE_MAD_EXCEPT}KM_Exceptions in 'src\KM_Exceptions.pas',{$ENDIF}
   KM_FogOfWar in 'src\KM_FogOfWar.pas',
 
-  KM_GameTypes in 'src\game\KM_GameTypes.pas',  
+  KM_GameTypes in 'src\game\KM_GameTypes.pas',
   KM_Game in 'src\game\KM_Game.pas',
   KM_GameApp in 'src\game\KM_GameApp.pas',
   KM_GameCursor in 'src\game\KM_GameCursor.pas',
@@ -80,7 +80,7 @@ uses
   KM_GUIMapEdHouse in 'src\gui\pages_maped\KM_GUIMapEdHouse.pas',
   KM_GUIMapEdMarkerDefence in 'src\gui\pages_maped\KM_GUIMapEdMarkerDefence.pas',
   KM_GUIMapEdMarkerReveal in 'src\gui\pages_maped\KM_GUIMapEdMarkerReveal.pas',
-  
+
   KM_GUIMapEdMenu in 'src\gui\pages_maped\menu\KM_GUIMapEdMenu.pas',
   KM_GUIMapEdMenuLoad in 'src\gui\pages_maped\menu\KM_GUIMapEdMenuLoad.pas',
   KM_GUIMapEdMenuSave in 'src\gui\pages_maped\menu\KM_GUIMapEdMenuSave.pas',
@@ -88,9 +88,9 @@ uses
   KM_GUIMapEdMenuQuickPlay in 'src\gui\pages_maped\menu\KM_GUIMapEdMenuQuickPlay.pas',
   KM_GUIMapEdMenuQuit in 'src\gui\pages_maped\menu\KM_GUIMapEdMenuQuit.pas',
   KM_GUIMapEdMenuSettings in 'src\gui\pages_maped\menu\KM_GUIMapEdMenuSettings.pas',
-	
+
   KM_GUIMapEdMessage in 'src\gui\pages_maped\KM_GUIMapEdMessage.pas',
-	
+
   KM_GUIMapEdPlayer in 'src\gui\pages_maped\player\KM_GUIMapEdPlayer.pas',
   KM_GUIMapEdPlayerBlockHouse in 'src\gui\pages_maped\player\KM_GUIMapEdPlayerBlockHouse.pas',
   KM_GUIMapEdPlayerBlockTrade in 'src\gui\pages_maped\player\KM_GUIMapEdPlayerBlockTrade.pas',
@@ -99,12 +99,12 @@ uses
   KM_GUIMapEdPlayerGoals in 'src\gui\pages_maped\player\KM_GUIMapEdPlayerGoals.pas',
   KM_GUIMapEdPlayerGoalPopUp in 'src\gui\pages_maped\player\KM_GUIMapEdPlayerGoalPopUp.pas',
   KM_GUIMapEdPlayerView in 'src\gui\pages_maped\player\KM_GUIMapEdPlayerView.pas',
-	
+
   KM_GUIMapEdMission in 'src\gui\pages_maped\mission\KM_GUIMapEdMission.pas',
   KM_GUIMapEdMissionAlliances in 'src\gui\pages_maped\mission\KM_GUIMapEdMissionAlliances.pas',
   KM_GUIMapEdMissionMode in 'src\gui\pages_maped\mission\KM_GUIMapEdMissionMode.pas',
   KM_GUIMapEdMissionPlayers in 'src\gui\pages_maped\mission\KM_GUIMapEdMissionPlayers.pas',
-	
+
   KM_GUIMapEdTerrain in 'src\gui\pages_maped\terrain\KM_GUIMapEdTerrain.pas',
   KM_GUIMapEdTerrainBrushes in 'src\gui\pages_maped\terrain\KM_GUIMapEdTerrainBrushes.pas',
   KM_GUIMapEdTerrainHeights in 'src\gui\pages_maped\terrain\KM_GUIMapEdTerrainHeights.pas',
@@ -112,16 +112,16 @@ uses
   KM_GUIMapEdTerrainObjects in 'src\gui\pages_maped\terrain\KM_GUIMapEdTerrainObjects.pas',
   KM_GUIMapEdTerrainSelection in 'src\gui\pages_maped\terrain\KM_GUIMapEdTerrainSelection.pas',
   KM_GUIMapEdRMG in 'src\gui\pages_maped\terrain\KM_GUIMapEdRMG.pas',
-	
+
   KM_GUIMapEdTown in 'src\gui\pages_maped\town\KM_GUIMapEdTown.pas',
   KM_GUIMapEdTownUnits in 'src\gui\pages_maped\town\KM_GUIMapEdTownUnits.pas',
   KM_GUIMapEdTownHouses in 'src\gui\pages_maped\town\KM_GUIMapEdTownHouses.pas',
   KM_GUIMapEdTownScript in 'src\gui\pages_maped\town\KM_GUIMapEdTownScript.pas',
   KM_GUIMapEdTownDefence in 'src\gui\pages_maped\town\KM_GUIMapEdTownDefence.pas',
-  KM_GUIMapEdTownOffence in 'src\gui\pages_maped\town\KM_GUIMapEdTownOffence.pas', 
+  KM_GUIMapEdTownOffence in 'src\gui\pages_maped\town\KM_GUIMapEdTownOffence.pas',
   KM_GUIMapEdTownAttackPopUp in 'src\gui\pages_maped\town\KM_GUIMapEdTownAttackPopUp.pas',
   KM_GUIMapEdTownFormationsPopUp in 'src\gui\pages_maped\town\KM_GUIMapEdTownFormationsPopUp.pas',
-	
+
   KM_GUIMapEdUnit in 'src\gui\pages_maped\KM_GUIMapEdUnit.pas',
 
   KM_GUIMenuCampaign in 'src\gui\pages_menu\KM_GUIMenuCampaign.pas',
@@ -166,14 +166,14 @@ uses
   KM_MessageLog in 'src\KM_MessageLog.pas',
   KM_MessageStack in 'src\KM_MessageStack.pas',
   KM_Minimap in 'src\KM_Minimap.pas',
-	
+
   KM_MissionScript in 'src\missionscript\KM_MissionScript.pas',
   KM_MissionScript_Info in 'src\missionscript\KM_MissionScript_Info.pas',
   KM_MissionScript_Preview in 'src\missionscript\KM_MissionScript_Preview.pas',
   KM_MissionScript_Standard in 'src\missionscript\KM_MissionScript_Standard.pas',
-	
+
   KM_Music in 'src\KM_Music.pas',
-	
+
   KM_Outline in 'src\navmesh\KM_Outline.pas',
   KM_NavMesh in 'src\navmesh\KM_NavMesh.pas',
   KM_PolySimplify in 'src\navmesh\KM_PolySimplify.pas',
@@ -202,20 +202,20 @@ uses
   KM_NetworkClasses in 'src\net\KM_NetworkClasses.pas',
   KM_Networking in 'src\net\KM_Networking.pas',
   KM_NetworkTypes in 'src\net\KM_NetworkTypes.pas',
-	
+
   KM_HTTPClient in 'src\net\http\KM_HTTPClient.pas',
   {$IFDEF WDC} KM_HTTPClientOverbyte in 'src\net\http\KM_HTTPClientOverbyte.pas', {$ENDIF}
   {$IFDEF FPC} KM_HTTPClientLNet in 'src\net\http\KM_HTTPClientLNet.pas', {$ENDIF}
-	
+
   KM_DedicatedServer in 'src\net\other\KM_DedicatedServer.pas',
   KM_MasterServer in 'src\net\other\KM_MasterServer.pas',
-	
+
   KM_PathFinding in 'src\pathfinding\KM_PathFinding.pas',
   KM_PathFindingAStarOld in 'src\pathfinding\KM_PathFindingAStarOld.pas',
   KM_PathFindingAStarNew in 'src\pathfinding\KM_PathFindingAStarNew.pas',
   KM_PathFindingJPS in 'src\pathfinding\KM_PathFindingJPS.pas',
   KM_PathFindingRoad in 'src\pathfinding\KM_PathFindingRoad.pas',
-	
+
   KM_PerfLog in 'src\KM_PerfLog.pas',
   KM_Projectiles in 'src\KM_Projectiles.pas',
 
@@ -252,10 +252,9 @@ uses
   KM_ScriptingStates in 'src\scripting\KM_ScriptingStates.pas',
   KM_ScriptingTypes in 'src\scripting\KM_ScriptingTypes.pas',
   KM_ScriptingUtils in 'src\scripting\KM_ScriptingUtils.pas',
-
   KM_ServerQuery in 'src\net\KM_ServerQuery.pas',
   KM_Settings in 'src\KM_Settings.pas',
-	KM_SoftShadows in 'src\KM_SoftShadows.pas',
+  KM_SoftShadows in 'src\KM_SoftShadows.pas',
   KM_Sound in 'src\KM_Sound.pas',
 
   KM_Terrain in 'src\terrain\KM_Terrain.pas',
@@ -274,25 +273,25 @@ uses
   KM_UnitActionSteer in 'src\units\actions\KM_UnitActionSteer.pas',
   KM_UnitActionStormAttack in 'src\units\actions\KM_UnitActionStormAttack.pas',
   KM_UnitActionWalkTo in 'src\units\actions\KM_UnitActionWalkTo.pas',
-  
+
   KM_UnitGroups in 'src\units\KM_UnitGroups.pas',
   KM_Units in 'src\units\KM_Units.pas',
   KM_UnitsCollection in 'src\units\KM_UnitsCollection.pas',
   KM_Units_Warrior in 'src\units\KM_Units_Warrior.pas',
   KM_Units_WorkPlan in 'src\units\KM_Units_WorkPlan.pas',
-  
+
   KM_UnitTaskAttackHouse in 'src\units\tasks\KM_UnitTaskAttackHouse.pas',
   KM_UnitTaskBuild in 'src\units\tasks\KM_UnitTaskBuild.pas',
   KM_UnitTaskDelivery in 'src\units\tasks\KM_UnitTaskDelivery.pas',
   KM_UnitTaskDie in 'src\units\tasks\KM_UnitTaskDie.pas',
   KM_UnitTaskGoEat in 'src\units\tasks\KM_UnitTaskGoEat.pas',
   KM_UnitTaskGoHome in 'src\units\tasks\KM_UnitTaskGoHome.pas',
-	KM_UnitTaskDismiss in 'src\units\tasks\KM_UnitTaskDismiss.pas',
+  KM_UnitTaskDismiss in 'src\units\tasks\KM_UnitTaskDismiss.pas',
   KM_UnitTaskGoOutShowHungry in 'src\units\tasks\KM_UnitTaskGoOutShowHungry.pas',
   KM_UnitTaskMining in 'src\units\tasks\KM_UnitTaskMining.pas',
   KM_UnitTaskSelfTrain in 'src\units\tasks\KM_UnitTaskSelfTrain.pas',
   KM_UnitTaskThrowRock in 'src\units\tasks\KM_UnitTaskThrowRock.pas',
-	
+
   KM_BinPacking in 'src\utils\KM_BinPacking.pas',
   KM_CommonUtils in 'src\utils\KM_CommonUtils.pas',
   KM_FileIO in 'src\utils\KM_FileIO.pas',
@@ -302,9 +301,9 @@ uses
   KM_Utils in 'src\utils\KM_Utils.pas',
   KM_FloodFill in 'src\utils\KM_FloodFill.pas',
 
-	
   KM_Viewport in 'src\KM_Viewport.pas',
-  KM_WareDistribution in 'src\KM_WareDistribution.pas';
+  KM_WareDistribution in 'src\KM_WareDistribution.pas',
+  ScriptValidatorResult in 'src\ext\ScriptValidatorResult.pas';
 
 {$IFDEF WDC}
   {$R KaM_Remake_Icon.res} //Keeps the Icon

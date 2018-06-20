@@ -7,7 +7,7 @@ uses
   uPSCompiler, uPSRuntime, uPSUtils, uPSDisassembly, uPSDebugger, uPSPreProcessor,
   KM_CommonClasses, KM_CommonTypes, KM_Defaults, KM_FileIO,
   KM_ScriptingActions, KM_ScriptingEvents, KM_ScriptingIdCache, KM_ScriptingStates, KM_ScriptingTypes, KM_ScriptingUtils,
-  KM_Houses, KM_Units, KM_UnitGroups, KM_ResHouses;
+  KM_Houses, KM_Units, KM_UnitGroups, KM_ResHouses, ScriptValidatorResult;
 
   //Dynamic scripts allow mapmakers to control the mission flow
 
@@ -52,6 +52,7 @@ type
   private
     fErrorString: TKMScriptErrorMessage; //Info about found mistakes (Unicode, can be localized later on)
     fWarningsString: TKMScriptErrorMessage;
+    fValidationIssues: TScriptValidatorResult;
 
     fHasErrorOccured: Boolean; //Has runtime error occurred? (only display first error)
     fScriptLogFile: UnicodeString;
@@ -60,20 +61,28 @@ type
     function AppendErrorPrefix(const aPrefix: UnicodeString; var aError: TKMScriptErrorMessage): TKMScriptErrorMessage;
   public
     constructor Create(aOnScriptError: TUnicodeStringEvent);
+    destructor Destroy;
 
     property ScriptLogFile: UnicodeString read fScriptLogFile write SetScriptLogFile;
     property ErrorString: TKMScriptErrorMessage read fErrorString;
     property WarningsString: TKMScriptErrorMessage read fWarningsString;
+    property ValidationIssues: TScriptValidatorResult read fValidationIssues;
 
     procedure HandleScriptError(aType: TKMScriptErrorType; aError: TKMScriptErrorMessage);
-    procedure HandleScriptErrorString(aType: TKMScriptErrorType; aErrorString: UnicodeString; aDetailedErrorString: UnicodeString = '');
+    procedure HandleScriptErrorString(aType: TKMScriptErrorType; aErrorString: UnicodeString;
+                                      aDetailedErrorString: UnicodeString = '');
     function HasErrors: Boolean;
     function HasWarnings: Boolean;
-    procedure AppendError(aError: TKMScriptErrorMessage);
-    procedure AppendWarning(aWarning: TKMScriptErrorMessage);
-    procedure AppendErrorStr(const aErrorString: UnicodeString; aDetailedErrorString: UnicodeString = '');
-    procedure AppendWarningStr(const aWarningString: UnicodeString; aDetailedWarningString: UnicodeString = '');
+    procedure AppendError(aLine, aColumn: Integer; aParam, aMessage: string; aError: TKMScriptErrorMessage);
+    procedure AppendWarning(aLine, aColumn: Integer; aParam, aMessage: string; aWarning: TKMScriptErrorMessage);
+    procedure AppendHint(aLine, aColumn: Integer; aParam, aMessage: string; aWarning: TKMScriptErrorMessage);
+    procedure AppendErrorStr(aLine, aColumn: Integer; aParam, aMessage: string;
+                             const aErrorString: UnicodeString; aDetailedErrorString: UnicodeString = '');
+    procedure AppendWarningStr(aLine, aColumn: Integer; aParam, aMessage: string;
+                               const aWarningString: UnicodeString; aDetailedWarningString: UnicodeString = '');
+    procedure AppendHintStr(aLine, aColumn: Integer; aParam, aMessage: string);
     procedure HandleErrors;
+    procedure ResetErrors;
     procedure Clear;
   end;
 
@@ -274,6 +283,8 @@ end;
 
 procedure TKMScripting.LoadFromFile(const aFileName, aCampaignDataTypeFile: UnicodeString; aCampaignData: TKMemoryStream);
 begin
+  fErrorHandler.ResetErrors;
+
   if not fPreProcessor.PreProcessFile(aFileName, fScriptCode) then
     Exit; // Continue only if PreProcess was successful;
 
@@ -316,7 +327,8 @@ begin
         Sender.AddUsedVariable(CAMPAIGN_DATA_VAR, CampaignDataType);
       except
         on E: Exception do
-          fErrorHandler.AppendErrorStr('Error in declaration of global campaign data type|');
+          fErrorHandler.AppendErrorStr(0, 0, '', 'Error in declaration of global campaign data type',
+                                                 'Error in declaration of global campaign data type|');
       end;
 
     // Common
@@ -809,10 +821,13 @@ end;
 
 procedure TKMScripting.CompileScript;
 var
-  I: Integer;
+  I:        Integer;
   Compiler: TPSPascalCompiler;
+  Msg:      TPSPascalCompilerMessage;
+  Success:  Boolean;
 begin
   Compiler := TPSPascalCompiler.Create; // create an instance of the compiler
+
   try
     Compiler.OnUses := ScriptOnUsesFunc; // assign the OnUses event
     Compiler.OnUseVariable := ScriptOnUseVariableProc;
@@ -821,15 +836,22 @@ begin
     Compiler.AllowNoEnd := True; //Scripts only use event handlers now, main section is unused
     Compiler.BooleanShortCircuit := True; //Like unchecking "Complete booolean evaluation" in Delphi compiler options
 
-    if not Compiler.Compile(fScriptCode) then  // Compile the Pascal script into bytecode
+    Success := Compiler.Compile(fScriptCode); // Compile the Pascal script into bytecode
+
+    for I := 0 to Compiler.MsgCount - 1 do
     begin
-      for I := 0 to Compiler.MsgCount - 1 do
-        fErrorHandler.AppendError(GetErrorMessage(Compiler.Msg[I]));
-      Exit;
-    end
+      Msg := Compiler.Msg[I];
+
+      if Msg.ErrorType = 'Hint' then
+        fErrorHandler.AppendHint(Msg.Row, Msg.Col, Msg.Param, Msg.ShortMessageToString, GetErrorMessage(Msg))
+      else if Msg.ErrorType = 'Warning' then
+        fErrorHandler.AppendWarning(Msg.Row, Msg.Col, Msg.Param, Msg.ShortMessageToString, GetErrorMessage(Msg))
       else
-        for I := 0 to Compiler.MsgCount - 1 do
-          fErrorHandler.AppendWarning(GetErrorMessage(Compiler.Msg[I]));
+        fErrorHandler.AppendError(Msg.Row, Msg.Col, Msg.Param, Msg.ShortMessageToString, GetErrorMessage(Msg));
+    end;
+
+    if not Success then
+      Exit;
 
     Compiler.GetOutput(fByteCode);            // Save the output of the compiler in the string Data.
     Compiler.GetDebugOutput(fDebugByteCode);  // Save the debug output of the compiler
@@ -873,6 +895,7 @@ var
   ClassImp: TPSRuntimeClassImporter;
   I: Integer;
   V: PIFVariant;
+  Err: string;
 begin
   //Create an instance of the runtime class importer
   ClassImp := TPSRuntimeClassImporter.Create;
@@ -1253,7 +1276,8 @@ begin
     begin
       { For some reason the script could not be loaded. This is usually the case when a
         library that has been used at compile time isn't registered at runtime. }
-      fErrorHandler.AppendErrorStr('Unknown error in loading bytecode to Exec|');
+      fErrorHandler.AppendErrorStr(0, 0, '', 'Unknown error in loading bytecode to Exec',
+                                   'Unknown error in loading bytecode to Exec|');
       Exit;
     end;
 
@@ -1270,13 +1294,17 @@ begin
       or SameText(UnicodeString(V.FType.ExportName), 'TKMScriptUtils') then
         Continue;
 
-      fErrorHandler.AppendErrorStr(ValidateVarType(V.FType));
-      if fErrorHandler.HasErrors then
-      begin
-        //Don't allow the script to run
-        fExec.Clear;
-        Exit;
-      end;
+      Err := ValidateVarType(V.FType);
+
+      if Err <> '' then
+        fErrorHandler.AppendErrorStr(0, 0, '', Err, Err);
+    end;
+
+    if fErrorHandler.HasErrors then
+    begin
+      //Don't allow the script to run
+      fExec.Clear;
+      Exit;
     end;
 
     //Link script objects with objects
@@ -1594,31 +1622,60 @@ begin
 end;
 
 
-procedure TKMScriptErrorHandler.AppendError(aError: TKMScriptErrorMessage);
+destructor TKMScriptErrorHandler.Destroy;
 begin
+  FreeAndNil(fValidationIssues);
+end;
+
+
+procedure TKMScriptErrorHandler.AppendError(aLine, aColumn: Integer; aParam, aMessage: string;
+                                            aError: TKMScriptErrorMessage);
+begin
+  fValidationIssues.AddError(aLine, aColumn, aParam, aMessage);
   fErrorString.GameMessage := fErrorString.GameMessage + aError.GameMessage;
-  fErrorString.LogMessage := fErrorString.LogMessage + aError.LogMessage;
+  fErrorString.LogMessage  := fErrorString.LogMessage + aError.LogMessage;
 end;
 
 
-procedure TKMScriptErrorHandler.AppendWarning(aWarning: TKMScriptErrorMessage);
+procedure TKMScriptErrorHandler.AppendWarning(aLine, aColumn: Integer; aParam, aMessage: string;
+                                              aWarning: TKMScriptErrorMessage);
 begin
+  fValidationIssues.AddWarning(aLine, aColumn, aParam, aMessage);
   fWarningsString.GameMessage := fWarningsString.GameMessage + aWarning.GameMessage;
-  fWarningsString.LogMessage := fWarningsString.LogMessage + aWarning.LogMessage;
+  fWarningsString.LogMessage  := fWarningsString.LogMessage + aWarning.LogMessage;
 end;
 
 
-procedure TKMScriptErrorHandler.AppendErrorStr(const aErrorString: UnicodeString; aDetailedErrorString: UnicodeString = '');
+procedure TKMScriptErrorHandler.AppendHint(aLine, aColumn: Integer; aParam, aMessage: string;
+                                           aWarning: TKMScriptErrorMessage);
 begin
+  fValidationIssues.AddHint(aLine, aColumn, aParam, aMessage);
+  fWarningsString.GameMessage := fWarningsString.GameMessage + aWarning.GameMessage;
+  fWarningsString.LogMessage  := fWarningsString.LogMessage + aWarning.LogMessage;
+end;
+
+
+procedure TKMScriptErrorHandler.AppendErrorStr(aLine, aColumn: Integer; aParam, aMessage: string;
+                                               const aErrorString: UnicodeString; aDetailedErrorString: UnicodeString = '');
+begin
+  fValidationIssues.AddError(aLine, aColumn, aParam, aMessage);
   fErrorString.GameMessage := fErrorString.GameMessage + aErrorString;
-  fErrorString.LogMessage := fErrorString.LogMessage + aDetailedErrorString;
+  fErrorString.LogMessage  := fErrorString.LogMessage + aDetailedErrorString;
 end;
 
 
-procedure TKMScriptErrorHandler.AppendWarningStr(const aWarningString: UnicodeString; aDetailedWarningString: UnicodeString = '');
+procedure TKMScriptErrorHandler.AppendWarningStr(aLine, aColumn: Integer; aParam, aMessage: string;
+                                                 const aWarningString: UnicodeString; aDetailedWarningString: UnicodeString = '');
 begin
+  fValidationIssues.AddWarning(aLine, aColumn, aParam, aMessage);
   fWarningsString.GameMessage := fWarningsString.GameMessage + aWarningString;
-  fWarningsString.LogMessage := fWarningsString.LogMessage + aDetailedWarningString;
+  fWarningsString.LogMessage  := fWarningsString.LogMessage + aDetailedWarningString;
+end;
+
+
+procedure TKMScriptErrorHandler.AppendHintStr(aLine, aColumn: Integer; aParam, aMessage: string);
+begin
+  fValidationIssues.AddHint(aLine, aColumn, aParam, aMessage);
 end;
 
 
@@ -1630,6 +1687,7 @@ begin
 
   if aError.LogMessage <> '' then
     aError.LogMessage := aPrefix + aError.LogMessage;
+
   Result := aError;
 end;
 
@@ -1646,7 +1704,6 @@ begin
 end;
 
 
-
 procedure TKMScriptErrorHandler.HandleErrors;
 begin
   HandleScriptError(se_CompileError, AppendErrorPrefix('Script compile errors:' + EolW, fErrorString));
@@ -1654,12 +1711,22 @@ begin
 end;
 
 
+procedure TKMScriptErrorHandler.ResetErrors;
+begin
+  if fValidationIssues <> nil then
+    FreeAndNil(fValidationIssues);
+
+  fValidationIssues := TScriptValidatorResult.Create;
+  Clear;
+end;
+
+
 procedure TKMScriptErrorHandler.Clear;
 begin
-  fErrorString.GameMessage := '';
-  fErrorString.LogMessage := '';
+  fErrorString.GameMessage    := '';
+  fErrorString.LogMessage     := '';
   fWarningsString.GameMessage := '';
-  fWarningsString.LogMessage := '';
+  fWarningsString.LogMessage  := '';
 end;
 
 
@@ -1863,7 +1930,8 @@ const
 
   procedure LoadCustomEventDirectives;
   var
-    ErrorStr: UnicodeString;
+    ErrorStr,
+    ErrDetailStr: UnicodeString;
     EventType: Integer;
     DirectiveParamSL: TStringList;
   begin
@@ -1884,7 +1952,12 @@ const
           EventType := GetEnumValue(TypeInfo(TKMScriptEventType), Trim(DirectiveParamSL[0]));
 
           if EventType = -1 then
-            fErrorHandler.AppendErrorStr(Format('Unknown directive ''%s'' at [%d:%d]' + sLineBreak, [Trim(DirectiveParamSL[0]), Parser.Row, Parser.Col]));
+          begin
+            ErrorStr := Format('Unknown directive ''%s''', [Trim(DirectiveParamSL[0])]);
+            fErrorHandler.AppendErrorStr(Parser.Row, Parser.Col, '', ErrorStr,
+                                         Format('%s at [%d:%d]' + sLineBreak,
+                                                [ErrorStr,Parser.Row, Parser.Col]));
+          end;
 
           gScriptEvents.AddEventHandlerName(TKMScriptEventType(EventType), AnsiString(Trim(DirectiveParamSL[1])));
         finally
@@ -1893,9 +1966,14 @@ const
       except
         on E: Exception do
           begin
-            ErrorStr := Format('Error loading directive ''%s'' at [%d:%d]', [Parser.Token, Parser.Row, Parser.Col]);
-            fErrorHandler.AppendErrorStr(ErrorStr, ErrorStr + ' Exception: ' + E.Message
-              {$IFDEF WDC} + sLineBreak + E.StackTrace {$ENDIF});
+            ErrorStr     := Format('Error loading directive ''%s'' at [%d:%d]', [Parser.Token, Parser.Row, Parser.Col]);
+            ErrDetailStr := ErrorStr + ' Exception: ' + E.Message {$IFDEF WDC} + sLineBreak + E.StackTrace {$ENDIF};
+            fErrorHandler.AppendErrorStr(Parser.Row, Parser.Col, '',
+                                         Format('Error loading directive ''%s'' %s',
+                                                [
+                                                  Parser.Token,
+                                                  ' Exception: ' + E.Message {$IFDEF WDC} + sLineBreak + E.StackTrace {$ENDIF}
+                                                ]), ErrorStr, ErrDetailStr);
           end;
       end;
     end;
@@ -1904,7 +1982,8 @@ const
   procedure LoadCustomTHTroopCost;
   var
     I, TroopCost: Integer;
-    ErrorStr: UnicodeString;
+    ErrorStr,
+    ErrDetailStr: UnicodeString;
     DirectiveParamSL: TStringList;
     HasError: Boolean;
     THTroopCost: array[0..5] of Integer;
@@ -1919,8 +1998,13 @@ const
           StringSplit(DirectiveParam, ',', DirectiveParamSL);
 
           if DirectiveParamSL.Count <> 6 then
-            fErrorHandler.AppendErrorStr(Format('Directive ''%s'' has wrong number of parameters: expected 6, actual: %d. At [%d:%d]' + sLineBreak,
-                                                [CUSTOM_TH_TROOP_COST_DIRECTIVE, DirectiveParamSL.Count, Parser.Row, Parser.Col]));
+          begin
+            ErrDetailStr := Format('Directive ''%s'' has wrong number of parameters: expected 6, actual: %d.',
+                                   [CUSTOM_TH_TROOP_COST_DIRECTIVE, DirectiveParamSL.Count]);
+            fErrorHandler.AppendErrorStr(Parser.Row, Parser.Col, '', ErrDetailStr,
+                                         Format('%s At [%d:%d]' + sLineBreak,
+                                                [ErrDetailStr, Parser.Row, Parser.Col]));
+          end;
 
           HasError := False;
           for I := 0 to 5 do
@@ -1928,8 +2012,11 @@ const
               THTroopCost[I] := EnsureRange(TroopCost, 1, 255)
             else begin
               HasError := True;
-              fErrorHandler.AppendErrorStr(Format('Directive ''%s'' wrong parameter: [%s] is not a number. At [%d:%d]' + sLineBreak,
-                                                  [CUSTOM_TH_TROOP_COST_DIRECTIVE, DirectiveParamSL[I], Parser.Row, Parser.Col]));
+              ErrDetailStr := Format('Directive ''%s'' wrong parameter: [%s] is not a number.',
+                                     [CUSTOM_TH_TROOP_COST_DIRECTIVE, DirectiveParamSL[I]]);
+              fErrorHandler.AppendErrorStr(Parser.Row, Parser.Col, '', ErrDetailStr,
+                                           Format('%s At [%d:%d]' + sLineBreak,
+                                                  [ErrDetailStr, Parser.Row, Parser.Col]));
             end;
 
           if not HasError then
@@ -1954,9 +2041,14 @@ const
       except
         on E: Exception do
           begin
-            ErrorStr := Format('Error loading directive ''%s'' at [%d:%d]', [Parser.Token, Parser.Row, Parser.Col]);
-            fErrorHandler.AppendErrorStr(ErrorStr, ErrorStr + ' Exception: ' + E.Message
-              {$IFDEF WDC} + sLineBreak + E.StackTrace {$ENDIF});
+            ErrorStr     := Format('Error loading directive ''%s'' at [%d:%d]', [Parser.Token, Parser.Row, Parser.Col]);
+            ErrDetailStr := ErrorStr + ' Exception: ' + E.Message {$IFDEF WDC} + sLineBreak + E.StackTrace {$ENDIF};
+            fErrorHandler.AppendErrorStr(Parser.Row, Parser.Col, '',
+                                         Format('Error loading directive ''%s'' %s',
+                                                [
+                                                  Parser.Token,
+                                                  ' Exception: ' + E.Message {$IFDEF WDC} + sLineBreak + E.StackTrace {$ENDIF}
+                                                ]), ErrorStr, ErrDetailStr);
           end;
       end;
     end;
@@ -1964,7 +2056,8 @@ const
 
   procedure LoadCustomMarketGoldPrice;
   var
-    ErrorStr: UnicodeString;
+    ErrorStr,
+    ErrDetailStr: UnicodeString;
     DirectiveParamSL: TStringList;
     HasError: Boolean;
     GoldOrePriceX, GoldPriceX: Single;
@@ -1979,8 +2072,13 @@ const
           StringSplit(DirectiveParam, ',', DirectiveParamSL);
 
           if DirectiveParamSL.Count <> 2 then
-            fErrorHandler.AppendErrorStr(Format('Directive ''%s'' has wrong number of parameters: expected 2, actual: %d. At [%d:%d]' + sLineBreak,
-                                                [CUSTOM_MARKET_GOLD_PRICE_DIRECTIVE, DirectiveParamSL.Count, Parser.Row, Parser.Col]));
+          begin
+            ErrDetailStr := Format('Directive ''%s'' has wrong number of parameters: expected 2, actual: %d.',
+                                   [CUSTOM_MARKET_GOLD_PRICE_DIRECTIVE, DirectiveParamSL.Count]);
+            fErrorHandler.AppendErrorStr(Parser.Row, Parser.Col, '', ErrDetailStr,
+                                         Format('%s At [%d:%d]' + sLineBreak,
+                                                [ErrDetailStr, Parser.Row, Parser.Col]));
+          end;
 
           HasError := False;
             if TryStrToFloat(StringReplace(DirectiveParamSL[0], '.', ',', [rfReplaceAll]), GoldOrePriceX)
@@ -1988,10 +2086,14 @@ const
             begin
               GoldOrePriceX := EnsureRange(GoldOrePriceX, 0.1, 10);
               GoldPriceX := EnsureRange(GoldPriceX, 0.1, 10);
-            end else begin
+            end else
+            begin
               HasError := True;
-              fErrorHandler.AppendErrorStr(Format('Directive ''%s'' has not a number parameter: [%s]. At [%d:%d]' + sLineBreak,
-                                                  [CUSTOM_MARKET_GOLD_PRICE_DIRECTIVE, DirectiveParam, Parser.Row, Parser.Col]));
+              ErrDetailStr := Format('Directive ''%s'' has not a number parameter: [%s].',
+                                     [CUSTOM_MARKET_GOLD_PRICE_DIRECTIVE, DirectiveParam]);
+              fErrorHandler.AppendErrorStr(Parser.Row, Parser.Col, '', ErrDetailStr,
+                                           Format('%s At [%d:%d]' + sLineBreak,
+                                                  [ErrDetailStr, Parser.Row, Parser.Col]));
             end;
 
           if not HasError then
@@ -2018,9 +2120,14 @@ const
       except
         on E: Exception do
           begin
-            ErrorStr := Format('Error loading directive ''%s'' at [%d:%d]', [Parser.Token, Parser.Row, Parser.Col]);
-            fErrorHandler.AppendErrorStr(ErrorStr, ErrorStr + ' Exception: ' + E.Message
-              {$IFDEF WDC} + sLineBreak + E.StackTrace {$ENDIF});
+            ErrorStr     := Format('Error loading directive ''%s'' at [%d:%d]', [Parser.Token, Parser.Row, Parser.Col]);
+            ErrDetailStr := ErrorStr + ' Exception: ' + E.Message {$IFDEF WDC} + sLineBreak + E.StackTrace {$ENDIF};
+            fErrorHandler.AppendErrorStr(Parser.Row, Parser.Col, '',
+                                         Format('Error loading directive ''%s'' %s',
+                                                [
+                                                  Parser.Token,
+                                                  ' Exception: ' + E.Message {$IFDEF WDC} + sLineBreak + E.StackTrace {$ENDIF}
+                                                ]), ErrorStr, ErrDetailStr);
           end;
       end;
     end;
