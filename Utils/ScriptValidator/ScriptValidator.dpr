@@ -103,7 +103,6 @@ begin
   begin
     try
       ProcessParams;
-      fConsoleMain := TConsoleMain.Create;
 
       if not fParamRecord.XmlApi then
         writeln(VALIDATOR_START_TEXT);
@@ -117,28 +116,34 @@ begin
                 'Validator version: ' + VALIDATOR_VERSION + sLineBreak);
       end;
 
-      // Always exit after showing help.
-      if fParamRecord.Help then
-      begin
-        fConsoleMain.ShowHelp;
-        Exit;
-      end;
-
       if fParamRecord.GraphicMode then
       begin
+        FreeConsole; // Used to hide the console
         Application.Initialize;
         Application.MainFormOnTaskbar := True;
         Application.CreateForm(TForm1, Form1);
         Application.Run;
       end else
-        fConsoleMain.Start(fParamRecord);
+      begin
+        try
+          fConsoleMain := TConsoleMain.Create;
+
+          // Always exit after showing help.
+          if fParamRecord.Help then
+          begin
+            fConsoleMain.ShowHelp;
+            Exit;
+          end;
+
+          fConsoleMain.Start(fParamRecord);
+        finally
+          FreeAndNil(fConsoleMain);
+        end;
+      end;
     except
       on E: Exception do
         Writeln(E.ClassName, ': ', E.Message);
     end;
-
-    if fConsoleMain <> nil then
-      FreeAndNil(fConsoleMain);
   end;
 
 end.
