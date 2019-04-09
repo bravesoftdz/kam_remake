@@ -17,9 +17,9 @@
     <MacroValues Count="1">
       <Macro1 Name="LCLWidgetType" Value="nogui"/>
     </MacroValues>
-    <BuildModes Count="3" Active="x84_64">
+    <BuildModes Count="9" Active="Release Win64">
       <Item1 Name="Default" Default="True"/>
-      <Item2 Name="x84_64">
+      <Item2 Name="Debug Linux_x84_64">
         <MacroValues Count="1">
           <Macro1 Name="LCLWidgetType" Value="nogui"/>
         </MacroValues>
@@ -27,7 +27,7 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="KaM_Remake_Server_x86_64"/>
+            <Filename Value="bin\debug\KaM_Remake_Server_x86_64"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;..\..\src\common\Overbyte ICS 8;$(ProjOutDir)"/>
@@ -53,18 +53,12 @@
               <OverflowChecks Value="True"/>
               <StackChecks Value="True"/>
             </Checks>
+            <StackSize Value="2097152"/>
             <TargetCPU Value="x86_64"/>
             <TargetOS Value="linux"/>
-            <Optimizations>
-              <OptimizationLevel Value="3"/>
-            </Optimizations>
           </CodeGeneration>
           <Linking>
-            <Options>
-              <Win32>
-                <GraphicApplication Value="True"/>
-              </Win32>
-            </Options>
+            <LinkSmart Value="True"/>
           </Linking>
           <Other>
             <CompilerMessages>
@@ -73,7 +67,7 @@
           </Other>
         </CompilerOptions>
       </Item2>
-      <Item3 Name="i386">
+      <Item3 Name="Release Linux_x84_64">
         <MacroValues Count="1">
           <Macro1 Name="LCLWidgetType" Value="nogui"/>
         </MacroValues>
@@ -81,7 +75,55 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="KaM_Remake_Server_i386"/>
+            <Filename Value="bin\release\KaM_Remake_Server_x86_64"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;..\..\src\common\Overbyte ICS 8;$(ProjOutDir)"/>
+            <Libraries Value="..\..;..\..\src;..\..\src\common"/>
+            <OtherUnitFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;..\..\src\common\Overbyte ICS 8"/>
+            <UnitOutputDirectory Value="dcu"/>
+            <ObjectPath Value="Ext"/>
+          </SearchPaths>
+          <Parsing>
+            <SyntaxOptions>
+              <SyntaxMode Value="Delphi"/>
+              <CStyleOperator Value="False"/>
+              <AllowLabel Value="False"/>
+              <CPPInline Value="False"/>
+              <UseAnsiStrings Value="False"/>
+            </SyntaxOptions>
+          </Parsing>
+          <CodeGeneration>
+            <SmartLinkUnit Value="True"/>
+            <StackSize Value="2097152"/>
+            <TargetCPU Value="x86_64"/>
+            <TargetOS Value="linux"/>
+            <Optimizations>
+              <OptimizationLevel Value="3"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <GenerateDebugInfo Value="False"/>
+            </Debugging>
+            <LinkSmart Value="True"/>
+          </Linking>
+          <Other>
+            <CompilerMessages>
+              <IgnoredMessages idx4081="True" idx4080="True" idx4079="True" idx4056="True" idx4055="True" idx4035="True"/>
+            </CompilerMessages>
+          </Other>
+        </CompilerOptions>
+      </Item3>
+      <Item4 Name="Debug Linux_i386">
+        <MacroValues Count="1">
+          <Macro1 Name="LCLWidgetType" Value="nogui"/>
+        </MacroValues>
+        <CompilerOptions>
+          <Version Value="11"/>
+          <PathDelim Value="\"/>
+          <Target>
+            <Filename Value="bin\debug\KaM_Remake_Server_i386"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;$(ProjOutDir)"/>
@@ -107,6 +149,49 @@
               <OverflowChecks Value="True"/>
               <StackChecks Value="True"/>
             </Checks>
+            <StackSize Value="2097152"/>
+            <TargetCPU Value="i386"/>
+            <TargetOS Value="linux"/>
+          </CodeGeneration>
+          <Linking>
+            <LinkSmart Value="True"/>
+          </Linking>
+          <Other>
+            <CompilerMessages>
+              <IgnoredMessages idx6058="True" idx5091="True" idx5089="True" idx5059="True" idx5058="True" idx5057="True" idx5043="True" idx5036="True" idx5028="True" idx5026="True" idx5025="True" idx5024="True" idx5023="True" idx5014="True" idx4105="True" idx4104="True" idx4081="True" idx4080="True" idx4079="True" idx4056="True" idx4055="True" idx4035="True"/>
+            </CompilerMessages>
+          </Other>
+        </CompilerOptions>
+      </Item4>
+      <Item5 Name="Release Linux_i386">
+        <MacroValues Count="1">
+          <Macro1 Name="LCLWidgetType" Value="nogui"/>
+        </MacroValues>
+        <CompilerOptions>
+          <Version Value="11"/>
+          <PathDelim Value="\"/>
+          <Target>
+            <Filename Value="bin\release\KaM_Remake_Server_i386"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;$(ProjOutDir)"/>
+            <Libraries Value="..\..;..\..\src;..\..\src\common"/>
+            <OtherUnitFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL"/>
+            <UnitOutputDirectory Value="dcu"/>
+            <ObjectPath Value="Ext"/>
+          </SearchPaths>
+          <Parsing>
+            <SyntaxOptions>
+              <SyntaxMode Value="Delphi"/>
+              <CStyleOperator Value="False"/>
+              <AllowLabel Value="False"/>
+              <CPPInline Value="False"/>
+              <UseAnsiStrings Value="False"/>
+            </SyntaxOptions>
+          </Parsing>
+          <CodeGeneration>
+            <SmartLinkUnit Value="True"/>
+            <StackSize Value="2097152"/>
             <TargetCPU Value="i386"/>
             <TargetOS Value="linux"/>
             <Optimizations>
@@ -114,21 +199,212 @@
             </Optimizations>
           </CodeGeneration>
           <Linking>
-            <Options>
-              <Win32>
-                <GraphicApplication Value="True"/>
-              </Win32>
-            </Options>
+            <Debugging>
+              <GenerateDebugInfo Value="False"/>
+            </Debugging>
+            <LinkSmart Value="True"/>
           </Linking>
           <Other>
             <CompilerMessages>
-              <IgnoredMessages idx4081="True" idx4080="True" idx4079="True" idx4056="True" idx4055="True" idx4035="True"/>
+              <IgnoredMessages idx6058="True" idx5091="True" idx5089="True" idx5059="True" idx5058="True" idx5057="True" idx5043="True" idx5036="True" idx5028="True" idx5026="True" idx5025="True" idx5024="True" idx5023="True" idx5014="True" idx4105="True" idx4104="True" idx4081="True" idx4080="True" idx4079="True" idx4056="True" idx4055="True" idx4035="True"/>
             </CompilerMessages>
           </Other>
         </CompilerOptions>
-      </Item3>
+      </Item5>
+      <Item6 Name="Debug Win64">
+        <MacroValues Count="1">
+          <Macro1 Name="LCLWidgetType" Value="nogui"/>
+        </MacroValues>
+        <CompilerOptions>
+          <Version Value="11"/>
+          <PathDelim Value="\"/>
+          <Target>
+            <Filename Value="bin\debug\KaM_Remake_Server_Win64.exe"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;..\..\src\common\Overbyte ICS 8;$(ProjOutDir)"/>
+            <Libraries Value="..\..;..\..\src;..\..\src\common"/>
+            <OtherUnitFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;..\..\src\common\Overbyte ICS 8"/>
+            <UnitOutputDirectory Value="dcu"/>
+            <ObjectPath Value="Ext"/>
+          </SearchPaths>
+          <Parsing>
+            <SyntaxOptions>
+              <SyntaxMode Value="Delphi"/>
+              <CStyleOperator Value="False"/>
+              <IncludeAssertionCode Value="True"/>
+              <AllowLabel Value="False"/>
+              <CPPInline Value="False"/>
+              <UseAnsiStrings Value="False"/>
+            </SyntaxOptions>
+          </Parsing>
+          <CodeGeneration>
+            <Checks>
+              <IOChecks Value="True"/>
+              <RangeChecks Value="True"/>
+              <OverflowChecks Value="True"/>
+              <StackChecks Value="True"/>
+            </Checks>
+            <StackSize Value="2097152"/>
+            <TargetCPU Value="x86_64"/>
+            <TargetOS Value="win64"/>
+          </CodeGeneration>
+          <Linking>
+            <LinkSmart Value="True"/>
+          </Linking>
+          <Other>
+            <CompilerMessages>
+              <IgnoredMessages idx5092="True" idx5091="True" idx5089="True" idx5059="True" idx5058="True" idx5057="True" idx5043="True" idx5036="True" idx5028="True" idx5027="True" idx5024="True" idx5023="True" idx5014="True" idx4105="True" idx4104="True" idx4081="True" idx4080="True" idx4079="True" idx4056="True" idx4055="True" idx4045="True" idx4035="True"/>
+            </CompilerMessages>
+          </Other>
+        </CompilerOptions>
+      </Item6>
+      <Item7 Name="Release Win64">
+        <MacroValues Count="1">
+          <Macro1 Name="LCLWidgetType" Value="nogui"/>
+        </MacroValues>
+        <CompilerOptions>
+          <Version Value="11"/>
+          <PathDelim Value="\"/>
+          <Target>
+            <Filename Value="bin\release\KaM_Remake_Server_Win64.exe"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;..\..\src\common\Overbyte ICS 8;$(ProjOutDir)"/>
+            <Libraries Value="..\..;..\..\src;..\..\src\common"/>
+            <OtherUnitFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;..\..\src\common\Overbyte ICS 8"/>
+            <UnitOutputDirectory Value="dcu"/>
+            <ObjectPath Value="Ext"/>
+          </SearchPaths>
+          <Parsing>
+            <SyntaxOptions>
+              <SyntaxMode Value="Delphi"/>
+              <CStyleOperator Value="False"/>
+              <AllowLabel Value="False"/>
+              <CPPInline Value="False"/>
+              <UseAnsiStrings Value="False"/>
+            </SyntaxOptions>
+          </Parsing>
+          <CodeGeneration>
+            <SmartLinkUnit Value="True"/>
+            <StackSize Value="2097152"/>
+            <TargetCPU Value="x86_64"/>
+            <TargetOS Value="win64"/>
+            <Optimizations>
+              <OptimizationLevel Value="3"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <GenerateDebugInfo Value="False"/>
+            </Debugging>
+            <LinkSmart Value="True"/>
+          </Linking>
+          <Other>
+            <CompilerMessages>
+              <IgnoredMessages idx5092="True" idx5091="True" idx5089="True" idx5059="True" idx5058="True" idx5057="True" idx5043="True" idx5036="True" idx5028="True" idx5027="True" idx5024="True" idx5023="True" idx5014="True" idx4105="True" idx4104="True" idx4081="True" idx4080="True" idx4079="True" idx4056="True" idx4055="True" idx4045="True" idx4035="True"/>
+            </CompilerMessages>
+          </Other>
+        </CompilerOptions>
+      </Item7>
+      <Item8 Name="Debug Win32">
+        <MacroValues Count="1">
+          <Macro1 Name="LCLWidgetType" Value="nogui"/>
+        </MacroValues>
+        <CompilerOptions>
+          <Version Value="11"/>
+          <PathDelim Value="\"/>
+          <Target>
+            <Filename Value="bin\debug\KaM_Remake_Server_Win32.exe"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;..\..\src\common\Overbyte ICS 8;$(ProjOutDir)"/>
+            <Libraries Value="..\..;..\..\src;..\..\src\common"/>
+            <OtherUnitFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;..\..\src\common\Overbyte ICS 8"/>
+            <UnitOutputDirectory Value="dcu"/>
+            <ObjectPath Value="Ext"/>
+          </SearchPaths>
+          <Parsing>
+            <SyntaxOptions>
+              <SyntaxMode Value="Delphi"/>
+              <CStyleOperator Value="False"/>
+              <IncludeAssertionCode Value="True"/>
+              <AllowLabel Value="False"/>
+              <CPPInline Value="False"/>
+              <UseAnsiStrings Value="False"/>
+            </SyntaxOptions>
+          </Parsing>
+          <CodeGeneration>
+            <Checks>
+              <IOChecks Value="True"/>
+              <RangeChecks Value="True"/>
+              <OverflowChecks Value="True"/>
+              <StackChecks Value="True"/>
+            </Checks>
+            <StackSize Value="2097152"/>
+            <TargetCPU Value="i386"/>
+            <TargetOS Value="win32"/>
+          </CodeGeneration>
+          <Linking>
+            <LinkSmart Value="True"/>
+          </Linking>
+          <Other>
+            <CompilerMessages>
+              <IgnoredMessages idx5092="True" idx5091="True" idx5089="True" idx5059="True" idx5058="True" idx5057="True" idx5043="True" idx5036="True" idx5028="True" idx5027="True" idx5024="True" idx5023="True" idx5014="True" idx4105="True" idx4104="True" idx4081="True" idx4080="True" idx4079="True" idx4056="True" idx4055="True" idx4045="True" idx4035="True"/>
+            </CompilerMessages>
+          </Other>
+        </CompilerOptions>
+      </Item8>
+      <Item9 Name="Release Win32">
+        <MacroValues Count="1">
+          <Macro1 Name="LCLWidgetType" Value="nogui"/>
+        </MacroValues>
+        <CompilerOptions>
+          <Version Value="11"/>
+          <PathDelim Value="\"/>
+          <Target>
+            <Filename Value="bin\release\KaM_Remake_Server_Win32.exe"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;..\..\src\common\Overbyte ICS 8;$(ProjOutDir)"/>
+            <Libraries Value="..\..;..\..\src;..\..\src\common"/>
+            <OtherUnitFiles Value="..\..;..\..\src;..\..\src\net;..\..\src\res;..\..\src\common;..\..\src\common\pngimage;..\..\src\common\BGRABitmap;..\..\src\common\LNet;..\..\src\common\pascalscript\Source;..\..\src\common\OggVorbis;..\..\src\common\LazarusOpenGL;..\..\src\common\Overbyte ICS 8"/>
+            <UnitOutputDirectory Value="dcu"/>
+            <ObjectPath Value="Ext"/>
+          </SearchPaths>
+          <Parsing>
+            <SyntaxOptions>
+              <SyntaxMode Value="Delphi"/>
+              <CStyleOperator Value="False"/>
+              <AllowLabel Value="False"/>
+              <CPPInline Value="False"/>
+              <UseAnsiStrings Value="False"/>
+            </SyntaxOptions>
+          </Parsing>
+          <CodeGeneration>
+            <SmartLinkUnit Value="True"/>
+            <StackSize Value="2097152"/>
+            <TargetCPU Value="i386"/>
+            <TargetOS Value="win32"/>
+            <Optimizations>
+              <OptimizationLevel Value="3"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <GenerateDebugInfo Value="False"/>
+            </Debugging>
+            <LinkSmart Value="True"/>
+          </Linking>
+          <Other>
+            <CompilerMessages>
+              <IgnoredMessages idx5092="True" idx5091="True" idx5089="True" idx5059="True" idx5058="True" idx5057="True" idx5043="True" idx5036="True" idx5028="True" idx5027="True" idx5024="True" idx5023="True" idx5014="True" idx4105="True" idx4104="True" idx4081="True" idx4080="True" idx4079="True" idx4056="True" idx4055="True" idx4045="True" idx4035="True"/>
+            </CompilerMessages>
+          </Other>
+        </CompilerOptions>
+      </Item9>
       <SharedMatrixOptions Count="1">
-        <Item1 ID="665278215502" Modes="x84_64,i386,Default" Type="IDEMacro" MacroName="LCLWidgetType" Value="nogui"/>
+        <Item1 ID="665278215502" Modes="Debug Linux_x84_64,Debug Linux_i386,Default,Debug Win64,Debug Win32,Release Linux_x84_64,Release Linux_i386,Release Win64,Release Win32" Type="IDEMacro" MacroName="LCLWidgetType" Value="nogui"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -148,13 +424,13 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="40">
+    <Units Count="62">
       <Unit0>
         <Filename Value="KaM_DedicatedServer.dpr"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="43"/>
-        <CursorPos X="47" Y="18"/>
-        <UsageCount Value="34"/>
+        <IsVisibleTab Value="True"/>
+        <CursorPos X="9" Y="18"/>
+        <UsageCount Value="46"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
@@ -162,7 +438,7 @@
         <Filename Value="..\..\KaM_Remake.lpr"/>
         <TopLine Value="59"/>
         <CursorPos X="15" Y="4"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
@@ -170,23 +446,21 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="652"/>
         <CursorPos X="22" Y="665"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\..\src\KM_DedicatedServer.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="57"/>
-        <CursorPos X="35" Y="80"/>
-        <UsageCount Value="25"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="27" Y="5"/>
+        <UsageCount Value="37"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
         <Filename Value="..\..\src\KM_CommonTypes.pas"/>
-        <TopLine Value="385"/>
-        <CursorPos X="37" Y="400"/>
+        <EditorIndex Value="-1"/>
         <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
@@ -194,39 +468,37 @@
         <Filename Value="..\..\src\common\dglOpenGL.pas"/>
         <TopLine Value="460"/>
         <CursorPos X="51" Y="478"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
         <Filename Value="..\..\src\KM_Utils.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="237"/>
-        <CursorPos Y="249"/>
-        <UsageCount Value="25"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="7" Y="287"/>
+        <UsageCount Value="37"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
         <Filename Value="..\..\src\KM_Points.pas"/>
-        <CursorPos X="100" Y="2"/>
-        <UsageCount Value="14"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
         <Filename Value="..\..\src\KM_Settings.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="9" Y="9"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="37"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
         <Filename Value="KM_ServerEventHandler.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="4"/>
-        <CursorPos X="63" Y="25"/>
-        <UsageCount Value="25"/>
+        <CursorPos X="24" Y="7"/>
+        <UsageCount Value="37"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
       <Unit10>
@@ -234,38 +506,36 @@
         <UnitName Value="WSImgList"/>
         <TopLine Value="250"/>
         <CursorPos X="10" Y="266"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
         <Filename Value="..\..\src\KM_Log.pas"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="61"/>
-        <CursorPos X="121" Y="77"/>
-        <UsageCount Value="25"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="37"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
         <Filename Value="..\..\src\KM_CommonClasses.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="150"/>
-        <CursorPos X="24" Y="163"/>
-        <UsageCount Value="14"/>
+        <CursorPos X="37" Y="304"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit12>
       <Unit13>
         <Filename Value="..\..\src\common\URLUtils.pas"/>
-        <TopLine Value="154"/>
-        <CursorPos X="20" Y="169"/>
-        <UsageCount Value="14"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit13>
       <Unit14>
         <Filename Value="..\..\src\KM_Defaults.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="34" Y="33"/>
-        <UsageCount Value="25"/>
+        <TopLine Value="6"/>
+        <CursorPos X="3" Y="25"/>
+        <UsageCount Value="37"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit14>
       <Unit15>
@@ -273,7 +543,8 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="21"/>
         <CursorPos X="23" Y="42"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit15>
       <Unit16>
         <Filename Value="F:\fpcupdeluxe\lazarus\lcl\forms.pp"/>
@@ -281,54 +552,54 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="49"/>
         <CursorPos X="3" Y="69"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit16>
       <Unit17>
         <Filename Value="..\..\src\net\KM_NetUDP.pas"/>
+        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="6"/>
-        <CursorPos X="4" Y="6"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="143"/>
+        <CursorPos X="49" Y="166"/>
+        <UsageCount Value="32"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit17>
       <Unit18>
         <Filename Value="..\..\src\net\KM_NetUDPLNet.pas"/>
+        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="3"/>
-        <CursorPos X="15" Y="23"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="53"/>
+        <CursorPos X="18" Y="70"/>
+        <UsageCount Value="32"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit18>
       <Unit19>
         <Filename Value="..\..\src\KM_Resolutions.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="69"/>
-        <CursorPos X="7" Y="82"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit19>
       <Unit20>
         <Filename Value="..\..\src\common\PolyTriangulate.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="200"/>
-        <CursorPos X="21" Y="213"/>
+        <TopLine Value="232"/>
+        <CursorPos X="22" Y="214"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit20>
       <Unit21>
         <Filename Value="..\..\src\common\LNet\lnet.pp"/>
         <UnitName Value="lNet"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="1572"/>
-        <CursorPos X="50" Y="1602"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="421"/>
+        <CursorPos X="61" Y="444"/>
+        <UsageCount Value="14"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit21>
       <Unit22>
         <Filename Value="..\..\KM_TextIDs.inc"/>
         <EditorIndex Value="-1"/>
+        <CursorPos Y="996"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
@@ -338,15 +609,15 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="440"/>
         <CursorPos X="32" Y="453"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit23>
       <Unit24>
         <Filename Value="..\..\src\common\LNet\lnetssl.pp"/>
         <UnitName Value="lNetSSL"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="394"/>
-        <CursorPos X="44" Y="512"/>
+        <TopLine Value="123"/>
+        <CursorPos X="23" Y="140"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit24>
@@ -356,14 +627,16 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="80"/>
         <CursorPos X="45" Y="92"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit25>
       <Unit26>
         <Filename Value="..\..\src\KM_HTTPClientLNet.pas"/>
+        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="50" Y="16"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="39"/>
+        <CursorPos Y="61"/>
+        <UsageCount Value="32"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit26>
       <Unit27>
@@ -371,7 +644,8 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="169"/>
         <CursorPos X="23" Y="194"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit27>
       <Unit28>
         <Filename Value="..\..\src\common\LNet\lopenssl.pas"/>
@@ -379,19 +653,19 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1309"/>
         <CursorPos X="26" Y="265"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit28>
       <Unit29>
         <Filename Value="..\..\src\common\LNet\lcontainers.inc"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit29>
       <Unit30>
         <Filename Value="..\..\src\common\LNet\lcontainersh.inc"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit30>
       <Unit31>
@@ -400,52 +674,56 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="6"/>
         <CursorPos X="37" Y="116"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit31>
       <Unit32>
         <Filename Value="..\..\src\net\KM_NetServer.pas"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="237"/>
-        <CursorPos X="38" Y="255"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="49"/>
+        <UsageCount Value="32"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit32>
       <Unit33>
         <Filename Value="..\..\src\net\KM_NetServerLNet.pas"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="259"/>
-        <CursorPos X="26" Y="140"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="41" Y="235"/>
+        <UsageCount Value="32"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit33>
       <Unit34>
         <Filename Value="F:\fpcupdeluxe\fpcsrc\rtl\objpas\classes\classesh.inc"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="105"/>
-        <CursorPos X="3" Y="122"/>
+        <TopLine Value="955"/>
+        <CursorPos X="14" Y="972"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit34>
       <Unit35>
         <Filename Value="..\..\src\KM_MasterServer.pas"/>
+        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="85"/>
+        <CursorPos Y="98"/>
+        <UsageCount Value="32"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit35>
       <Unit36>
         <Filename Value="..\..\src\KM_HTTPClient.pas"/>
+        <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="6"/>
-        <CursorPos X="4" Y="6"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="35"/>
+        <CursorPos Y="53"/>
+        <UsageCount Value="32"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit36>
       <Unit37>
         <Filename Value="..\..\src\net\KM_NetServerOverbyte.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="39" Y="7"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit37>
       <Unit38>
@@ -453,134 +731,214 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1040"/>
         <CursorPos X="18" Y="1090"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit38>
       <Unit39>
         <Filename Value="..\..\src\common\Overbyte ICS 8\Include\OverbyteIcsDefs.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="206"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit39>
+      <Unit40>
+        <Filename Value="..\..\src\net\KM_NetAuthUnsecure.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="32"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit40>
+      <Unit41>
+        <Filename Value="..\..\src\net\KM_NetClient.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="32"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit41>
+      <Unit42>
+        <Filename Value="..\..\src\net\KM_NetClientLNet.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="32"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit42>
+      <Unit43>
+        <Filename Value="..\..\src\net\KM_NetFileTransfer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="32"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit43>
+      <Unit44>
+        <Filename Value="..\..\src\net\KM_NetPlayersList.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="32"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit44>
+      <Unit45>
+        <Filename Value="..\..\src\net\KM_NetworkClasses.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="32"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit45>
+      <Unit46>
+        <Filename Value="..\..\src\net\KM_Networking.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="32"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit46>
+      <Unit47>
+        <Filename Value="..\..\src\net\KM_NetworkTypes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="32"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit47>
+      <Unit48>
+        <Filename Value="..\..\src\KM_WareDistribution.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="86"/>
+        <CursorPos X="3" Y="103"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit48>
+      <Unit49>
+        <Filename Value="..\..\src\res\KM_ResWares.pas"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit49>
+      <Unit50>
+        <Filename Value="..\..\src\res\KM_ResHouses.pas"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit50>
+      <Unit51>
+        <Filename Value="..\..\src\common\LNet\lhttp.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2295"/>
+        <CursorPos X="79" Y="2308"/>
+        <UsageCount Value="13"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit51>
+      <Unit52>
+        <Filename Value="F:\fpcupdeluxe\fpcsrc\packages\openssl\src\openssl.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="51"/>
+        <CursorPos X="17" Y="70"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit52>
+      <Unit53>
+        <Filename Value="..\..\src\common\LNet\sys\osunits.inc"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="3" Y="3"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit53>
+      <Unit54>
+        <Filename Value="..\..\src\common\LNet\lcommon.pp"/>
+        <UnitName Value="lCommon"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="340"/>
+        <CursorPos X="4" Y="358"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit54>
+      <Unit55>
+        <Filename Value="..\..\src\common\VerySimpleXML.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="585"/>
+        <CursorPos X="3" Y="607"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit55>
+      <Unit56>
+        <Filename Value="..\..\src\common\LNet\lws2tcpip.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="30"/>
+        <CursorPos X="84" Y="60"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit56>
+      <Unit57>
+        <Filename Value="..\..\src\KM_PolySimplify.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="10" Y="466"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit57>
+      <Unit58>
+        <Filename Value="..\..\src\common\LNet\levents.pp"/>
+        <UnitName Value="lEvents"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="145"/>
+        <CursorPos X="14" Y="162"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit58>
+      <Unit59>
+        <Filename Value="F:\fpcupdeluxe\fpcsrc\packages\rtl-extra\src\inc\socketsh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="7"/>
+        <CursorPos X="3" Y="20"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit59>
+      <Unit60>
+        <Filename Value="F:\fpcupdeluxe\fpcsrc\rtl\inc\ctypes.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="39"/>
+        <CursorPos X="3" Y="52"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit60>
+      <Unit61>
+        <Filename Value="C:\fpcupdeluxe\lazarus\lcl\lclexceptionstacktrace.pas"/>
+        <UnitName Value="LCLExceptionStackTrace"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="10"/>
+        <CursorPos X="3" Y="35"/>
+        <UsageCount Value="12"/>
+      </Unit61>
     </Units>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="2" HistoryIndex="1">
       <Position1>
-        <Filename Value="..\..\src\net\KM_NetServerLNet.pas"/>
-        <Caret Line="51" Column="29" TopLine="31"/>
+        <Filename Value="..\..\src\KM_DedicatedServer.pas"/>
+        <Caret Line="5" Column="27"/>
       </Position1>
       <Position2>
-        <Filename Value="..\..\src\net\KM_NetServerLNet.pas"/>
-        <Caret Line="140" Column="26" TopLine="109"/>
+        <Filename Value="KaM_DedicatedServer.dpr"/>
+        <Caret Line="18" Column="9"/>
       </Position2>
-      <Position3>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="375" Column="20" TopLine="354"/>
-      </Position3>
-      <Position4>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="430" Column="10" TopLine="397"/>
-      </Position4>
-      <Position5>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="838" Column="14" TopLine="808"/>
-      </Position5>
-      <Position6>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="876" Column="17" TopLine="843"/>
-      </Position6>
-      <Position7>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="1195" Column="34" TopLine="1162"/>
-      </Position7>
-      <Position8>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="99" Column="25" TopLine="80"/>
-      </Position8>
-      <Position9>
-        <Filename Value="..\..\src\net\KM_NetServerLNet.pas"/>
-        <Caret Line="140" Column="26" TopLine="259"/>
-      </Position9>
-      <Position10>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="302" Column="50" TopLine="283"/>
-      </Position10>
-      <Position11>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="319" Column="26" TopLine="286"/>
-      </Position11>
-      <Position12>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="357" Column="26" TopLine="324"/>
-      </Position12>
-      <Position13>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="664" Column="31" TopLine="631"/>
-      </Position13>
-      <Position14>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="984" Column="18" TopLine="951"/>
-      </Position14>
-      <Position15>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="1301" Column="28" TopLine="1268"/>
-      </Position15>
-      <Position16>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="1602" Column="28" TopLine="1580"/>
-      </Position16>
-      <Position17>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="1625" Column="49" TopLine="1592"/>
-      </Position17>
-      <Position18>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="60" Column="34" TopLine="40"/>
-      </Position18>
-      <Position19>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="454" Column="19" TopLine="431"/>
-      </Position19>
-      <Position20>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="540" Column="20" TopLine="507"/>
-      </Position20>
-      <Position21>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="547" Column="63" TopLine="514"/>
-      </Position21>
-      <Position22>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="585" Column="40" TopLine="552"/>
-      </Position22>
-      <Position23>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="610" Column="67" TopLine="577"/>
-      </Position23>
-      <Position24>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="1161" Column="23" TopLine="1128"/>
-      </Position24>
-      <Position25>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="1396" Column="38" TopLine="1363"/>
-      </Position25>
-      <Position26>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="1428" Column="47" TopLine="1395"/>
-      </Position26>
-      <Position27>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="1533" Column="23" TopLine="1500"/>
-      </Position27>
-      <Position28>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="1552" Column="57" TopLine="1519"/>
-      </Position28>
-      <Position29>
-        <Filename Value="..\..\src\common\LNet\lnet.pp"/>
-        <Caret Line="1602" Column="28" TopLine="1569"/>
-      </Position29>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -613,6 +971,7 @@
         <OverflowChecks Value="True"/>
         <StackChecks Value="True"/>
       </Checks>
+      <StackSize Value="2097152"/>
       <TargetOS Value="win64"/>
     </CodeGeneration>
     <Linking>
