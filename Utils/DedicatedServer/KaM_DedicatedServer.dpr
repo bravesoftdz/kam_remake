@@ -121,10 +121,10 @@ begin
 end;
 
 {$IFDEF MSWindows}
-function OnConsoleCtrl(ACtrl: DWord): LongBool; stdcall;
+function OnConsoleCtrl(aCtrl: DWORD): BOOL; stdcall;
 begin
   Result := False;
-  if (ACtrl = CTRL_C_EVENT) or (ACtrl = CTRL_BREAK_EVENT) or (ACtrl = CTRL_CLOSE_EVENT) then
+  if aCtrl in [CTRL_C_EVENT, CTRL_BREAK_EVENT, CTRL_CLOSE_EVENT, CTRL_SHUTDOWN_EVENT] then
   begin
     Result := True;
     ServerKilled;
