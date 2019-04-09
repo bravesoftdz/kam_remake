@@ -3,7 +3,7 @@ unit KM_DedicatedServer;
 interface
 uses
   SysUtils, Classes, Math,
-  {$IFDEF MSWindows}Windows,{$ENDIF}
+  {$IFDEF MSWindows} Windows, {$ENDIF}
   KM_NetServer, KM_MasterServer, KM_NetUDP, KM_CommonTypes, KM_Defaults;
 
 type
@@ -113,7 +113,7 @@ begin
     fLastPing := TickCount;
   end;
 
-  if fPublishServer and (GetTimeSince(fLastAnnounce) >= fAnnounceInterval*1000) then
+  if fPublishServer and (GetTimeSince(fLastAnnounce) >= fAnnounceInterval * 1000) then
   begin
     fMasterServer.AnnounceServer(UnicodeString(fServerName), fPort, fNetServer.GetPlayerCount, fAnnounceInterval + 20);
     fLastAnnounce := TickCount;
@@ -145,7 +145,7 @@ end;
 
 procedure TKMDedicatedServer.MasterServerError(const aData: string);
 begin
-  StatusMessage('HTTP Master Server: '+aData);
+  StatusMessage('HTTP Master Server: ' + aData);
 end;
 
 

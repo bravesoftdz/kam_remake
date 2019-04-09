@@ -702,14 +702,16 @@ var
   Arg, Opt: Integer;
 begin
   Result := false;
-  if FConnectionStatus = scNone then begin
+  if FConnectionStatus = scNone then
+  begin
     Done := true;
     FHandle := fpSocket(FSocketNet, FSocketType, FProtocol);
     if FHandle = INVALID_SOCKET then
       Exit(Bail('Socket error', LSocketError));
     SetOptions;
 
-    if FSocketType = SOCK_DGRAM then begin
+    if FSocketType = SOCK_DGRAM then
+    begin
       Arg := 1;
       if fpsetsockopt(FHandle, SOL_SOCKET, SO_BROADCAST, @Arg, Sizeof(Arg)) = SOCKET_ERROR then
         Exit(Bail('SetSockOpt error', LSocketError));
@@ -892,8 +894,10 @@ begin
   if aSize = 0 then
     raise Exception.Create('Invalid buffersize 0 in Send');
 
-  if SendPossible then begin
-    if aSize <= 0 then begin
+  if SendPossible then
+  begin
+    if aSize <= 0 then
+    begin
       LogError('Send error: Size <= 0', -1);
       Exit(0);
     end;
@@ -1170,8 +1174,11 @@ end;
 constructor TLUdp.Create(aOwner: TComponent);
 begin
   inherited Create(aOwner);
+  FSocketNet := LAF_INET; // default to IPv4
   FTimeVal.tv_usec := 0;
   FTimeVal.tv_sec := 0;
+  FIterator  := nil;
+  FRootSock  := nil;
 end;
 
 procedure TLUdp.Disconnect(const Forced: Boolean = False);
@@ -1212,7 +1219,8 @@ begin
   FRootSock.SetReuseAddress(FReuseAddress);
   FIterator := FRootSock;
 
-  if FRootSock.Listen(APort, AIntf) then begin
+  if FRootSock.Listen(APort, AIntf) then
+  begin
     FillAddressInfo(FRootSock.FPeerAddress, FRootSock.FSocketNet, LADDR_BR, aPort);
   
     FRootSock.FConnectionStatus := scConnected;
@@ -1239,13 +1247,14 @@ var
   s: string;
   p: Word;
 begin
-  if FSocketNet = LAF_INET6 then
+  if FSocketNet = LAF_INET then
     n := Pos(':', Address)  // IPv4
   else
     n := Pos(']:', Address) + 1; // IPv6
 
-  if n > 1 then begin
-    s := Copy(Address, 1, n-1);
+  if n > 1 then
+  begin
+    s := Copy(Address, 1, n - 1);
     p := Word(StrToInt(Copy(Address, n+1, Length(Address))));
 
     FillAddressInfo(FRootSock.FPeerAddress, FRootSock.FSocketNet, s, p);
@@ -1342,11 +1351,11 @@ begin
     Result := FRootSock.Send(aData, aSize)
 end;
 
-function TLUdp.Send(const aData; const aSize: Integer; const Address: string
-  ): Integer;
+function TLUdp.Send(const aData; const aSize: Integer; const Address: string): Integer;
 begin
   Result := 0;
-  if Assigned(FRootSock) then begin
+  if Assigned(FRootSock) then
+  begin
     SetAddress(Address);
     Result := FRootSock.Send(aData, aSize);
   end;
@@ -1597,12 +1606,14 @@ begin
   Result := False;
 
   Tmp := FRootSock;
-  while Assigned(Tmp) do begin
-    if  (Tmp.ConnectionStatus = scConnected)
-    {and not (ssServerSocket in Tmp.SocketState)} then begin
+  while Assigned(Tmp) do
+  begin
+    if (Tmp.ConnectionStatus = scConnected) then
+    begin
       Result := True;
       Exit;
-    end else Tmp := Tmp.NextSock;
+    end else
+      Tmp := Tmp.NextSock;
   end;
 end;
 

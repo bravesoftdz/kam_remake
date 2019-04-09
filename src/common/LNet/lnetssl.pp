@@ -509,7 +509,7 @@ begin
     Exit;
 
   case FMethod of
-    msSslTLS   : aMethod := SslMethodTLSV1;//SslMethodTLSV1_2; // DEPRECATED
+    msSslTLS   : aMethod := SslMethodTLSV1_2; // DEPRECATED
     msSSLv2or3 : aMethod := SslMethodV23;
     msSSLv2    : aMethod := SslMethodV2;
     msSSLv3    : aMethod := SslMethodV3;

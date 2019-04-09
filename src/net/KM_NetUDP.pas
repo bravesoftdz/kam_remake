@@ -2,9 +2,9 @@ unit KM_NetUDP;
 {$I KaM_Remake.inc}
 interface
 uses
-  Classes, Math, SysUtils, KM_CommonClasses, KM_Defaults
-  {$IFDEF WDC} ,KM_NetUDPOverbyte {$ENDIF}
-  {$IFDEF FPC} ,KM_NetUDPLNet {$ENDIF}
+  Classes, Math, SysUtils, KM_CommonClasses, KM_Defaults,
+  {$IFDEF WDC} KM_NetUDPOverbyte {$ENDIF}
+  {$IFDEF FPC} KM_NetUDPLNet {$ENDIF}
   ;
 
 
@@ -87,7 +87,7 @@ begin
   fServerName := aName;
   fUDP.StopListening;
   try
-    fUDP.Listen({$IFDEF FPC}'56789'{$ELSE}56789{$ENDIF});
+    fUDP.Listen(56789);
   except
     //UDP announce is not that important, and will fail whenever you start more than 1 server per machine
     on E: Exception do
@@ -152,7 +152,7 @@ begin
   //Prepare to receive responses
   fUDP.StopListening;
   try
-    fUDP.Listen({$IFDEF FPC}'56788'{$ELSE}56788{$ENDIF});
+    fUDP.Listen(56788);
   except
     //UDP scan is not that important, and could fail during debugging if running two KaM Remake instances
     on E: Exception do

@@ -12,9 +12,9 @@ type
     fOnError: TGetStrProc;
     fOnGetCompleted: TGetStrProc;
     fIsUTF8: Boolean;
-    procedure HTTPClientDoneInput(ASocket: TLHTTPClientSocket);
+    procedure HTTPClientDoneInput(aSocket: TLHTTPClientSocket);
     procedure HTTPClientError(const msg: string; aSocket: TLSocket);
-    function HTTPClientInput(ASocket: TLHTTPClientSocket; ABuffer: PChar; ASize: Integer): Integer;
+    function HTTPClientInput(aSocket: TLHTTPClientSocket; ABuffer: PChar; ASize: Integer): Integer;
   public
     constructor Create;
     destructor Destroy; override;
@@ -62,7 +62,7 @@ begin
 end;
 
 
-procedure TKMHTTPClientLNet.HTTPClientDoneInput(ASocket: TLHTTPClientSocket);
+procedure TKMHTTPClientLNet.HTTPClientDoneInput(aSocket: TLHTTPClientSocket);
 var ReturnString: UnicodeString;
 begin
   aSocket.Disconnect;
@@ -83,7 +83,7 @@ begin
 end;
 
 
-function TKMHTTPClientLNet.HTTPClientInput(ASocket: TLHTTPClientSocket; ABuffer: PChar; ASize: Integer): Integer;
+function TKMHTTPClientLNet.HTTPClientInput(aSocket: TLHTTPClientSocket; ABuffer: PChar; ASize: Integer): Integer;
 var
   oldLength: dword;
 begin

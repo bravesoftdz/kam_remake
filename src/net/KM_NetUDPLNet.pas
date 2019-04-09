@@ -20,7 +20,7 @@ type
     constructor Create;
     destructor Destroy; override;
     procedure SendPacket(const aAddress: string; const aPort: Word; aData: pointer; aLength: cardinal);
-    procedure Listen(const aPort: string);
+    procedure Listen(const aPort: Word);
     procedure StopListening;
     procedure UpdateStateIdle;
     property OnError:TGetStrProc write fOnError;
@@ -37,20 +37,21 @@ begin
   fUDP := TLUdp.Create(nil);
   fUDP.OnError := Error;
   fUDP.Timeout := 1;
+  fUDP.ReuseAddress := True;
 end;
 
 
 destructor TKMNetUDPLNet.Destroy;
 begin
-  if fUDP<>nil then fUDP.Free;
+  if fUDP <> nil then fUDP.Free;
   Inherited;
 end;
 
 
-procedure TKMNetUDPLNet.Listen(const aPort:string);
+procedure TKMNetUDPLNet.Listen(const aPort: Word);
 begin
   fUDP.OnReceive := Receive;
-  fUDP.Listen(StrToInt(aPort));
+  fUDP.Listen(aPort, LADDR_ANY);
   fUDP.CallAction;
 end;
 
@@ -64,7 +65,7 @@ end;
 
 procedure TKMNetUDPLNet.SendPacket(const aAddress: string; const aPort: Word; aData: pointer; aLength: cardinal);
 begin
-  fUDP.Send(aData^, aLength, aAddress + ':' + IntToStr(aPort));
+  fUDP.Send(aData^, aLength, Format('%s:%d', [aAddress, aPort]));
 end;
 
 
@@ -87,7 +88,7 @@ end;
 
 procedure TKMNetUDPLNet.Error(const msg: string; aSocket: TLSocket);
 begin
-  fOnError('LNet UDP Error: '+msg);
+  fOnError('LNet UDP Error: ' + msg);
 end;
 
 
@@ -96,4 +97,4 @@ begin
   if fUDP <> nil then fUDP.CallAction; //Process network events
 end;
 
-end.
+end.
