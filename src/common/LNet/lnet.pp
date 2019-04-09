@@ -717,7 +717,8 @@ begin
         Exit(Bail('SetSockOpt error', LSocketError));
     end;
 
-    if FReuseAddress then begin
+    if FReuseAddress then
+    begin
       Arg := 1;
       Opt := SO_REUSEADDR;
       {$ifdef WIN32} // I expect 64 has it oddly, so screw them for now
@@ -747,7 +748,8 @@ var
 begin
   if FSocketType = SOCK_STREAM then
     Result := Sockets.fpSend(FHandle, @aData, aSize, LMSG)
-  else begin
+  else
+  begin
     case FAddress.IPv4.sin_family of
       LAF_INET  :
         begin
@@ -769,7 +771,8 @@ var
 begin
   if FSocketType = SOCK_STREAM then
     Result := sockets.fpRecv(FHandle, @aData, aSize, LMSG)
-  else begin
+  else
+  begin
     case FAddress.IPv4.sin_family of
       LAF_INET  :
         begin
@@ -792,7 +795,8 @@ var
   LastError: Longint;
 begin
   Result := aResult;
-  if Result = SOCKET_ERROR then begin
+  if Result = SOCKET_ERROR then
+  begin
     LastError := LSocketError;
     if IsBlockError(LastError) then case aOp of
       soSend:
@@ -1126,8 +1130,7 @@ end;
 
 procedure TLConnection.SetReuseAddress(const aValue: Boolean);
 begin
-  if not Assigned(FRootSock)
-  or (FRootSock.FConnectionStatus = scNone) then
+  if not Assigned(FRootSock) or (FRootSock.FConnectionStatus = scNone) then
     FReuseAddress := aValue;
 end;
 
@@ -1183,7 +1186,8 @@ end;
 
 procedure TLUdp.Disconnect(const Forced: Boolean = False);
 begin
-  if Assigned(FRootSock) then begin
+  if Assigned(FRootSock) then
+  begin
     FRootSock.Disconnect(True); // true on UDP it always goes there anyways
     FRootSock := nil; // even if the old one exists, eventer takes care of it
   end;
@@ -1201,7 +1205,8 @@ begin
 
   Result := FRootSock.SetupSocket(APort, LADDR_ANY);
   
-  if Result then begin
+  if Result then
+  begin
     FillAddressInfo(FRootSock.FPeerAddress, FRootSock.FSocketNet, Address, aPort);
     FRootSock.FConnectionStatus := scConnected;
     RegisterWithEventer;
@@ -1382,11 +1387,13 @@ begin
   FRootSock := InitSocket(SocketClass.Create);
   Result := FRootSock.Connect(Address, aPort);
   
-  if Result then begin
+  if Result then
+  begin
     Inc(FCount);
     FIterator := FRootSock;
     RegisterWithEventer;
-  end else begin
+  end else
+  begin
     FreeAndNil(FRootSock); // one possible use, since we're not in eventer yet
     FIterator := nil;
   end;
@@ -1401,7 +1408,8 @@ begin
   
   FRootSock := InitSocket(SocketClass.Create);
   FRootSock.SetReuseAddress(FReuseAddress);
-  if FRootSock.Listen(APort, AIntf) then begin
+  if FRootSock.Listen(APort, AIntf) then
+  begin
     FRootSock.SetState(ssServerSocket);
     FRootSock.FConnectionStatus := scConnected;
     FIterator := FRootSock;
@@ -1433,7 +1441,8 @@ begin
       FIterator := FIterator.NextSock
     else if Assigned(FIterator.PrevSock) then
       FIterator := FIterator.PrevSock
-    else FIterator := nil; // NOT iterreset, not reorganized yet
+    else
+      FIterator := nil; // NOT iterreset, not reorganized yet
     if Assigned(FIterator) and (ssServerSocket in FIterator.SocketState) then
       FIterator := nil;
   end;
@@ -1464,10 +1473,12 @@ begin
   if not Assigned(FIterator) then
     Exit;
 
-  if Assigned(FIterator.NextSock) then begin
+  if Assigned(FIterator.NextSock) then
+  begin
     FIterator := FIterator.NextSock;
     Result := True;
-  end else IterReset;
+  end else
+    IterReset;
 end;
 
 procedure TLTcp.IterReset;
@@ -1478,7 +1489,8 @@ end;
 procedure TLTcp.Disconnect(const Forced: Boolean = False);
 begin
   FreeSocks(Forced);
-  if Forced then begin // only unlick for forced, we still need to wait otherwise!
+  if Forced then
+  begin // only unlick for forced, we still need to wait otherwise!
     FRootSock := nil;
     FIterator := nil;
     FCount := 0;

@@ -12,12 +12,6 @@ uses
   {$ENDIF}
   ;
 
-{$ifdef FPC}
-type
-  TStringDynArray = array of string;
-  {$EXTERNALSYM TStringDynArray 'System::TStringDynArray'}
-{$endif}
-
   function KMGetCursorDirection(X,Y: integer): TKMDirection;
 
   function GetPositionInGroup2(OriginX, OriginY: Word; aDir: TKMDirection; aIndex, aUnitPerRow: Word; MapX, MapY: Word; out aTargetCanBeReached: Boolean): TKMPoint;
@@ -80,14 +74,18 @@ type
   function StrTrimRight(aStr: String; aCharsToTrim: TKMCharArray): String;
   function StrSplit(aStr, aDelimiters: String): TStrings;
 
-  {$ifdef FPC}
+{$ifdef FPC}
+type
+  TStringDynArray = array of string;
+  {$EXTERNALSYM TStringDynArray 'System::TStringDynArray'}
+
   {
     SplitString splits a string into different parts delimited by the
     specified delimiter characters
   }
   function SplitString(const S, Delimiters: string): TStringDynArray;
   function FindDelimiter(const Delimiters, S: string; StartIdx: Integer = 1): Integer;
-  {$endif}
+{$endif}
 
 implementation
 uses
@@ -286,8 +284,7 @@ begin
   begin
     ResultX := OriginX;
     ResultY := OriginY;
-  end
-  else
+  end else
   begin
     if aIndex <= aUnitPerRow div 2 then
       Dec(aIndex);
@@ -394,8 +391,7 @@ begin
   begin
     oH := 0.5;
     oS := 0;
-  end
-  else
+  end else
   begin // Middle of HSImage
     if oB < 0.5 then
       oS := Vdlt / (Vmax + Vmin)
@@ -431,26 +427,22 @@ begin
     Rt := 1;
     Gt := Hue * V;
     Bt := 0;
-  end else
-  if Hue < 2/6 then
+  end else if Hue < 2/6 then
   begin
     Rt := (2/6 - Hue) * V;
     Gt := 1;
     Bt := 0;
-  end else
-  if Hue < 3/6 then
+  end else if Hue < 3/6 then
   begin
     Rt := 0;
     Gt := 1;
     Bt := (Hue - 2/6) * V;
-  end else
-  if Hue < 4/6 then
+  end else if Hue < 4/6 then
   begin
     Rt := 0;
     Gt := (4/6 - Hue) * V;
     Bt := 1;
-  end else
-  if Hue < 5/6 then
+  end else if Hue < 5/6 then
   begin
     Rt := (Hue - 4/6) * V;
     Gt := 0;
@@ -475,8 +467,7 @@ begin
     Rt := Rt + (1 - Rt) * (Bri - 0.5) * 2;
     Gt := Gt + (1 - Gt) * (Bri - 0.5) * 2;
     Bt := Bt + (1 - Bt) * (Bri - 0.5) * 2;
-  end
-  else if Bri < 0.5 then
+  end else if Bri < 0.5 then
   begin
     //Mix with black
     Rt := Rt * (Bri * 2);
@@ -496,12 +487,9 @@ end;
 function ReduceBrightness(aColor: Cardinal; aBrightness: Byte): Cardinal;
 begin
   Result := Round((aColor and $FF) / 255 * aBrightness)
-            or
-            Round((aColor shr 8 and $FF) / 255 * aBrightness) shl 8
-            or
-            Round((aColor shr 16 and $FF) / 255 * aBrightness) shl 16
-            or
-            (aColor and $FF000000);
+            or Round((aColor shr 8 and $FF) / 255 * aBrightness) shl 8
+            or Round((aColor shr 16 and $FF) / 255 * aBrightness) shl 16
+            or (aColor and $FF000000);
 end;
 
 
@@ -759,7 +747,9 @@ end;
 
 function GetMultiplicator(aShift: TShiftState): Word;
 begin
-  Result := Byte(aShift = [ssLeft]) + Byte(aShift = [ssRight]) * 10 + Byte(aShift = [ssShift, ssLeft]) * 100 + Byte(aShift = [ssShift, ssRight]) * 1000;
+  Result := Byte(aShift = [ssLeft]) + Byte(aShift = [ssRight]) * 10 +
+            Byte(aShift = [ssShift, ssLeft]) * 100 +
+            Byte(aShift = [ssShift, ssRight]) * 1000;
 end;
 
 
@@ -781,11 +771,7 @@ var I: Integer;
 begin
   Result := -1;
   for I := 1 to Length(aStr) do
-  {$IFDEF FPC}
-    if AnsiStartsStr(aSubStr, StrSubstring(aStr, I-1)) then
-  {$ELSE}
-    if StartsStr(aSubStr, StrSubstring(aStr, I-1)) then
-  {$ENDIF}
+    if {$IFDEF FPC}AnsiStartsStr{$ELSE}StartsStr{$ENDIF}(aSubStr, StrSubstring(aStr, I - 1)) then
       Result := I - 1;
 end;
 
@@ -837,8 +823,9 @@ end;
 
 
 function StrSplit(aStr, aDelimiters: String): TStrings;
-var StrArray: TStringDynArray;
-    I: Integer;
+var
+  StrArray: TStringDynArray;
+  I: Integer;
 begin
   //Todo refactor:
   //@Krom: It's bad practice to create object (TStringList) inside and return it as parent class (TStrings).
@@ -854,10 +841,8 @@ end;
 {$ifdef FPC}
 function SplitString(const S, Delimiters: string): TStringDynArray;
 var
-  StartIdx: Integer;
-  FoundIdx: Integer;
-  SplitPoints: Integer;
-  CurrentSplit: Integer;
+  StartIdx, FoundIdx,
+  SplitPoints, CurrentSplit,
   i: Integer;
 begin
   Result := nil;
@@ -905,8 +890,7 @@ begin
     begin
       Result := StartIdx;
       Stop := True;
-    end
-    else
+    end else
       Inc(StartIdx);
 end;
 {$endif}

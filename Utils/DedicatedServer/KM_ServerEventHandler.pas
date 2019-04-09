@@ -2,7 +2,7 @@ unit KM_ServerEventHandler;
 interface
 uses
   SysUtils, KM_Defaults, KM_Log
-  {$IFDEF MSWindows} ,Windows {$ENDIF}
+  {$IFDEF WDC} ,Windows {$ENDIF}
   ;
 
 //We need a dummy event handler because Events can't be assigned to regular procedures (e.g. in a console application)

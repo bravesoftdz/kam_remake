@@ -91,13 +91,16 @@ begin
   begin
     if src^ in aCharSet then
       dest^ := src^
-    else if src^ = ' ' then begin
-      for i := 1 to n do begin
+    else if src^ = ' ' then
+    begin
+      for i := 1 to n do
+      begin
         dest^ := SpaceString[i];
         if i < n then
           inc(dest);
       end;
-    end else begin
+    end else
+    begin
       dest^ := '%';
       inc(dest);
       hex := HexStr(Ord(src^),2);
@@ -298,7 +301,8 @@ begin
   Port := uri_rec.Port;
 
   Result := LowerCase(uri_rec.Protocol) = 'https';
-  if Port = 0 then begin
+  if Port = 0 then
+  begin
     Port := 80; // default http port
     if Result then
       Port := 443; // default https/ssl port
@@ -315,7 +319,8 @@ var
   i: Integer;
   c: Char;
 begin
-  for i := 0 to 255 do begin
+  for i := 0 to 255 do
+  begin
     c := Chr(i);
     if c <> ' ' then
       AllChars := AllChars + [c];
