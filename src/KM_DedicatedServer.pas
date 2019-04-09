@@ -9,29 +9,32 @@ uses
 type
   TKMDedicatedServer = class
   private
-    fLastPing, fLastAnnounce: cardinal;
-    fNetServer: TKMNetServer;
-    fMasterServer: TKMMasterServer;
-    fUDPAnnounce: TKMNetUDPAnnounce;
-    fOnMessage: TUnicodeStringEvent;
-    fPublishServer: boolean;
-    fAnnounceInterval: word;
-    fPingInterval: word;
-    fPort: Word;
-    fServerName: AnsiString;
+    fLastPing,
+    fLastAnnounce:     Cardinal;
+    fNetServer:        TKMNetServer;
+    fMasterServer:     TKMMasterServer;
+    fUDPAnnounce:      TKMNetUDPAnnounce;
+    fOnMessage:        TUnicodeStringEvent;
+    fPublishServer,
+    fBroadcastLocal:   Boolean;
+    fAnnounceInterval,
+    fPingInterval,
+    fPort:             Word;
+    fServerName:       AnsiString;
     procedure StatusMessage(const aData: string);
     procedure MasterServerError(const aData: string);
   public
     constructor Create(aMaxRooms, aKickTimeout, aPingInterval, aAnnounceInterval: Word;
                        const aMasterServerAddress: string; const aHTMLStatusFile: string;
-                       const aWelcomeMessage:UnicodeString; aDedicated:Boolean);
+                       const aWelcomeMessage: UnicodeString; aDedicated: Boolean);
     destructor Destroy; override;
 
-    procedure Start(const aServerName: AnsiString; const aPort: Word; aPublishServer:boolean);
+    procedure Start(const aServerName: AnsiString; const aPort: Word; aPublishServer, aBroadcastLocal: Boolean);
     procedure Stop;
     procedure UpdateState;
-    procedure UpdateSettings(const aServerName: AnsiString; aPublishServer: Boolean; aKickTimeout, aPingInterval, aAnnounceInterval: Word;
-                             const aMasterServerAddress: string; const aHTMLStatusFile: string; const aWelcomeMessage: UnicodeString);
+    procedure UpdateSettings(const aServerName: AnsiString; aPublishServer, aBroadcastLocal: Boolean;
+                             aKickTimeout, aPingInterval, aAnnounceInterval: Word; const aMasterServerAddress: string;
+                             const aHTMLStatusFile: string; const aWelcomeMessage: UnicodeString);
     property OnMessage: TUnicodeStringEvent write fOnMessage;
     
     procedure GetServerInfo(var aList: TList);
@@ -49,42 +52,45 @@ const
 
 
 //Announce interval of -1 means the server will not be published (LAN)
-constructor TKMDedicatedServer.Create(aMaxRooms, aKickTimeout, aPingInterval, aAnnounceInterval:word;
-                                      const aMasterServerAddress:string; const aHTMLStatusFile:string;
-                                      const aWelcomeMessage:UnicodeString; aDedicated:Boolean);
+constructor TKMDedicatedServer.Create(aMaxRooms, aKickTimeout, aPingInterval, aAnnounceInterval: Word;
+                                      const aMasterServerAddress: string; const aHTMLStatusFile: string;
+                                      const aWelcomeMessage: UnicodeString; aDedicated: Boolean);
 begin
   inherited Create;
-  fNetServer := TKMNetServer.Create(aMaxRooms, aKickTimeout, aHTMLStatusFile, aWelcomeMessage);
-  fMasterServer := TKMMasterServer.Create(aMasterServerAddress, aDedicated);
+  fNetServer            := TKMNetServer.Create(aMaxRooms, aKickTimeout, aHTMLStatusFile, aWelcomeMessage);
+  fMasterServer         := TKMMasterServer.Create(aMasterServerAddress, aDedicated);
   fMasterServer.OnError := MasterServerError;
-  fUDPAnnounce := TKMNetUDPAnnounce.Create;
-  fUDPAnnounce.OnError := StatusMessage;
+  fUDPAnnounce          := TKMNetUDPAnnounce.Create;
+  fUDPAnnounce.OnError  := StatusMessage;
 
   fAnnounceInterval := Max(MINIMUM_ANNOUNCE_INTERVAL, aAnnounceInterval);
-  fPingInterval := aPingInterval;
-  fLastPing := 0;
-  fLastAnnounce := 0;
+  fPingInterval     := aPingInterval;
+  fLastPing         := 0;
+  fLastAnnounce     := 0;
 end;
 
 
 destructor TKMDedicatedServer.Destroy;
 begin
-  fNetServer.Free;
-  fMasterServer.Free;
-  fUDPAnnounce.Free;
+  FreeAndNil(fNetServer);
+  FreeAndNil(fMasterServer);
+  FreeAndNil(fUDPAnnounce);
   StatusMessage('Server destroyed');
   inherited;
 end;
 
 
-procedure TKMDedicatedServer.Start(const aServerName: AnsiString; const aPort: Word; aPublishServer:boolean);
+procedure TKMDedicatedServer.Start(const aServerName: AnsiString; const aPort: Word; aPublishServer, aBroadcastLocal: Boolean);
 begin
-  fPort := aPort;
-  fServerName := aServerName;
-  fPublishServer := aPublishServer;
+  fPort                      := aPort;
+  fServerName                := aServerName;
+  fPublishServer             := aPublishServer;
+  fBroadcastLocal            := aBroadcastLocal;
   fNetServer.OnStatusMessage := StatusMessage;
   fNetServer.StartListening(fPort, fServerName);
-  fUDPAnnounce.StartAnnouncing(fPort, fServerName);
+
+  if fBroadcastLocal then
+     fUDPAnnounce.StartAnnouncing(fPort, fServerName);
 end;
 
 
@@ -92,21 +98,28 @@ procedure TKMDedicatedServer.Stop;
 begin
   fNetServer.StopListening;
   fNetServer.ClearClients;
-  fUDPAnnounce.StopAnnouncing;
+
+  if fBroadcastLocal or fUDPAnnounce.Announcing then
+     fUDPAnnounce.StopAnnouncing;
+
   StatusMessage('Stopped listening');
 end;
 
 
 procedure TKMDedicatedServer.UpdateState;
-var TickCount:Cardinal;
+var
+  TickCount: Cardinal;
 begin
   fNetServer.UpdateStateIdle;
   fMasterServer.UpdateStateIdle;
-  fUDPAnnounce.UpdateStateIdle;
+
+  if fBroadcastLocal and fUDPAnnounce.Announcing then
+     fUDPAnnounce.UpdateStateIdle;
 
   if not fNetServer.Listening then Exit; //Do not measure pings or announce the server if we are not listening
 
   TickCount := TimeGet;
+
   if GetTimeSince(fLastPing) >= fPingInterval then
   begin
     fNetServer.MeasurePings;
@@ -121,17 +134,26 @@ begin
 end;
 
 
-procedure TKMDedicatedServer.UpdateSettings(const aServerName: AnsiString; aPublishServer:boolean; aKickTimeout, aPingInterval, aAnnounceInterval:word;
-                                            const aMasterServerAddress:string; const aHTMLStatusFile:string; const aWelcomeMessage:UnicodeString);
+procedure TKMDedicatedServer.UpdateSettings(const aServerName: AnsiString; aPublishServer, aBroadcastLocal: Boolean;
+                                            aKickTimeout, aPingInterval, aAnnounceInterval: Word; const aMasterServerAddress: string;
+                                            const aHTMLStatusFile: string; const aWelcomeMessage: UnicodeString);
 begin
-  fAnnounceInterval := Max(MINIMUM_ANNOUNCE_INTERVAL, aAnnounceInterval);
-  fPingInterval := aPingInterval;
+  fAnnounceInterval                 := Max(MINIMUM_ANNOUNCE_INTERVAL, aAnnounceInterval);
+  fPingInterval                     := aPingInterval;
   fMasterServer.MasterServerAddress := aMasterServerAddress;
-  fServerName := aServerName;
-  fPublishServer := aPublishServer;
+  fServerName                       := aServerName;
+  fPublishServer                    := aPublishServer;
+  fBroadcastLocal                   := aBroadcastLocal;
 
   fNetServer.UpdateSettings(aKickTimeout, aHTMLStatusFile, aWelcomeMessage, aServerName);
   fUDPAnnounce.UpdateSettings(aServerName);
+
+  if aBroadcastLocal then
+  begin
+    if not fUDPAnnounce.Announcing then
+       fUDPAnnounce.StartAnnouncing(fPort, fServerName);
+  end else if fUDPAnnounce.Announcing then
+    fUDPAnnounce.StopAnnouncing;
 
   fLastAnnounce := 0; //Make the server announce itself next update so the changes are sent to the master server ASAP
 end;

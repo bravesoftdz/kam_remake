@@ -14,25 +14,25 @@ uses
 type
   TKMWindowParamsRecord = record
     Width, Height, Left, Top: SmallInt;
-    State: TWindowState;
+    State:                    TWindowState;
   end;
 
   TKMWindowParams = class
   private
-    fWidth, fHeight, fLeft, fTop: SmallInt; // Window size/position on the screen
-    fState: TWindowState;                   // Window state (wsNormal/wsMaximized)
-    fLockParams: Boolean;                   // Lock updating window params, used when Fullscreen turned On
-    fIsChanged: Boolean;
-    fNeedResetToDefaults: Boolean;          // Flag, when set params should be updated with defaults
+    fWidth, fHeight, fLeft, fTop: SmallInt;     // Window size/position on the screen
+    fState:                       TWindowState; // Window state (wsNormal/wsMaximized)
+    fLockParams,                                // Lock updating window params, used when Fullscreen turned On
+    fIsChanged,
+    fNeedResetToDefaults:         Boolean;      // Flag, when set params should be updated with defaults
   public
     constructor Create;
-    property Width: SmallInt read fWidth;
-    property Height: SmallInt read fHeight;
-    property Left: SmallInt read fLeft;
-    property Top: SmallInt read fTop;
-    property State: TWindowState read fState;
-    property IsChanged: Boolean read fIsChanged;
-    property NeedResetToDefaults: Boolean read fNeedResetToDefaults write fNeedResetToDefaults;
+    property Width:               SmallInt     read fWidth;
+    property Height:              SmallInt     read fHeight;
+    property Left:                SmallInt     read fLeft;
+    property Top:                 SmallInt     read fTop;
+    property State:               TWindowState read fState;
+    property IsChanged:           Boolean      read fIsChanged;
+    property NeedResetToDefaults: Boolean      read fNeedResetToDefaults write fNeedResetToDefaults;
 
     procedure ApplyWindowParams(aParams: TKMWindowParamsRecord; aDefaults: Boolean = False);
     procedure LockParams;
@@ -44,7 +44,7 @@ type
   TKMFavouriteMaps = class
   private
     fFavouriteMPMaps: TStringList;
-    fOnMapsUpdate: TUnicodeStringEvent;
+    fOnMapsUpdate:    TUnicodeStringEvent;
 
     procedure FavoriteMapsUpdated;
   public
@@ -68,11 +68,11 @@ type
   //Everything gets written through setter to set fNeedsSave flag
   TMainSettings = class
   private
-    fNeedsSave: Boolean;
-    fFullScreen: Boolean;
-    fResolution: TKMScreenRes;
+    fNeedsSave,
+    fFullScreen:   Boolean;
+    fResolution:   TKMScreenRes;
     fWindowParams: TKMWindowParams;
-    fVSync: Boolean;
+    fVSync:        Boolean;
     procedure SetFullScreen(aValue: Boolean);
     procedure SetResolution(const Value: TKMScreenRes);
     procedure SetVSync(aValue: Boolean);
@@ -87,69 +87,70 @@ type
     procedure SaveSettings(aForce: Boolean = False);
     procedure ReloadSettings;
 
-    property FullScreen: Boolean read fFullScreen write SetFullScreen;
-    property Resolution: TKMScreenRes read fResolution write SetResolution;
+    property FullScreen:   Boolean         read fFullScreen   write SetFullScreen;
+    property Resolution:   TKMScreenRes    read fResolution   write SetResolution;
     property WindowParams: TKMWindowParams read fWindowParams;
-    property VSync: Boolean read fVSync write SetVSync;
+    property VSync:        Boolean         read fVSync        write SetVSync;
   end;
 
   //Gameplay settings, those that affect the game
   //Everything gets written through setter to set fNeedsSave flag
   TGameSettings = class
   private
-    fNeedsSave: Boolean;
+    fNeedsSave,
 
-    fAutosave: Boolean;
-    fReplayAutopause: Boolean;
-    fReplayShowBeacons: Boolean; //Replay variable - show beacons during replay
-    fSpecShowBeacons: Boolean;   //Spectator variable - show beacons while spectating
-    fBrightness: Byte;
-    fScrollSpeed: Byte;
-    fAlphaShadows: Boolean;
-    fLoadFullFonts: Boolean;
-    fLocale: AnsiString;
-    fMusicOff: Boolean;
-    fShuffleOn: Boolean;
-    fMusicVolume: Single;
-    fSoundFXVolume: Single;
-    fSpeedPace: Word;
-    fSpeedMedium: Single;
-    fSpeedFast: Single;
-    fSpeedVeryFast: Single;
-    fMultiplayerName: AnsiString;
-    fLastIP: string;
-    fLastPort: string;
-    fLastRoom: string;
-    fLastPassword: string;
-    fServerPort: string;
-    fMasterServerAddress: string;
-    fServerName: AnsiString;
-    fMasterAnnounceInterval: Integer;
-    fMaxRooms: Integer;
-    fFlashOnMessage: Boolean;
-    fAutoKickTimeout: Integer;
-    fPingInterval: Integer;
-    fAnnounceServer: Boolean;
-    fHTMLStatusFile: UnicodeString;
-    fServerWelcomeMessage: UnicodeString;
-    fWareDistribution: TKMWareDistribution;
+    fAutosave,
+    fReplayAutopause,
+    fReplayShowBeacons,               //Replay variable - show beacons during replay
+    fSpecShowBeacons:        Boolean; //Spectator variable - show beacons while spectating
+    fBrightness,
+    fScrollSpeed:            Byte;
+    fAlphaShadows,
+    fLoadFullFonts:          Boolean;
+    fLocale:                 AnsiString;
+    fMusicOff,
+    fShuffleOn:              Boolean;
+    fMusicVolume,
+    fSoundFXVolume:          Single;
+    fSpeedPace:              Word;
+    fSpeedMedium,
+    fSpeedFast,
+    fSpeedVeryFast:          Single;
+    fMultiplayerName:        AnsiString;
+    fLastIP,
+    fLastPort,
+    fLastRoom,
+    fLastPassword,
+    fServerPort,
+    fMasterServerAddress:    string;
+    fServerName:             AnsiString;
+    fMasterAnnounceInterval,
+    fMaxRooms:               Integer;
+    fFlashOnMessage:         Boolean;
+    fAutoKickTimeout,
+    fPingInterval:           Integer;
+    fAnnounceServer,
+    fAnnounceLAN:            Boolean;
+    fHTMLStatusFile,
+    fServerWelcomeMessage:   UnicodeString;
+    fWareDistribution:       TKMWareDistribution;
 
     fMenu_FavouriteMPMapsStr: UnicodeString;
-    fMenu_ReplaysType: Byte;
-    fMenu_MapEdMapType: Byte;
-    fMenu_MapEdNewMapX: Word;
-    fMenu_MapEdNewMapY: Word;
-    fMenu_MapEdSPMapCRC: Cardinal;
-    fMenu_MapEdMPMapCRC: Cardinal;
-    fMenu_MapEdMPMapName: UnicodeString;
-    fMenu_CampaignName: UnicodeString;
-    fMenu_ReplaySPSaveCRC: Cardinal;
-    fMenu_ReplayMPSaveCRC: Cardinal;
-    fMenu_ReplaySPSaveName: UnicodeString;
-    fMenu_ReplayMPSaveName: UnicodeString;
-    fMenu_SPMapCRC: Cardinal;
-    fMenu_SPSaveCRC: Cardinal;
-    fMenu_LobbyMapType: Byte;
+    fMenu_ReplaysType,
+    fMenu_MapEdMapType:       Byte;
+    fMenu_MapEdNewMapX,
+    fMenu_MapEdNewMapY:       Word;
+    fMenu_MapEdSPMapCRC,
+    fMenu_MapEdMPMapCRC:      Cardinal;
+    fMenu_MapEdMPMapName,
+    fMenu_CampaignName:       UnicodeString;
+    fMenu_ReplaySPSaveCRC,
+    fMenu_ReplayMPSaveCRC:    Cardinal;
+    fMenu_ReplaySPSaveName,
+    fMenu_ReplayMPSaveName:   UnicodeString;
+    fMenu_SPMapCRC,
+    fMenu_SPSaveCRC:          Cardinal;
+    fMenu_LobbyMapType:       Byte;
 
     fFavouriteMaps: TKMFavouriteMaps;
 
@@ -209,57 +210,58 @@ type
     procedure SaveSettings(aForce: Boolean=False);
     procedure ReloadSettings;
 
-    property Autosave: Boolean read fAutosave write SetAutosave;
-    property ReplayAutopause: Boolean read fReplayAutopause write SetReplayAutopause;
-    property ReplayShowBeacons: Boolean read fReplayShowBeacons write SetReplayShowBeacons;
-    property SpecShowBeacons: Boolean read fSpecShowBeacons write SetSpecShowBeacons;
-    property Brightness: Byte read fBrightness write SetBrightness;
-    property ScrollSpeed: Byte read fScrollSpeed write SetScrollSpeed;
-    property AlphaShadows: Boolean read fAlphaShadows write SetAlphaShadows;
-    property LoadFullFonts: Boolean read fLoadFullFonts write SetLoadFullFonts;
-    property Locale: AnsiString read fLocale write SetLocale;
-    property MusicOff: Boolean read fMusicOff write SetMusicOff;
-    property ShuffleOn: Boolean read fShuffleOn write SetShuffleOn;
-    property MusicVolume: Single read fMusicVolume write SetMusicVolume;
-    property SoundFXVolume: Single read fSoundFXVolume write SetSoundFXVolume;
-    property SpeedPace: Word read fSpeedPace;
-    property SpeedMedium: Single read fSpeedMedium;
-    property SpeedFast: Single read fSpeedFast;
-    property SpeedVeryFast: Single read fSpeedVeryFast;
-    property MultiplayerName: AnsiString read fMultiplayerName write SetMultiplayerName;
-    property LastIP: string read fLastIP write SetLastIP;
-    property LastPort: string read fLastPort write SetLastPort;
-    property LastRoom: string read fLastRoom write SetLastRoom;
-    property LastPassword: string read fLastPassword write SetLastPassword;
-    property ServerPort: string read fServerPort write SetServerPort;
-    property MasterServerAddress: string read fMasterServerAddress write SetMasterServerAddress;
-    property ServerName: AnsiString read fServerName write SetServerName;
-    property MasterAnnounceInterval: Integer read fMasterAnnounceInterval write SetMasterAnnounceInterval;
-    property AnnounceServer: Boolean read fAnnounceServer write SetAnnounceServer;
-    property MaxRooms: Integer read fMaxRooms write SetMaxRooms;
-    property FlashOnMessage: Boolean read fFlashOnMessage write SetFlashOnMessage;
-    property AutoKickTimeout: Integer read fAutoKickTimeout write SetAutoKickTimeout;
-    property PingInterval: Integer read fPingInterval write SetPingInterval;
-    property HTMLStatusFile: UnicodeString read fHTMLStatusFile write SetHTMLStatusFile;
-    property ServerWelcomeMessage: UnicodeString read fServerWelcomeMessage write SetServerWelcomeMessage;
-    property WareDistribution: TKMWareDistribution read fWareDistribution;
+    property Autosave:               Boolean             read fAutosave               write SetAutosave;
+    property ReplayAutopause:        Boolean             read fReplayAutopause        write SetReplayAutopause;
+    property ReplayShowBeacons:      Boolean             read fReplayShowBeacons      write SetReplayShowBeacons;
+    property SpecShowBeacons:        Boolean             read fSpecShowBeacons        write SetSpecShowBeacons;
+    property Brightness:             Byte                read fBrightness             write SetBrightness;
+    property ScrollSpeed:            Byte                read fScrollSpeed            write SetScrollSpeed;
+    property AlphaShadows:           Boolean             read fAlphaShadows           write SetAlphaShadows;
+    property LoadFullFonts:          Boolean             read fLoadFullFonts          write SetLoadFullFonts;
+    property Locale:                 AnsiString          read fLocale                 write SetLocale;
+    property MusicOff:               Boolean             read fMusicOff               write SetMusicOff;
+    property ShuffleOn:              Boolean             read fShuffleOn              write SetShuffleOn;
+    property MusicVolume:            Single              read fMusicVolume            write SetMusicVolume;
+    property SoundFXVolume:          Single              read fSoundFXVolume          write SetSoundFXVolume;
+    property SpeedPace:              Word                read fSpeedPace;
+    property SpeedMedium:            Single              read fSpeedMedium;
+    property SpeedFast:              Single              read fSpeedFast;
+    property SpeedVeryFast:          Single              read fSpeedVeryFast;
+    property MultiplayerName:        AnsiString          read fMultiplayerName        write SetMultiplayerName;
+    property LastIP:                 string              read fLastIP                 write SetLastIP;
+    property LastPort:               string              read fLastPort               write SetLastPort;
+    property LastRoom:               string              read fLastRoom               write SetLastRoom;
+    property LastPassword:           string              read fLastPassword           write SetLastPassword;
+    property ServerPort:             string              read fServerPort             write SetServerPort;
+    property MasterServerAddress:    string              read fMasterServerAddress    write SetMasterServerAddress;
+    property ServerName:             AnsiString          read fServerName             write SetServerName;
+    property MasterAnnounceInterval: Integer             read fMasterAnnounceInterval write SetMasterAnnounceInterval;
+    property AnnounceServer:         Boolean             read fAnnounceServer         write SetAnnounceServer;
+    property AnnounceLAN:            Boolean             read fAnnounceLAN            write fAnnounceLAN;
+    property MaxRooms:               Integer             read fMaxRooms               write SetMaxRooms;
+    property FlashOnMessage:         Boolean             read fFlashOnMessage         write SetFlashOnMessage;
+    property AutoKickTimeout:        Integer             read fAutoKickTimeout        write SetAutoKickTimeout;
+    property PingInterval:           Integer             read fPingInterval           write SetPingInterval;
+    property HTMLStatusFile:         UnicodeString       read fHTMLStatusFile         write SetHTMLStatusFile;
+    property ServerWelcomeMessage:   UnicodeString       read fServerWelcomeMessage   write SetServerWelcomeMessage;
+    property WareDistribution:       TKMWareDistribution read fWareDistribution;
 
     property MenuFavouriteMPMapsStr: UnicodeString read fMenu_FavouriteMPMapsStr write SetMenuFavouriteMPMapsStr;
-    property MenuReplaysType: Byte read fMenu_ReplaysType write SetMenuReplaysType;
-    property MenuMapEdMapType: Byte read fMenu_MapEdMapType write SetMenuMapEdMapType;
-    property MenuMapEdNewMapX: Word read fMenu_MapEdNewMapX write SetMenuMapEdNewMapX;
-    property MenuMapEdNewMapY: Word read fMenu_MapEdNewMapY write SetMenuMapEdNewMapY;
-    property MenuMapEdSPMapCRC: Cardinal read fMenu_MapEdSPMapCRC write SetMenuMapEdSPMapCRC;
-    property MenuMapEdMPMapCRC: Cardinal read fMenu_MapEdMPMapCRC write SetMenuMapEdMPMapCRC;
-    property MenuMapEdMPMapName: UnicodeString read fMenu_MapEdMPMapName write SetMenuMapEdMPMapName;
-    property MenuCampaignName: UnicodeString read fMenu_CampaignName write SetMenuCampaignName;
-    property MenuReplaySPSaveCRC: Cardinal read fMenu_ReplaySPSaveCRC write SetMenuReplaySPSaveCRC;
-    property MenuReplayMPSaveCRC: Cardinal read fMenu_ReplayMPSaveCRC write SetMenuReplayMPSaveCRC;
-    property MenuReplaySPSaveName: UnicodeString read fMenu_ReplaySPSaveName write SetMenuReplaySPSaveName;
-    property MenuReplayMPSaveName: UnicodeString read fMenu_ReplayMPSaveName write SetMenuReplayMPSaveName;
-    property MenuSPMapCRC: Cardinal read fMenu_SPMapCRC write SetMenuSPMapCRC;
-    property MenuSPSaveCRC: Cardinal read fMenu_SPSaveCRC write SetMenuSPSaveCRC;
-    property MenuLobbyMapType: Byte read fMenu_LobbyMapType write SetMenuLobbyMapType;
+    property MenuReplaysType:        Byte          read fMenu_ReplaysType        write SetMenuReplaysType;
+    property MenuMapEdMapType:       Byte          read fMenu_MapEdMapType       write SetMenuMapEdMapType;
+    property MenuMapEdNewMapX:       Word          read fMenu_MapEdNewMapX       write SetMenuMapEdNewMapX;
+    property MenuMapEdNewMapY:       Word          read fMenu_MapEdNewMapY       write SetMenuMapEdNewMapY;
+    property MenuMapEdSPMapCRC:      Cardinal      read fMenu_MapEdSPMapCRC      write SetMenuMapEdSPMapCRC;
+    property MenuMapEdMPMapCRC:      Cardinal      read fMenu_MapEdMPMapCRC      write SetMenuMapEdMPMapCRC;
+    property MenuMapEdMPMapName:     UnicodeString read fMenu_MapEdMPMapName     write SetMenuMapEdMPMapName;
+    property MenuCampaignName:       UnicodeString read fMenu_CampaignName       write SetMenuCampaignName;
+    property MenuReplaySPSaveCRC:    Cardinal      read fMenu_ReplaySPSaveCRC    write SetMenuReplaySPSaveCRC;
+    property MenuReplayMPSaveCRC:    Cardinal      read fMenu_ReplayMPSaveCRC    write SetMenuReplayMPSaveCRC;
+    property MenuReplaySPSaveName:   UnicodeString read fMenu_ReplaySPSaveName   write SetMenuReplaySPSaveName;
+    property MenuReplayMPSaveName:   UnicodeString read fMenu_ReplayMPSaveName   write SetMenuReplayMPSaveName;
+    property MenuSPMapCRC:           Cardinal      read fMenu_SPMapCRC           write SetMenuSPMapCRC;
+    property MenuSPSaveCRC:          Cardinal      read fMenu_SPSaveCRC          write SetMenuSPSaveCRC;
+    property MenuLobbyMapType:       Byte          read fMenu_LobbyMapType       write SetMenuLobbyMapType;
 
     property FavouriteMaps: TKMFavouriteMaps read fFavouriteMaps;
   end;
@@ -320,7 +322,9 @@ begin
     fWindowParams.fHeight := F.ReadInteger('Window', 'WindowHeight', MENU_DESIGN_Y);
     fWindowParams.fLeft   := F.ReadInteger('Window', 'WindowLeft',   -1);
     fWindowParams.fTop    := F.ReadInteger('Window', 'WindowTop',    -1);
-    fWindowParams.fState  := TWindowState(EnsureRange(F.ReadInteger('Window', 'WindowState', 0), 0, 2));
+    fWindowParams.fState  := TWindowState(
+      EnsureRange(F.ReadInteger('Window', 'WindowState', 0), 0, 2)
+    );
   end else
     fWindowParams.fNeedResetToDefaults := True;
 
@@ -340,17 +344,17 @@ var
 begin
   F := TMemIniFile.Create(aFileName {$IFDEF WDC}, TEncoding.UTF8 {$ENDIF} );
 
-  F.WriteBool   ('GFX','FullScreen',      fFullScreen);
-  F.WriteBool   ('GFX','VSync',           fVSync);
-  F.WriteInteger('GFX','ResolutionWidth', fResolution.Width);
-  F.WriteInteger('GFX','ResolutionHeight',fResolution.Height);
-  F.WriteInteger('GFX','RefreshRate',     fResolution.RefRate);
+  F.WriteBool   ('GFX', 'FullScreen',       fFullScreen);
+  F.WriteBool   ('GFX', 'VSync',            fVSync);
+  F.WriteInteger('GFX', 'ResolutionWidth',  fResolution.Width);
+  F.WriteInteger('GFX', 'ResolutionHeight', fResolution.Height);
+  F.WriteInteger('GFX', 'RefreshRate',      fResolution.RefRate);
 
-  F.WriteInteger('Window','WindowWidth',    fWindowParams.Width);
-  F.WriteInteger('Window','WindowHeight',   fWindowParams.Height);
-  F.WriteInteger('Window','WindowLeft',     fWindowParams.Left);
-  F.WriteInteger('Window','WindowTop',      fWindowParams.Top);
-  F.WriteInteger('Window','WindowState',    Ord(fWindowParams.State));
+  F.WriteInteger('Window', 'WindowWidth',  fWindowParams.Width);
+  F.WriteInteger('Window', 'WindowHeight', fWindowParams.Height);
+  F.WriteInteger('Window', 'WindowLeft',   fWindowParams.Left);
+  F.WriteInteger('Window', 'WindowTop',    fWindowParams.Top);
+  F.WriteInteger('Window', 'WindowState',  Ord(fWindowParams.State));
 
   F.UpdateFile; //Write changes to file
   FreeAndNil(F);
@@ -443,71 +447,72 @@ begin
 
   F := TMemIniFile.Create(FileName {$IFDEF WDC}, TEncoding.UTF8 {$ENDIF} );
   try
-    fBrightness         := F.ReadInteger  ('GFX', 'Brightness',         1);
-    fAlphaShadows       := F.ReadBool     ('GFX', 'AlphaShadows',       True);
-    fLoadFullFonts      := F.ReadBool     ('GFX', 'LoadFullFonts',      False);
+    fBrightness    := F.ReadInteger('GFX', 'Brightness',    1);
+    fAlphaShadows  := F.ReadBool   ('GFX', 'AlphaShadows',  True);
+    fLoadFullFonts := F.ReadBool   ('GFX', 'LoadFullFonts', False);
 
-    fAutosave           := F.ReadBool     ('Game', 'Autosave',          True); //Should be ON by default
-    fReplayAutopause    := F.ReadBool     ('Game', 'ReplayAutopause',   False); //Disabled by default
-    fReplayShowBeacons  := F.ReadBool     ('Game', 'ReplayShowBeacons', False); //Disabled by default
-    fSpecShowBeacons    := F.ReadBool     ('Game', 'SpecShowBeacons',   False); //Disabled by default
-    fScrollSpeed        := F.ReadInteger  ('Game', 'ScrollSpeed',       10);
-    fSpeedPace          := F.ReadInteger  ('Game', 'SpeedPace',         100);
-    fSpeedMedium        := F.ReadFloat    ('Game', 'SpeedMedium',       3);
-    fSpeedFast          := F.ReadFloat    ('Game', 'SpeedFast',         6);
-    fSpeedVeryFast      := F.ReadFloat    ('Game', 'SpeedVeryFast',     10);
+    fAutosave          :=            F.ReadBool   ('Game', 'Autosave',          True);  //Should be ON by default
+    fReplayAutopause   :=            F.ReadBool   ('Game', 'ReplayAutopause',   False); //Disabled by default
+    fReplayShowBeacons :=            F.ReadBool   ('Game', 'ReplayShowBeacons', False); //Disabled by default
+    fSpecShowBeacons   :=            F.ReadBool   ('Game', 'SpecShowBeacons',   False); //Disabled by default
+    fScrollSpeed       :=            F.ReadInteger('Game', 'ScrollSpeed',       10);
+    fSpeedPace         :=            F.ReadInteger('Game', 'SpeedPace',         100);
+    fSpeedMedium       :=            F.ReadFloat  ('Game', 'SpeedMedium',       3);
+    fSpeedFast         :=            F.ReadFloat  ('Game', 'SpeedFast',         6);
+    fSpeedVeryFast     :=            F.ReadFloat  ('Game', 'SpeedVeryFast',     10);
+    fLocale            := AnsiString(F.ReadString ('Game', 'Locale',            UnicodeString(DEFAULT_LOCALE)));
 
-    fLocale             := AnsiString(F.ReadString ('Game', 'Locale', UnicodeString(DEFAULT_LOCALE)));
+    fWareDistribution.LoadFromStr(F.ReadString('Game', 'WareDistribution', ''));
 
-    fWareDistribution.LoadFromStr(F.ReadString ('Game','WareDistribution',''));
-
-    fSoundFXVolume  := F.ReadFloat  ('SFX',  'SFXVolume',      0.5);
-    fMusicVolume    := F.ReadFloat  ('SFX',  'MusicVolume',    0.5);
-    fMusicOff       := F.ReadBool   ('SFX',  'MusicDisabled',  False);
-    fShuffleOn      := F.ReadBool   ('SFX',  'ShuffleEnabled', False);
+    fSoundFXVolume := F.ReadFloat('SFX', 'SFXVolume',      0.5);
+    fMusicVolume   := F.ReadFloat('SFX', 'MusicVolume',    0.5);
+    fMusicOff      := F.ReadBool ('SFX', 'MusicDisabled',  False);
+    fShuffleOn     := F.ReadBool ('SFX', 'ShuffleEnabled', False);
 
     if INI_HITPOINT_RESTORE then
       HITPOINT_RESTORE_PACE := F.ReadInteger('Fights', 'HitPointRestorePace', DEFAULT_HITPOINT_RESTORE)
     else
       HITPOINT_RESTORE_PACE := DEFAULT_HITPOINT_RESTORE;
 
-    fMultiplayerName        := AnsiString(F.ReadString ('Multiplayer','Name','NoName'));
-    fLastIP                 := F.ReadString ('Multiplayer','LastIP','127.0.0.1');
-    fLastPort               := F.ReadString ('Multiplayer','LastPort','56789');
-    fLastRoom               := F.ReadString ('Multiplayer','LastRoom','0');
-    fLastPassword           := F.ReadString('Multiplayer','LastPassword','');
-    fFlashOnMessage         := F.ReadBool   ('Multiplayer','FlashOnMessage',True);
-    fServerPort             := F.ReadString ('Server','ServerPort','56789');
+    fMultiplayerName := AnsiString(F.ReadString('Multiplayer', 'Name',           'NoName'));
+    fLastIP          :=            F.ReadString('Multiplayer', 'LastIP',         '127.0.0.1');
+    fLastPort        :=            F.ReadString('Multiplayer', 'LastPort',       '56789');
+    fLastRoom        :=            F.ReadString('Multiplayer', 'LastRoom',       '0');
+    fLastPassword    :=            F.ReadString('Multiplayer', 'LastPassword',   '');
+    fFlashOnMessage  :=            F.ReadBool  ('Multiplayer', 'FlashOnMessage', True);
+
+    fServerPort             :=            F.ReadString ('Server', 'ServerPort',                   '56789');
     //We call it MasterServerAddressNew to force it to update in everyone's .ini file when we changed address.
     //If the key stayed the same then everyone would still be using the old value from their settings.
-    fMasterServerAddress    := F.ReadString ('Server','MasterServerAddressNew','https://kam.hodgman.id.au/');
-    fMasterAnnounceInterval := F.ReadInteger('Server','MasterServerAnnounceInterval',180);
-    fAnnounceServer         := F.ReadBool   ('Server','AnnounceDedicatedServer',True);
-    fServerName             := AnsiString(F.ReadString ('Server','ServerName','KaM Remake Server'));
-    fMaxRooms               := F.ReadInteger('Server','MaxRooms',16);
-    fAutoKickTimeout        := F.ReadInteger('Server','AutoKickTimeout',20);
-    fPingInterval           := F.ReadInteger('Server','PingMeasurementInterval',1000);
-    fHTMLStatusFile         := F.ReadString ('Server','HTMLStatusFile','KaM_Remake_Server_Status.html');
-    fServerWelcomeMessage   := {$IFDEF FPC} UTF8Decode {$ENDIF} (F.ReadString ('Server','WelcomeMessage',''));
+    fMasterServerAddress    :=            F.ReadString ('Server', 'MasterServerAddressNew',       'https://kam.hodgman.id.au/');
+    fMasterAnnounceInterval :=            F.ReadInteger('Server', 'MasterServerAnnounceInterval', 180);
+    fAnnounceServer         :=            F.ReadBool   ('Server', 'AnnounceDedicatedServer',      True);
+    fAnnounceLAN            :=            F.ReadBool   ('Server', 'AnnounceLANServer',            True);
+    fServerName             := AnsiString(F.ReadString ('Server', 'ServerName',                   'KaM Remake Server'));
+    fMaxRooms               :=            F.ReadInteger('Server', 'MaxRooms',                     16);
+    fAutoKickTimeout        :=            F.ReadInteger('Server', 'AutoKickTimeout',              20);
+    fPingInterval           :=            F.ReadInteger('Server', 'PingMeasurementInterval',      1000);
+    fHTMLStatusFile         :=            F.ReadString ('Server', 'HTMLStatusFile',               'KaM_Remake_Server_Status.html');
+    fServerWelcomeMessage   := {$IFDEF FPC}UTF8Decode{$ENDIF}(F.ReadString('Server', 'WelcomeMessage', ''));
 
-    fMenu_FavouriteMPMapsStr   := F.ReadString('Menu', 'FavouriteMaps', '');
+    fMenu_FavouriteMPMapsStr := F.ReadString('Menu', 'FavouriteMaps', '');
     fFavouriteMaps.LoadFromString(fMenu_FavouriteMPMapsStr);
 
-    fMenu_ReplaysType       := F.ReadInteger('Menu', 'ReplaysType',  0);
-    fMenu_MapEdMapType      := F.ReadInteger('Menu', 'MapEdMapType', 0);
-    fMenu_MapEdNewMapX      := F.ReadInteger('Menu', 'MapEdNewMapX', 64);
-    fMenu_MapEdNewMapY      := F.ReadInteger('Menu', 'MapEdNewMapY', 64);
-    fMenu_MapEdSPMapCRC     := StrToInt64(F.ReadString('Menu', 'MapEdSPMapCRC', '0'));
-    fMenu_MapEdMPMapCRC     := StrToInt64(F.ReadString('Menu', 'MapEdMPMapCRC', '0'));
-    fMenu_MapEdMPMapName    := F.ReadString('Menu', 'MapEdMPMapName', '');
-    fMenu_CampaignName      := F.ReadString('Menu', 'CampaignName', '');
-    fMenu_ReplaySPSaveCRC   := StrToInt64(F.ReadString('Menu', 'ReplaySPSaveCRC', '0'));
-    fMenu_ReplayMPSaveCRC   := StrToInt64(F.ReadString('Menu', 'ReplayMPSaveCRC', '0'));
-    fMenu_ReplaySPSaveName  := F.ReadString('Menu', 'ReplaySPSaveName', '');
-    fMenu_ReplayMPSaveName  := F.ReadString('Menu', 'ReplayMPSaveName', '');
-    fMenu_SPMapCRC          := StrToInt64(F.ReadString('Menu', 'SPMapCRC', '0'));
-    fMenu_SPSaveCRC         := StrToInt64(F.ReadString('Menu', 'SPSaveCRC', '0'));
-    fMenu_LobbyMapType      := F.ReadInteger('Menu', 'LobbyMapType', 0);
+    fMenu_ReplaysType      :=            F.ReadInteger('Menu', 'ReplaysType',      0);
+    fMenu_MapEdMapType     :=            F.ReadInteger('Menu', 'MapEdMapType',     0);
+    fMenu_MapEdNewMapX     :=            F.ReadInteger('Menu', 'MapEdNewMapX',     64);
+    fMenu_MapEdNewMapY     :=            F.ReadInteger('Menu', 'MapEdNewMapY',     64);
+    fMenu_MapEdSPMapCRC    := StrToInt64(F.ReadString ('Menu', 'MapEdSPMapCRC',    '0'));
+    fMenu_MapEdMPMapCRC    := StrToInt64(F.ReadString ('Menu', 'MapEdMPMapCRC',    '0'));
+    fMenu_MapEdMPMapName   :=            F.ReadString ('Menu', 'MapEdMPMapName',   '');
+    fMenu_CampaignName     :=            F.ReadString ('Menu', 'CampaignName',     '');
+    fMenu_ReplaySPSaveCRC  := StrToInt64(F.ReadString ('Menu', 'ReplaySPSaveCRC',  '0'));
+    fMenu_ReplayMPSaveCRC  := StrToInt64(F.ReadString ('Menu', 'ReplayMPSaveCRC',  '0'));
+    fMenu_ReplaySPSaveName :=            F.ReadString ('Menu', 'ReplaySPSaveName', '');
+    fMenu_ReplayMPSaveName :=            F.ReadString ('Menu', 'ReplayMPSaveName', '');
+    fMenu_SPMapCRC         := StrToInt64(F.ReadString ('Menu', 'SPMapCRC',         '0'));
+    fMenu_SPSaveCRC        := StrToInt64(F.ReadString ('Menu', 'SPSaveCRC',        '0'));
+    fMenu_LobbyMapType     :=            F.ReadInteger('Menu', 'LobbyMapType',     0);
   finally
     F.Free;
   end;
@@ -523,66 +528,65 @@ var
 begin
   F := TMemIniFile.Create(FileName {$IFDEF WDC}, TEncoding.UTF8 {$ENDIF} );
   try
-    F.WriteInteger('GFX','Brightness',    fBrightness);
-    F.WriteBool   ('GFX','AlphaShadows',  fAlphaShadows);
-    F.WriteBool   ('GFX','LoadFullFonts', fLoadFullFonts);
+    F.WriteInteger('GFX', 'Brightness',    fBrightness);
+    F.WriteBool   ('GFX', 'AlphaShadows',  fAlphaShadows);
+    F.WriteBool   ('GFX', 'LoadFullFonts', fLoadFullFonts);
 
-    F.WriteBool   ('Game','Autosave',           fAutosave);
-    F.WriteBool   ('Game','ReplayAutopause',    fReplayAutopause);
-    F.WriteBool   ('Game','ReplayShowBeacons',  fReplayShowBeacons);
-    F.WriteBool   ('Game','SpecShowBeacons',    fSpecShowBeacons);
-    F.WriteInteger('Game','ScrollSpeed',        fScrollSpeed);
-    F.WriteInteger('Game','SpeedPace',          fSpeedPace);
-    F.WriteFloat  ('Game','SpeedMedium',        fSpeedMedium);
-    F.WriteFloat  ('Game','SpeedFast',          fSpeedFast);
-    F.WriteFloat  ('Game','SpeedVeryFast',      fSpeedVeryFast);
+    F.WriteBool   ('Game', 'Autosave',          fAutosave);
+    F.WriteBool   ('Game', 'ReplayAutopause',   fReplayAutopause);
+    F.WriteBool   ('Game', 'ReplayShowBeacons', fReplayShowBeacons);
+    F.WriteBool   ('Game', 'SpecShowBeacons',   fSpecShowBeacons);
+    F.WriteInteger('Game', 'ScrollSpeed',       fScrollSpeed);
+    F.WriteInteger('Game', 'SpeedPace',         fSpeedPace);
+    F.WriteFloat  ('Game', 'SpeedMedium',       fSpeedMedium);
+    F.WriteFloat  ('Game', 'SpeedFast',         fSpeedFast);
+    F.WriteFloat  ('Game', 'SpeedVeryFast',     fSpeedVeryFast);
+    F.WriteString ('Game', 'Locale',            UnicodeString(fLocale));
+    F.WriteString ('Game', 'WareDistribution',  fWareDistribution.PackToStr);
 
-    F.WriteString ('Game','Locale',          UnicodeString(fLocale));
-
-    F.WriteString('Game','WareDistribution', fWareDistribution.PackToStr);
-
-    F.WriteFloat  ('SFX','SFXVolume',     fSoundFXVolume);
-    F.WriteFloat  ('SFX','MusicVolume',   fMusicVolume);
-    F.WriteBool   ('SFX','MusicDisabled', fMusicOff);
-    F.WriteBool   ('SFX','ShuffleEnabled',fShuffleOn);
+    F.WriteFloat('SFX', 'SFXVolume',      fSoundFXVolume);
+    F.WriteFloat('SFX', 'MusicVolume',    fMusicVolume);
+    F.WriteBool ('SFX', 'MusicDisabled',  fMusicOff);
+    F.WriteBool ('SFX', 'ShuffleEnabled', fShuffleOn);
 
     if INI_HITPOINT_RESTORE then
-      F.WriteInteger('Fights','HitPointRestorePace', HITPOINT_RESTORE_PACE);
+      F.WriteInteger('Fights', 'HitPointRestorePace', HITPOINT_RESTORE_PACE);
 
-    F.WriteString ('Multiplayer','Name',            UnicodeString(fMultiplayerName));
-    F.WriteString ('Multiplayer','LastIP',          fLastIP);
-    F.WriteString ('Multiplayer','LastPort',        fLastPort);
-    F.WriteString ('Multiplayer','LastRoom',        fLastRoom);
-    F.WriteString ('Multiplayer','LastPassword',    fLastPassword);
-    F.WriteBool   ('Multiplayer','FlashOnMessage',  fFlashOnMessage);
+    F.WriteString('Multiplayer', 'Name',           UnicodeString(fMultiplayerName));
+    F.WriteString('Multiplayer', 'LastIP',         fLastIP);
+    F.WriteString('Multiplayer', 'LastPort',       fLastPort);
+    F.WriteString('Multiplayer', 'LastRoom',       fLastRoom);
+    F.WriteString('Multiplayer', 'LastPassword',   fLastPassword);
+    F.WriteBool  ('Multiplayer', 'FlashOnMessage', fFlashOnMessage);
 
-    F.WriteString ('Server','ServerName',                   UnicodeString(fServerName));
-    F.WriteString ('Server','WelcomeMessage',               {$IFDEF FPC} UTF8Encode {$ENDIF}(fServerWelcomeMessage));
-    F.WriteString ('Server','ServerPort',                   fServerPort);
-    F.WriteBool   ('Server','AnnounceDedicatedServer',      fAnnounceServer);
-    F.WriteInteger('Server','MaxRooms',                     fMaxRooms);
-    F.WriteString ('Server','HTMLStatusFile',               fHTMLStatusFile);
-    F.WriteInteger('Server','MasterServerAnnounceInterval', fMasterAnnounceInterval);
-    F.WriteString ('Server','MasterServerAddressNew',       fMasterServerAddress);
-    F.WriteInteger('Server','AutoKickTimeout',              fAutoKickTimeout);
-    F.WriteInteger('Server','PingMeasurementInterval',      fPingInterval);
+    F.WriteString ('Server', 'ServerName',                   UnicodeString(fServerName));
+    F.WriteString ('Server', 'WelcomeMessage',               {$IFDEF FPC} UTF8Encode {$ENDIF}(fServerWelcomeMessage));
+    F.WriteString ('Server', 'ServerPort',                   fServerPort);
+    F.WriteBool   ('Server', 'AnnounceDedicatedServer',      fAnnounceServer);
+    F.WriteBool   ('Server', 'AnnounceLANServer',            fAnnounceLAN);
+    F.WriteInteger('Server', 'MaxRooms',                     fMaxRooms);
+    F.WriteString ('Server', 'HTMLStatusFile',               fHTMLStatusFile);
+    F.WriteInteger('Server', 'MasterServerAnnounceInterval', fMasterAnnounceInterval);
+    F.WriteString ('Server', 'MasterServerAddressNew',       fMasterServerAddress);
+    F.WriteInteger('Server', 'AutoKickTimeout',              fAutoKickTimeout);
+    F.WriteInteger('Server', 'PingMeasurementInterval',      fPingInterval);
 
-    F.WriteString ('Menu',  'FavouriteMaps',      fMenu_FavouriteMPMapsStr);
-    F.WriteInteger('Menu',  'ReplaysType',        fMenu_ReplaysType);
-    F.WriteInteger('Menu',  'MapEdMapType',       fMenu_MapEdMapType);
-    F.WriteInteger('Menu',  'MapEdNewMapX',       fMenu_MapEdNewMapX);
-    F.WriteInteger('Menu',  'MapEdNewMapY',       fMenu_MapEdNewMapY);
-    F.WriteString ('Menu',  'MapEdSPMapCRC',      IntToStr(fMenu_MapEdSPMapCRC));
-    F.WriteString ('Menu',  'MapEdMPMapCRC',      IntToStr(fMenu_MapEdMPMapCRC));
-    F.WriteString ('Menu',  'MapEdMPMapName',     fMenu_MapEdMPMapName);
-    F.WriteString ('Menu',  'CampaignName',       fMenu_CampaignName);
-    F.WriteString ('Menu',  'ReplaySPSaveCRC',    IntToStr(fMenu_ReplaySPSaveCRC));
-    F.WriteString ('Menu',  'ReplayMPSaveCRC',    IntToStr(fMenu_ReplayMPSaveCRC));
-    F.WriteString ('Menu',  'ReplaySPSaveName',   fMenu_ReplaySPSaveName);
-    F.WriteString ('Menu',  'ReplayMPSaveName',   fMenu_ReplayMPSaveName);
-    F.WriteString ('Menu',  'SPMapCRC',           IntToStr(fMenu_SPMapCRC));
-    F.WriteString ('Menu',  'SPSaveCRC',          IntToStr(fMenu_SPSaveCRC));
-    F.WriteInteger('Menu',  'LobbyMapType',       fMenu_LobbyMapType);
+    F.WriteString ('Menu', 'FavouriteMaps',    fMenu_FavouriteMPMapsStr);
+    F.WriteInteger('Menu', 'ReplaysType',      fMenu_ReplaysType);
+    F.WriteInteger('Menu', 'MapEdMapType',     fMenu_MapEdMapType);
+    F.WriteInteger('Menu', 'MapEdNewMapX',     fMenu_MapEdNewMapX);
+    F.WriteInteger('Menu', 'MapEdNewMapY',     fMenu_MapEdNewMapY);
+    F.WriteString ('Menu', 'MapEdSPMapCRC',    IntToStr(fMenu_MapEdSPMapCRC));
+    F.WriteString ('Menu', 'MapEdMPMapCRC',    IntToStr(fMenu_MapEdMPMapCRC));
+    F.WriteString ('Menu', 'MapEdMPMapName',   fMenu_MapEdMPMapName);
+    F.WriteString ('Menu', 'CampaignName',     fMenu_CampaignName);
+    F.WriteString ('Menu', 'ReplaySPSaveCRC',  IntToStr(fMenu_ReplaySPSaveCRC));
+    F.WriteString ('Menu', 'ReplayMPSaveCRC',  IntToStr(fMenu_ReplayMPSaveCRC));
+    F.WriteString ('Menu', 'ReplaySPSaveName', fMenu_ReplaySPSaveName);
+    F.WriteString ('Menu', 'ReplayMPSaveName', fMenu_ReplayMPSaveName);
+    F.WriteString ('Menu', 'SPMapCRC',         IntToStr(fMenu_SPMapCRC));
+    F.WriteString ('Menu', 'SPSaveCRC',        IntToStr(fMenu_SPSaveCRC));
+    F.WriteInteger('Menu', 'LobbyMapType',     fMenu_LobbyMapType);
 
     F.UpdateFile; //Write changes to file
   finally

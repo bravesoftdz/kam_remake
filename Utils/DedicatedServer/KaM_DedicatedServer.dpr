@@ -22,15 +22,16 @@ uses
   KM_ServerEventHandler in 'KM_ServerEventHandler.pas';
 
 var
-  fEventHandler: TKMServerEventHandler;
-  fDedicatedServer: TKMDedicatedServer;
-  fSettings: TGameSettings;
-  fSettingsLastModified: Integer;
+  fEventHandler:          TKMServerEventHandler;
+  fDedicatedServer:       TKMDedicatedServer;
+  fSettings:              TGameSettings;
+  fSettingsLastModified:  Integer;
   fLastSettingsFileCheck: Cardinal;
 
 {$IFDEF WDC}
 procedure MyProcessMessages;
-var myMsg: TMsg;
+var
+  myMsg: TMsg;
 begin
   while PeekMessage(myMsg, 0, 0, 0, 0) do
   begin
@@ -43,39 +44,52 @@ end;
 
 procedure RunTheServer;
 begin
-  fDedicatedServer := TKMDedicatedServer.Create(fSettings.MaxRooms,
-                                                fSettings.AutoKickTimeout,
-                                                fSettings.PingInterval,
-                                                fSettings.MasterAnnounceInterval,
-                                                fSettings.MasterServerAddress,
-                                                fSettings.HTMLStatusFile,
-                                                fSettings.ServerWelcomeMessage,
-                                                True);
+  fDedicatedServer := TKMDedicatedServer.Create(
+    fSettings.MaxRooms,
+    fSettings.AutoKickTimeout,
+    fSettings.PingInterval,
+    fSettings.MasterAnnounceInterval,
+    fSettings.MasterServerAddress,
+    fSettings.HTMLStatusFile,
+    fSettings.ServerWelcomeMessage,
+    True
+  );
   fDedicatedServer.OnMessage := fEventHandler.ServerStatusMessage;
-  fDedicatedServer.Start(fSettings.ServerName, StrToInt(fSettings.ServerPort), fSettings.AnnounceServer);
+  fDedicatedServer.Start(
+    fSettings.ServerName,
+    StrToInt(fSettings.ServerPort),
+    fSettings.AnnounceServer,
+    fSettings.AnnounceLAN
+  );
 
   while True do
   begin
     fDedicatedServer.UpdateState;
+
     //Reload the INI file if it has changed, by checking the file age every 5 seconds
     if GetTimeSince(fLastSettingsFileCheck) >= 5000 then
     begin
       fLastSettingsFileCheck := TimeGet;
+
       if FileAge(ExeDir+SETTINGS_FILE) <> fSettingsLastModified then
       begin
-        fEventHandler.ServerStatusMessage('Reloading updated settings from '+ExeDir+SETTINGS_FILE);
+        fEventHandler.ServerStatusMessage('Reloading updated settings from ' + ExeDir + SETTINGS_FILE);
         fSettings.ReloadSettings;
-        fSettingsLastModified := FileAge(ExeDir+SETTINGS_FILE);
-        fDedicatedServer.UpdateSettings(fSettings.ServerName,
-                                        fSettings.AnnounceServer,
-                                        fSettings.AutoKickTimeout,
-                                        fSettings.PingInterval,
-                                        fSettings.MasterAnnounceInterval,
-                                        fSettings.MasterServerAddress,
-                                        fSettings.HTMLStatusFile,
-                                        fSettings.ServerWelcomeMessage);
+        fSettingsLastModified := FileAge(ExeDir + SETTINGS_FILE);
+        fDedicatedServer.UpdateSettings(
+          fSettings.ServerName,
+          fSettings.AnnounceServer,
+          fSettings.AnnounceLAN,
+          fSettings.AutoKickTimeout,
+          fSettings.PingInterval,
+          fSettings.MasterAnnounceInterval,
+          fSettings.MasterServerAddress,
+          fSettings.HTMLStatusFile,
+          fSettings.ServerWelcomeMessage
+        );
       end;
     end;
+
     //In Lazarus LNet will wait for 1ms in CallAction for the OS to respond with socket events
     //so we don't need to do ProcessMessage or Sleep here.
     {$IFDEF WDC}
@@ -93,11 +107,13 @@ var
 begin
   Result := '*** STACKTRACE ***' + LineEnding;
   Result := Result + BackTraceStrFunc(ExceptAddr);
+
   for I := 0 to ExceptFrameCount - 1 do
   begin
-    P := (ExceptFrames + I)^;
+    P      := (ExceptFrames + I)^;
     Result := Result + LineEnding + BackTraceStrFunc(P);
   end;
+
   Result := Result + LineEnding + '*** END STACKTRACE ***';
 end;
 {$ENDIF}
@@ -115,8 +131,8 @@ begin
     fDedicatedServer.Stop;
     FreeAndNil(fDedicatedServer);
   end;
-  FreeAndNil(fEventHandler);
 
+  FreeAndNil(fEventHandler);
   Halt; //Terminate the process
 end;
 
@@ -124,6 +140,7 @@ end;
 function OnConsoleCtrl(aCtrl: DWORD): BOOL; stdcall;
 begin
   Result := False;
+
   if aCtrl in [CTRL_C_EVENT, CTRL_BREAK_EVENT, CTRL_CLOSE_EVENT, CTRL_SHUTDOWN_EVENT] then
   begin
     Result := True;
@@ -133,7 +150,7 @@ end;
 {$ENDIF}
 
 {$IFDEF UNIX}
-procedure OnInterrupt(ASignal: cint); cdecl;
+procedure OnInterrupt(aSignal: cint); cdecl;
 begin
   ServerKilled;
 end;
@@ -160,7 +177,7 @@ begin
 
   fSettings := TGameSettings.Create;
   fSettings.SaveSettings(true);
-  fSettingsLastModified := FileAge(ExeDir+SETTINGS_FILE);
+  fSettingsLastModified  := FileAge(ExeDir+SETTINGS_FILE);
   fLastSettingsFileCheck := TimeGet;
 
   while True do
@@ -170,7 +187,7 @@ begin
     except
       on E : Exception do //todo: For some reason this doesn't catch exceptions that occur within network events e.g. OnReceive (once server is running errors can really only occur in these events)
       begin
-        fEventHandler.ServerStatusMessage('EXCEPTION: '+E.ClassName+': '+E.Message);
+        fEventHandler.ServerStatusMessage('EXCEPTION: ' + E.ClassName + ': ' + E.Message);
         {$IFDEF FPC} fEventHandler.ServerStatusMessage(GetExceptionCallStack()); {$ENDIF}
         fEventHandler.ServerStatusMessage('Server restarting...');
         FreeAndNil(fDedicatedServer);
