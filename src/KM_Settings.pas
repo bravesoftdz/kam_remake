@@ -480,7 +480,7 @@ begin
     fServerPort             := F.ReadString ('Server','ServerPort','56789');
     //We call it MasterServerAddressNew to force it to update in everyone's .ini file when we changed address.
     //If the key stayed the same then everyone would still be using the old value from their settings.
-    fMasterServerAddress    := F.ReadString ('Server','MasterServerAddressNew','http://kam.hodgman.id.au/');
+    fMasterServerAddress    := F.ReadString ('Server','MasterServerAddressNew','https://kam.hodgman.id.au/');
     fMasterAnnounceInterval := F.ReadInteger('Server','MasterServerAnnounceInterval',180);
     fAnnounceServer         := F.ReadBool   ('Server','AnnounceDedicatedServer',True);
     fServerName             := AnsiString(F.ReadString ('Server','ServerName','KaM Remake Server'));
