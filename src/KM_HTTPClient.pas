@@ -3,16 +3,14 @@ unit KM_HTTPClient;
 interface
 uses
   Classes, SysUtils,
-  {$IFDEF WDC} KM_HTTPClientOverbyte {$ENDIF}
-  {$IFDEF FPC} KM_HTTPClientLNet {$ENDIF};
+  {$IFDEF WDC} KM_HTTPClientOverbyte {$ELSE} KM_HTTPClientLNet {$ENDIF};
 
 type
   //General wrapper for Delphi/Lazarus implementations
   TKMHTTPClient = class
   private
-    {$IFDEF WDC} fClient: TKMHTTPClientOverbyte; {$ENDIF}
-    {$IFDEF FPC} fClient: TKMHTTPClientLNet;     {$ENDIF}
-    fOnError: TGetStrProc;
+    fClient: {$IFDEF WDC} TKMHTTPClientOverbyte {$ELSE} TKMHTTPClientLNet {$ENDIF} ;
+    fOnError,
     fOnReceive: TGetStrProc;
     procedure Error(const S: string);
     procedure GetCompleted(const S: string);
@@ -23,7 +21,7 @@ type
     procedure GetURL(aURL: string; aIsUTF8: Boolean);
     procedure UpdateStateIdle;
 
-    property OnError: TGetStrProc write fOnError;
+    property OnError:   TGetStrProc write fOnError;
     property OnReceive: TGetStrProc write fOnReceive;
   end;
 
@@ -34,10 +32,9 @@ implementation
 constructor TKMHTTPClient.Create;
 begin
   inherited;
-  {$IFDEF WDC} fClient := TKMHTTPClientOverbyte.Create; {$ENDIF}
-  {$IFDEF FPC} fClient := TKMHTTPClientLNet.Create;     {$ENDIF}
+  fClient                := {$IFDEF WDC} TKMHTTPClientOverbyte {$ELSE} TKMHTTPClientLNet {$ENDIF} .Create;
   fClient.OnGetCompleted := GetCompleted;
-  fClient.OnError := Error;
+  fClient.OnError        := Error;
 end;
 
 

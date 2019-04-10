@@ -2,9 +2,8 @@ unit KM_NetClient;
 {$I KaM_Remake.inc}
 interface
 uses
-  Classes, SysUtils, KM_NetworkTypes
-  {$IFDEF WDC} ,KM_NetClientOverbyte {$ENDIF}
-  {$IFDEF FPC} ,KM_NetClientLNet {$ENDIF}
+  Classes, SysUtils, KM_NetworkTypes,
+  {$IFDEF WDC} KM_NetClientOverbyte {$ELSE} KM_NetClientLNet {$ENDIF}
   ;
 
 { Contains basic items we need for smooth Net experience:
@@ -22,29 +21,23 @@ uses
     - optionaly report non-important status messages }
 
 type
-  {$IFDEF WDC}
-    TKMNetClientImplementation = class(TKMNetClientOverbyte);
-  {$ENDIF}
-  {$IFDEF FPC}
-    TKMNetClientImplementation = class(TKMNetClientLNet);
-  {$ENDIF}
-
-  TKMNetClient = class;
-  TNotifySenderDataEvent = procedure (aNetClient: TKMNetClient; aSenderIndex: Integer; aData: Pointer; aLength: Cardinal) of object;
+  TKMNetClientImplementation = class({$IFDEF WDC} TKMNetClientOverbyte {$ELSE} TKMNetClientLNet {$ENDIF});
+  TKMNetClient               = class;
+  TNotifySenderDataEvent     = procedure(aNetClient: TKMNetClient; aSenderIndex: Integer; aData: Pointer; aLength: Cardinal) of object;
 
   TKMNetClient = class
   private
-    fClient: TKMNetClientImplementation;
+    fClient:    TKMNetClientImplementation;
     fConnected: Boolean;
 
     fBufferSize: Cardinal;
-    fBuffer: array of Byte;
+    fBuffer:     array of Byte;
 
-    fOnConnectSucceed: TNotifyEvent;
-    fOnConnectFailed: TGetStrProc;
+    fOnConnectSucceed:   TNotifyEvent;
+    fOnConnectFailed:    TGetStrProc;
     fOnForcedDisconnect: TNotifyEvent;
-    fOnRecieveData: TNotifySenderDataEvent;
-    fOnStatusMessage: TGetStrProc;
+    fOnRecieveData:      TNotifySenderDataEvent;
+    fOnStatusMessage:    TGetStrProc;
     procedure Error(const S: string);
     procedure ConnectSucceed(Sender: TObject);
     procedure ConnectFailed(const S: string);
@@ -60,7 +53,7 @@ type
 
     procedure ConnectTo(const aAddress: string; const aPort: Word); //Try to connect to server
     property OnConnectSucceed: TNotifyEvent write fOnConnectSucceed; //Signal success
-    property OnConnectFailed: TGetStrProc write fOnConnectFailed; //Signal fail and text description
+    property OnConnectFailed:  TGetStrProc  write fOnConnectFailed; //Signal fail and text description
 
     procedure Disconnect; //Disconnect from server
     property OnForcedDisconnect: TNotifyEvent write fOnForcedDisconnect; //Signal we were forcelly disconnected
@@ -81,10 +74,10 @@ constructor TKMNetClient.Create;
 begin
   inherited;
 
-  fClient := TKMNetClientImplementation.Create;
-  fConnected := False;
-  SetLength(fBuffer, 0);
+  fClient     := TKMNetClientImplementation.Create;
+  fConnected  := False;
   fBufferSize := 0;
+  SetLength(fBuffer, 0);
 end;
 
 
@@ -95,7 +88,7 @@ begin
 end;
 
 
-function TKMNetClient.MyIPString:string;
+function TKMNetClient.MyIPString: string;
 begin
   Result := fClient.MyIPString;
 end;
@@ -116,12 +109,12 @@ end;
 procedure TKMNetClient.ConnectTo(const aAddress: string; const aPort: Word);
 begin
   SetLength(fBuffer, 0);
-  fBufferSize := 0;
-  fClient.OnError := Error;
-  fClient.OnConnectSucceed := ConnectSucceed;
-  fClient.OnConnectFailed := ConnectFailed;
+  fBufferSize                   := 0;
+  fClient.OnError               := Error;
+  fClient.OnConnectSucceed      := ConnectSucceed;
+  fClient.OnConnectFailed       := ConnectFailed;
   fClient.OnSessionDisconnected := ForcedDisconnect;
-  fClient.OnRecieveData := RecieveData;
+  fClient.OnRecieveData         := RecieveData;
   fClient.ConnectTo(aAddress, aPort);
   if Assigned(fOnStatusMessage) then fOnStatusMessage('Client: Connecting..');
 end;
@@ -145,11 +138,11 @@ end;
 
 procedure TKMNetClient.Disconnect;
 begin
-  fOnConnectSucceed := nil;
-  fOnConnectFailed := nil;
+  fOnConnectSucceed   := nil;
+  fOnConnectFailed    := nil;
   fOnForcedDisconnect := nil;
-  fOnRecieveData := nil;
-  fOnStatusMessage := nil;
+  fOnRecieveData      := nil;
+  fOnStatusMessage    := nil;
 
   SetLength(fBuffer,0);
   fBufferSize := 0;
@@ -169,9 +162,11 @@ begin
   begin
     if Assigned(fOnStatusMessage) then
       fOnStatusMessage('Client: Forced disconnect');
+
     if Assigned(fOnForcedDisconnect) then
       fOnForcedDisconnect(Self);
   end;
+
   fConnected := false;
 end;
 
@@ -182,13 +177,13 @@ procedure TKMNetClient.SendData(aSender,aRecepient: Integer; aData: Pointer; aLe
 var
   P: Pointer;
 begin
-  assert(aLength <= MAX_PACKET_SIZE,'Packet over size limit');
-  GetMem(P, aLength+12);
-  PInteger(P)^ := aSender;
-  PInteger(cardinal(P)+4)^ := aRecepient;
-  PCardinal(cardinal(P)+8)^ := aLength;
-  Move(aData^, Pointer(cardinal(P)+12)^, aLength);
-  fClient.SendData(P, aLength+12);
+  assert(aLength <= MAX_PACKET_SIZE, 'Packet over size limit');
+  GetMem(P, aLength + 12);
+  PInteger(P)^                := aSender;
+  PInteger(Cardinal(P) + 4)^  := aRecepient;
+  PCardinal(Cardinal(P) + 8)^ := aLength;
+  Move(aData^, Pointer(Cardinal(P) + 12)^, aLength);
+  fClient.SendData(P, aLength + 12);
   FreeMem(P);
 end;
 
@@ -212,7 +207,7 @@ begin
     PacketLength := PCardinal(@fBuffer[8])^;
 
     //Buffer is lengthy enough to contain full packet, process it
-    if PacketLength <= fBufferSize-12 then
+    if PacketLength <= fBufferSize - 12 then
     begin
       //Skip packet header
       fOnRecieveData(Self, PacketSender, @fBuffer[12], PacketLength);
@@ -222,8 +217,9 @@ begin
         Exit;
 
       //Trim received packet from buffer
-      if 12+PacketLength < fBufferSize then //Check range
-        Move(fBuffer[12+PacketLength], fBuffer[0], fBufferSize-PacketLength-12);
+      if 12 + PacketLength < fBufferSize then //Check range
+        Move(fBuffer[12 + PacketLength], fBuffer[0], fBufferSize - PacketLength - 12);
+
       fBufferSize := fBufferSize - PacketLength - 12;
     end else
       Exit;

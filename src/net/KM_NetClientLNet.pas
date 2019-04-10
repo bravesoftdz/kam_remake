@@ -12,42 +12,42 @@ const
   MAX_SEND_BUFFER = 1048576; //1 MB
 
 type
-  TNotifyDataEvent = procedure(aData:pointer; aLength:cardinal)of object;
+  TNotifyDataEvent = procedure(aData: Pointer; aLength: Cardinal) of object;
 
   TKMNetClientLNet = class
   private
-    fSocket: TLTCP;
-    fBuffer: array of byte;
+    fSocket:    TLTCP;
+    fBuffer:    array of Byte;
     fBufferLen: Cardinal;
 
-    fOnError:TGetStrProc;
-    fOnConnectSucceed:TNotifyEvent;
-    fOnConnectFailed:TGetStrProc;
-    fOnSessionDisconnected:TNotifyEvent;
-    fOnRecieveData:TNotifyDataEvent;
+    fOnError:               TGetStrProc;
+    fOnConnectSucceed:      TNotifyEvent;
+    fOnConnectFailed:       TGetStrProc;
+    fOnSessionDisconnected: TNotifyEvent;
+    fOnRecieveData:         TNotifyDataEvent;
     procedure Connected(aSocket: TLSocket);
     procedure Disconnected(aSocket: TLSocket);
     procedure Receive(aSocket: TLSocket);
     procedure Error(const msg: string; aSocket: TLSocket);
     procedure CanSend(aSocket: TLSocket);
 
-    procedure PutInBuffer(aData:pointer; aLength:cardinal);
+    procedure PutInBuffer(aData: Pointer; aLength: Cardinal);
     procedure AttemptSend;
     function BufferFull: Boolean;
   public
     constructor Create;
     destructor Destroy; override;
-    function MyIPString:string;
+    function MyIPString: string;
     function SendBufferEmpty: Boolean;
     procedure ConnectTo(const aAddress: string; const aPort: Word);
     procedure Disconnect;
-    procedure SendData(aData:pointer; aLength:cardinal);
+    procedure SendData(aData: Pointer; aLength: Cardinal);
     procedure UpdateStateIdle;
-    property OnError:TGetStrProc write fOnError;
-    property OnConnectSucceed:TNotifyEvent write fOnConnectSucceed;
-    property OnConnectFailed:TGetStrProc write fOnConnectFailed;
-    property OnSessionDisconnected:TNotifyEvent write fOnSessionDisconnected;
-    property OnRecieveData:TNotifyDataEvent write fOnRecieveData;
+    property OnError:               TGetStrProc      write fOnError;
+    property OnConnectSucceed:      TNotifyEvent     write fOnConnectSucceed;
+    property OnConnectFailed:       TGetStrProc      write fOnConnectFailed;
+    property OnSessionDisconnected: TNotifyEvent     write fOnSessionDisconnected;
+    property OnRecieveData:         TNotifyDataEvent write fOnRecieveData;
   end;
 
 
@@ -62,12 +62,12 @@ end;
 
 destructor TKMNetClientLNet.Destroy;
 begin
-  if fSocket<>nil then fSocket.Free;
+  if fSocket <> nil then fSocket.Free;
   Inherited;
 end;
 
 
-function TKMNetClientLNet.MyIPString:string;
+function TKMNetClientLNet.MyIPString: string;
 begin
   Result := 'Not implemented yet';
 end;
@@ -82,32 +82,32 @@ end;
 procedure TKMNetClientLNet.ConnectTo(const aAddress: string; const aPort: Word);
 begin
   FreeAndNil(fSocket);
-  fSocket := TLTCP.Create(nil);
+  fSocket              := TLTCP.Create(nil);
   fSocket.OnDisconnect := Disconnected;
-  fSocket.OnConnect := Connected;
-  fSocket.OnReceive := Receive;
-  fSocket.OnError := Error;
-  fSocket.Timeout := 0;
+  fSocket.OnConnect    := Connected;
+  fSocket.OnReceive    := Receive;
+  fSocket.OnError      := Error;
+  fSocket.Timeout      := 0;
+
   try
     fSocket.Connect(aAddress, aPort);
     fSocket.CallAction;
   except
     on E : Exception do
-    begin
-      //Trap the exception and tell the user. Note: While debugging, Delphi will still stop execution for the exception, but normally the dialouge won't show.
+      // Trap the exception and tell the user.
+      // Note: While debugging, Delphi will still stop execution for the exception, but normally the dialouge won't show.
       fOnConnectFailed(E.Message);
-    end;
   end;
 end;
 
 
 procedure TKMNetClientLNet.Disconnect;
 begin
-  if fSocket <> nil then fSocket.Disconnect(true);
+  if fSocket <> nil then fSocket.Disconnect(True);
 end;
 
 
-procedure TKMNetClientLNet.PutInBuffer(aData:pointer; aLength:cardinal);
+procedure TKMNetClientLNet.PutInBuffer(aData: Pointer; aLength: Cardinal);
 begin
   SetLength(fBuffer, fBufferLen + aLength);
   Move(aData^, fBuffer[fBufferLen], aLength);
@@ -125,17 +125,20 @@ begin
   if LenSent > 0 then
   begin
     fBufferLen := fBufferLen - LenSent;
+
     if fBufferLen > 0 then
       Move(fBuffer[LenSent], fBuffer[0], fBufferLen);
   end;
 end;
+
 
 function TKMNetClientLNet.BufferFull: Boolean;
 begin
   Result := fBufferLen >= MAX_SEND_BUFFER;
 end;
 
-procedure TKMNetClientLNet.SendData(aData:pointer; aLength:cardinal);
+
+procedure TKMNetClientLNet.SendData(aData: Pointer; aLength: Cardinal);
 begin
   if fSocket.Connected then
   begin
@@ -144,6 +147,7 @@ begin
       fOnError('LNet Client Error: Send buffer full');
       Exit;
     end;
+
     PutInBuffer(aData, aLength);
     AttemptSend;
   end;
@@ -176,7 +180,7 @@ var
   P:pointer;
   L:integer; //L could be -1 when no data is available
 begin
-  GetMem(P, BufferSize+1); //+1 to avoid RangeCheckError when L = BufferSize
+  GetMem(P, BufferSize + 1); //+1 to avoid RangeCheckError when L = BufferSize
   L := aSocket.Get(P^, BufferSize);
 
   if L > 0 then //if L=0 then exit;
@@ -188,7 +192,7 @@ end;
 
 procedure TKMNetClientLNet.Error(const msg: string; aSocket: TLSocket);
 begin
-  fOnError('LNet Client Error: '+msg);
+  fOnError('LNet Client Error: ' + msg);
 end;
 
 

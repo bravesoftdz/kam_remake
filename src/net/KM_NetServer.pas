@@ -43,8 +43,8 @@ type
   public
     constructor Create(aHandle, aRoom: Integer);
     property Handle: Integer read fHandle; //ReadOnly
-    property Room:   Integer read fRoom write fRoom;
-    property Ping:   Word    read fPing write fPing;
+    property Room:   Integer read fRoom   write fRoom;
+    property Ping:   Word    read fPing   write fPing;
   end;
 
 

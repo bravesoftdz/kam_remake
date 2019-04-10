@@ -7,14 +7,14 @@ uses
 type
   TKMHTTPClientLNet = class
   private
-    fHTTPClient: TLHTTPClient;
-    HTTPBuffer: AnsiString;
-    fOnError: TGetStrProc;
+    fHTTPClient:     TLHTTPClient;
+    fHTTPBuffer:     AnsiString;
+    fOnError,
     fOnGetCompleted: TGetStrProc;
-    fIsUTF8: Boolean;
+    fIsUTF8:         Boolean;
     procedure HTTPClientDoneInput(aSocket: TLHTTPClientSocket);
     procedure HTTPClientError(const msg: string; aSocket: TLSocket);
-    function HTTPClientInput(aSocket: TLHTTPClientSocket; ABuffer: PChar; ASize: Integer): Integer;
+    function HTTPClientInput(aSocket: TLHTTPClientSocket; aBuffer: PChar; aSize: Integer): Integer;
   public
     constructor Create;
     destructor Destroy; override;
@@ -22,7 +22,7 @@ type
     procedure GetURL(aURL: string; aIsUTF8: Boolean);
     procedure UpdateStateIdle;
 
-    property OnError: TGetStrProc write fOnError;
+    property OnError:        TGetStrProc write fOnError;
     property OnGetCompleted: TGetStrProc write fOnGetCompleted;
   end;
 
@@ -32,10 +32,10 @@ implementation
 constructor TKMHTTPClientLNet.Create;
 begin
   inherited Create;
-  fHTTPClient := TLHTTPClient.Create(nil);
-  fHTTPClient.Timeout := 0;
-  fHTTPClient.OnInput := HTTPClientInput;
-  fHTTPClient.OnError := HTTPClientError;
+  fHTTPClient             := TLHTTPClient.Create(nil);
+  fHTTPClient.Timeout     := 0;
+  fHTTPClient.OnInput     := HTTPClientInput;
+  fHTTPClient.OnError     := HTTPClientError;
   fHTTPClient.OnDoneInput := HTTPClientDoneInput;
 end;
 
@@ -51,48 +51,52 @@ procedure TKMHTTPClientLNet.GetURL(aURL: string; aIsUTF8: Boolean);
 var
   Proto, User, Pass, Host, Port, Path: string;
 begin
-  fIsUTF8 := aIsUTF8;
-  fHTTPClient.Disconnect(true); //If we were doing something, stop it
-  HTTPBuffer := '';
+  fHTTPClient.Disconnect(True); //If we were doing something, stop it
+  fIsUTF8     := aIsUTF8;
+  fHTTPBuffer := '';
   ParseURL(aURL, Proto, User, Pass, Host, Port, Path);
   fHTTPClient.Host := Host;
-  fHTTPClient.URI := Path;
+  fHTTPClient.URI  := Path;
   fHTTPClient.Port := StrToIntDef(Port, 80);
   fHTTPClient.SendRequest;
 end;
 
 
 procedure TKMHTTPClientLNet.HTTPClientDoneInput(aSocket: TLHTTPClientSocket);
-var ReturnString: UnicodeString;
+var
+  ReturnString: UnicodeString;
 begin
   aSocket.Disconnect;
+
   if fIsUTF8 then
-    ReturnString := UTF8Decode(HTTPBuffer)
+    ReturnString := UTF8Decode(fHTTPBuffer)
   else
-    ReturnString := UnicodeString(HTTPBuffer);
+    ReturnString := UnicodeString(fHTTPBuffer);
+
   if Assigned(fOnGetCompleted) then
     fOnGetCompleted(ReturnString);
-  HTTPBuffer := '';
+
+  fHTTPBuffer := '';
 end;
 
 
 procedure TKMHTTPClientLNet.HTTPClientError(const msg: string; aSocket: TLSocket);
 begin
-  if Assigned(fOnError) then
-    fOnError(msg);
+  if Assigned(fOnError) then fOnError(msg);
 end;
 
 
-function TKMHTTPClientLNet.HTTPClientInput(aSocket: TLHTTPClientSocket; ABuffer: PChar; ASize: Integer): Integer;
+function TKMHTTPClientLNet.HTTPClientInput(aSocket: TLHTTPClientSocket; aBuffer: PChar; aSize: Integer): Integer;
 var
-  oldLength: dword;
+  oldLength: DWord;
 begin
-  if ASize > 0 then
+  if aSize > 0 then
   begin
-    oldLength := Length(HTTPBuffer);
-    setlength(HTTPBuffer, oldLength + ASize);
-    move(ABuffer^, HTTPBuffer[oldLength + 1], ASize);
+    oldLength := Length(fHTTPBuffer);
+    setlength(fHTTPBuffer, oldLength + aSize);
+    move(aBuffer^, fHTTPBuffer[oldLength + 1], aSize);
   end;
+
   Result := aSize; // tell the http buffer we read it all
 end;
 

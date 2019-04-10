@@ -6,20 +6,20 @@ uses
   KM_CommonClasses, KM_CommonTypes, KM_Defaults, KM_Hand, KM_ResLocales, KM_NetworkTypes;
 
 const
-  PING_COUNT = 20; //Number of pings to store and take the maximum over for latency calculation (pings are measured once per second)
-  LOC_RANDOM = 0;
+  PING_COUNT   = 20; //Number of pings to store and take the maximum over for latency calculation (pings are measured once per second)
+  LOC_RANDOM   = 0;
   LOC_SPECTATE = -1;
 
 type
   //Multiplayer info that is filled in Lobby before TKMPlayers are created (thats why it has many mirror fields)
   TKMNetPlayerInfo = class
   private
-    fNikname: AnsiString;
-    fLangCode: AnsiString;
-    fIndexOnServer: Integer;
-    fFlagColorID: Integer;    //Flag color, 0 means random
-    fPings: array[0 .. PING_COUNT-1] of Word; //Ring buffer
-    fPingPos: Byte;
+    fNikname,
+    fLangCode:      AnsiString;
+    fIndexOnServer,
+    fFlagColorID:   Integer;    //Flag color, 0 means random
+    fPings:         array[0 .. PING_COUNT - 1] of Word; //Ring buffer
+    fPingPos:       Byte;
     procedure SetLangCode(const aCode: AnsiString);
     function GetNiknameColored: AnsiString;
     function GetNikname: AnsiString;
@@ -27,17 +27,17 @@ type
     function GetNiknameU: UnicodeString;
     function GetHandIndex: Integer;
   public
-    PlayerNetType: TNetPlayerType; //Human, Computer, Closed
-    StartLocation: Integer;  //Start location, 0 means random, -1 means spectate
-    Team: Integer;
-    ReadyToStart: Boolean;
-    ReadyToPlay: Boolean;
-    ReadyToReturnToLobby: Boolean;
-    HasMapOrSave: Boolean;
-    Connected: Boolean;      //Player is still connected
-    Dropped: Boolean;        //Host elected to continue play without this player
-    FPS: Cardinal;
-    VotedYes: Boolean;
+    PlayerNetType:        TNetPlayerType; //Human, Computer, Closed
+    StartLocation,                        //Start location, 0 means random, -1 means spectate
+    Team:                 Integer;
+    ReadyToStart,
+    ReadyToPlay,
+    ReadyToReturnToLobby,
+    HasMapOrSave,
+    Connected,                            //Player is still connected
+    Dropped:              Boolean;        //Host elected to continue play without this player
+    FPS:                  Cardinal;
+    VotedYes:             Boolean;
     procedure AddPing(aPing: Word);
     procedure ResetPingRecord;
     function GetInstantPing: Word;
@@ -48,16 +48,16 @@ type
     function IsSpectator: Boolean;
     function GetPlayerType: THandType;
     function SlotName: UnicodeString; //Player name if it's human or computer or closed
-    property Nikname: AnsiString read GetNikname; //Human player nikname (ANSI-Latin)
-    property NiknameColored: AnsiString read GetNiknameColored;
-    property NiknameU: UnicodeString read GetNiknameU;
-    property NiknameColoredU: UnicodeString read GetNiknameColoredU;
-    property LangCode: AnsiString read fLangCode write SetLangCode;
-    property IndexOnServer: Integer read fIndexOnServer;
-    property SetIndexOnServer: Integer write fIndexOnServer;
+    property Nikname:          AnsiString    read GetNikname; //Human player nikname (ANSI-Latin)
+    property NiknameColored:   AnsiString    read GetNiknameColored;
+    property NiknameU:         UnicodeString read GetNiknameU;
+    property NiknameColoredU:  UnicodeString read GetNiknameColoredU;
+    property LangCode:         AnsiString    read fLangCode          write SetLangCode;
+    property IndexOnServer:    Integer       read fIndexOnServer;
+    property SetIndexOnServer: Integer                               write fIndexOnServer;
     function FlagColor(aDefault: Cardinal = $FF000000): Cardinal;
     property FlagColorID: Integer read fFlagColorID write fFlagColorID;
-    property HandIndex: Integer read GetHandIndex;
+    property HandIndex:   Integer read GetHandIndex;
 
     procedure Save(SaveStream: TKMemoryStream);
     procedure Load(LoadStream: TKMemoryStream);
@@ -68,17 +68,17 @@ type
   //but knows nothing about networking nor game setup. Only players.
   TKMNetPlayersList = class
   private
-    fCount: Integer;
+    fCount:      Integer;
     fNetPlayers: array [1..MAX_LOBBY_SLOTS] of TKMNetPlayerInfo;
     function GetPlayer(aIndex: Integer): TKMNetPlayerInfo;
     procedure ValidateColors;
     procedure RemAllClosedPlayers;
   public
-    HostDoesSetup: Boolean; //Gives host absolute control over locations/teams (not colors)
-    RandomizeTeamLocations: Boolean; //When the game starts locations are shuffled within each team
-    SpectatorsAllowed: Boolean;
-    SpectatorSlotsOpen: ShortInt;
-    VoteActive: Boolean;
+    HostDoesSetup,                    //Gives host absolute control over locations/teams (not colors)
+    RandomizeTeamLocations,           //When the game starts locations are shuffled within each team
+    SpectatorsAllowed:      Boolean;
+    SpectatorSlotsOpen:     ShortInt;
+    VoteActive:             Boolean;
     constructor Create;
     destructor Destroy; override;
     procedure Clear;
@@ -144,7 +144,7 @@ uses
 { TKMNetPlayerInfo }
 procedure TKMNetPlayerInfo.AddPing(aPing: Word);
 begin
-  fPingPos := (fPingPos + 1) mod PING_COUNT;
+  fPingPos         := (fPingPos + 1) mod PING_COUNT;
   fPings[fPingPos] := aPing;
 end;
 
@@ -167,8 +167,7 @@ end;
 
 procedure TKMNetPlayerInfo.SetLangCode(const aCode: AnsiString);
 begin
-  if gResLocales.IndexByCode(aCode) <> -1 then
-    fLangCode := aCode;
+  if gResLocales.IndexByCode(aCode) <> -1 then fLangCode := aCode;
 end;
 
 
@@ -179,19 +178,21 @@ end;
 
 
 function TKMNetPlayerInfo.GetMaxPing: Word;
-var I: Integer; Worst: Word;
+var
+  I:     Integer;
+  Worst: Word;
 begin
   Result := 0;
-  Worst := 0;
+  Worst  := 0;
+
   //We should ignore the worst ping so we don't delay game input due to one ping spike
   for I := 0 to PING_COUNT - 1 do
   begin
     if fPings[I] > Worst then
     begin
       Result := Math.max(Result, Worst);
-      Worst := fPings[I]
-    end
-    else
+      Worst  := fPings[I]
+    end else
       Result := Math.max(Result, fPings[I]);
   end;
 end;
@@ -274,6 +275,7 @@ end;
 function TKMNetPlayerInfo.GetHandIndex: Integer;
 begin
   Result := -1;
+
   if StartLocation > 0 then
     Result := StartLocation - 1;
 end;
@@ -319,17 +321,20 @@ end;
 
 { TKMNetPlayersList }
 constructor TKMNetPlayersList.Create;
-var I: Integer;
+var
+  I: Integer;
 begin
   inherited;
   SpectatorSlotsOpen := MAX_LOBBY_SPECTATORS;
+
   for I := 1 to MAX_LOBBY_SLOTS do
     fNetPlayers[I] := TKMNetPlayerInfo.Create;
 end;
 
 
 destructor TKMNetPlayersList.Destroy;
-var I: Integer;
+var
+  I: Integer;
 begin
   for I := 1 to MAX_LOBBY_SLOTS do
     fNetPlayers[I].Free;
@@ -340,10 +345,10 @@ end;
 
 procedure TKMNetPlayersList.Clear;
 begin
-  HostDoesSetup := False;
+  HostDoesSetup          := False;
   RandomizeTeamLocations := False;
-  SpectatorsAllowed := False;
-  SpectatorSlotsOpen := MAX_LOBBY_SPECTATORS;
+  SpectatorsAllowed      := False;
+  SpectatorSlotsOpen     := MAX_LOBBY_SPECTATORS;
   ResetVote;
   fCount := 0;
 end;
@@ -357,8 +362,10 @@ end;
 
 procedure TKMNetPlayersList.ValidateColors;
 var
-  I,K,ColorCount: Integer;
-  UsedColor: array [0..MP_COLOR_COUNT] of Boolean; //0 means Random
+  I,
+  K,
+  ColorCount:     Integer;
+  UsedColor:      array [0..MP_COLOR_COUNT] of Boolean; //0 means Random
   AvailableColor: array [1..MP_COLOR_COUNT] of Byte;
 begin
   //All wrong colors will be reset to random
@@ -377,12 +384,13 @@ begin
 
   //Collect available colors
   ColorCount := 0;
+
   for I := 1 to MP_COLOR_COUNT do
-  if not UsedColor[I] then
-  begin
-    Inc(ColorCount);
-    AvailableColor[ColorCount] := I;
-  end;
+    if not UsedColor[I] then
+    begin
+      Inc(ColorCount);
+      AvailableColor[ColorCount] := I;
+    end;
 
   //Randomize (don't use KaMRandom - we want varied results and PlayerList is synced to clients before start)
   for I := 1 to ColorCount do
@@ -390,12 +398,13 @@ begin
 
   //Allocate available colors
   K := 0;
+
   for I := 1 to fCount do
     if fNetPlayers[I].FlagColorID = 0 then
     begin
       Inc(K);
-      if K <= ColorCount then
-        fNetPlayers[I].FlagColorID := AvailableColor[K];
+
+      if K <= ColorCount then fNetPlayers[I].FlagColorID := AvailableColor[K];
     end;
 
   //Check for odd players
@@ -409,8 +418,7 @@ var
   I: Integer;
 begin
   for I := fCount downto 1 do
-    if Player[I].IsClosed then
-      RemPlayer(I);
+    if Player[I].IsClosed then RemPlayer(I);
 end;
 
 
@@ -418,19 +426,20 @@ procedure TKMNetPlayersList.AddPlayer(aNik: AnsiString; aIndexOnServer: Integer;
 begin
   Assert(fCount <= MAX_LOBBY_SLOTS, 'Can''t add player');
   Inc(fCount);
-  fNetPlayers[fCount].fNikname := aNik;
-  fNetPlayers[fCount].fLangCode := aLang;
-  fNetPlayers[fCount].fIndexOnServer := aIndexOnServer;
-  fNetPlayers[fCount].PlayerNetType := nptHuman;
-  fNetPlayers[fCount].Team := 0;
-  fNetPlayers[fCount].FlagColorID := 0;
-  fNetPlayers[fCount].ReadyToStart := false;
-  fNetPlayers[fCount].HasMapOrSave := false;
-  fNetPlayers[fCount].ReadyToPlay := false;
-  fNetPlayers[fCount].ReadyToReturnToLobby := false;
-  fNetPlayers[fCount].Connected := true;
-  fNetPlayers[fCount].Dropped := false;
+  fNetPlayers[fCount].fNikname             := aNik;
+  fNetPlayers[fCount].fLangCode            := aLang;
+  fNetPlayers[fCount].fIndexOnServer       := aIndexOnServer;
+  fNetPlayers[fCount].PlayerNetType        := nptHuman;
+  fNetPlayers[fCount].Team                 := 0;
+  fNetPlayers[fCount].FlagColorID          := 0;
+  fNetPlayers[fCount].ReadyToStart         := False;
+  fNetPlayers[fCount].HasMapOrSave         := False;
+  fNetPlayers[fCount].ReadyToPlay          := False;
+  fNetPlayers[fCount].ReadyToReturnToLobby := False;
+  fNetPlayers[fCount].Connected            := True;
+  fNetPlayers[fCount].Dropped              := False;
   fNetPlayers[fCount].ResetPingRecord;
+
   //Check if this player must go in a spectator slot
   if fCount-GetSpectatorCount > MAX_LOBBY_PLAYERS then
     fNetPlayers[fCount].StartLocation := LOC_SPECTATE
@@ -447,18 +456,19 @@ begin
     Inc(fCount);
     aSlot := fCount;
   end;
-  fNetPlayers[aSlot].fNikname := '';
-  fNetPlayers[aSlot].fLangCode := '';
+
+  fNetPlayers[aSlot].fNikname       := '';
+  fNetPlayers[aSlot].fLangCode      := '';
   fNetPlayers[aSlot].fIndexOnServer := -1;
-  fNetPlayers[aSlot].PlayerNetType := nptComputer;
-  fNetPlayers[aSlot].Team := 0;
-  fNetPlayers[aSlot].FlagColorID := 0;
-  fNetPlayers[aSlot].StartLocation := 0;
-  fNetPlayers[aSlot].ReadyToStart := True;
-  fNetPlayers[aSlot].HasMapOrSave := True;
-  fNetPlayers[aSlot].ReadyToPlay := True;
-  fNetPlayers[aSlot].Connected := True;
-  fNetPlayers[aSlot].Dropped := False;
+  fNetPlayers[aSlot].PlayerNetType  := nptComputer;
+  fNetPlayers[aSlot].Team           := 0;
+  fNetPlayers[aSlot].FlagColorID    := 0;
+  fNetPlayers[aSlot].StartLocation  := 0;
+  fNetPlayers[aSlot].ReadyToStart   := True;
+  fNetPlayers[aSlot].HasMapOrSave   := True;
+  fNetPlayers[aSlot].ReadyToPlay    := True;
+  fNetPlayers[aSlot].Connected      := True;
+  fNetPlayers[aSlot].Dropped        := False;
   fNetPlayers[aSlot].ResetPingRecord;
 end;
 
@@ -471,18 +481,19 @@ begin
     Inc(fCount);
     aSlot := fCount;
   end;
-  fNetPlayers[aSlot].fNikname := '';
-  fNetPlayers[aSlot].fLangCode := '';
+
+  fNetPlayers[aSlot].fNikname       := '';
+  fNetPlayers[aSlot].fLangCode      := '';
   fNetPlayers[aSlot].fIndexOnServer := -1;
-  fNetPlayers[aSlot].PlayerNetType := nptClosed;
-  fNetPlayers[aSlot].Team := 0;
-  fNetPlayers[aSlot].FlagColorID := 0;
-  fNetPlayers[aSlot].StartLocation := 0;
-  fNetPlayers[aSlot].ReadyToStart := True;
-  fNetPlayers[aSlot].HasMapOrSave := True;
-  fNetPlayers[aSlot].ReadyToPlay := True;
-  fNetPlayers[aSlot].Connected := True;
-  fNetPlayers[aSlot].Dropped := False;
+  fNetPlayers[aSlot].PlayerNetType  := nptClosed;
+  fNetPlayers[aSlot].Team           := 0;
+  fNetPlayers[aSlot].FlagColorID    := 0;
+  fNetPlayers[aSlot].StartLocation  := 0;
+  fNetPlayers[aSlot].ReadyToStart   := True;
+  fNetPlayers[aSlot].HasMapOrSave   := True;
+  fNetPlayers[aSlot].ReadyToPlay    := True;
+  fNetPlayers[aSlot].Connected      := True;
+  fNetPlayers[aSlot].Dropped        := False;
   fNetPlayers[aSlot].ResetPingRecord;
 end;
 
@@ -515,8 +526,8 @@ var
 begin
   ID := ServerToLocal(aIndexOnServer);
   Assert(ID <> -1, 'Cannot drop player');
-  fNetPlayers[ID].Connected := false;
-  fNetPlayers[ID].Dropped := true;
+  fNetPlayers[ID].Connected := False;
+  fNetPlayers[ID].Dropped   := True;
 end;
 
 
@@ -525,6 +536,7 @@ var
   I: Integer;
 begin
   fNetPlayers[aIndex].Free;
+
   for I := aIndex to fCount - 1 do
     fNetPlayers[I] := fNetPlayers[I + 1]; // Shift only pointers
 
@@ -548,6 +560,7 @@ var
   I: Integer;
 begin
   Result := -1;
+
   for I := 1 to fCount do
     if fNetPlayers[I].fIndexOnServer = aIndexOnServer then
     begin
@@ -563,6 +576,7 @@ var
   I: Integer;
 begin
   Result := -1;
+
   for I := 1 to fCount do
     if fNetPlayers[I].fNikname = aNikname then
       Result := I;
@@ -571,9 +585,11 @@ end;
 
 //Convert known starting location to local index in players list
 function TKMNetPlayersList.StartingLocToLocal(aLoc: Integer): Integer;
-var I: Integer;
+var
+  I: Integer;
 begin
   Result := -1;
+
   for I := 1 to fCount do
     if fNetPlayers[I].StartLocation = aLoc then
       Result := I;
@@ -581,9 +597,11 @@ end;
 
 
 function TKMNetPlayersList.PlayerIndexToLocal(aIndex: TKMHandIndex): Integer;
-var I: Integer;
+var
+  I: Integer;
 begin
   Result := -1;
+
   for I := 1 to Count do
     if (aIndex = fNetPlayers[I].StartLocation - 1) then
       Result := I;
@@ -595,19 +613,14 @@ function TKMNetPlayersList.CheckCanJoin(aNik: AnsiString; aIndexOnServer: Intege
 begin
   if fCount >= MAX_LOBBY_SLOTS then
     Result := TX_NET_ROOM_FULL
-  else
-  if ServerToLocal(aIndexOnServer) <> -1 then
+  else if ServerToLocal(aIndexOnServer) <> -1 then
     Result := TX_NET_SAME_NAME
-  else
-  if NiknameToLocal(aNik) <> -1 then
+  else if NiknameToLocal(aNik) <> -1 then
     Result := TX_NET_SAME_NAME
-  else
-  if (aNik = 'AI Player') or (aNik = 'Closed') then
+  else if (aNik = 'AI Player') or (aNik = 'Closed') then
     Result := TX_NET_SAME_NAME
-  else
-  //If this player must take a spectator spot, check that one is open
-  if (fCount-GetSpectatorCount >= MAX_LOBBY_PLAYERS)
-  and ((SpectatorSlotsOpen-GetSpectatorCount <= 0) or not SpectatorsAllowed) then
+  else if (fCount-GetSpectatorCount >= MAX_LOBBY_PLAYERS) and //If this player must take a spectator spot, check that one is open
+          ((SpectatorSlotsOpen-GetSpectatorCount <= 0) or not SpectatorsAllowed) then
     Result := TX_NET_ROOM_FULL
   else
     Result := -1;
@@ -619,11 +632,9 @@ function TKMNetPlayersList.CheckCanReconnect(aLocalIndex: Integer): Integer;
 begin
   if aLocalIndex = -1 then
     Result := -2 //Silent failure, client should try again
-  else
-  if Player[aLocalIndex].Connected then
+  else if Player[aLocalIndex].Connected then
     Result := -2 //Silent failure, client should try again
-  else
-  if Player[aLocalIndex].Dropped then
+  else if Player[aLocalIndex].Dropped then
     Result := TX_NET_RECONNECTION_DROPPED
   else
     Result := -1; //Success
@@ -631,9 +642,11 @@ end;
 
 
 function TKMNetPlayersList.LocAvailable(aIndex: Integer): Boolean;
-var I: Integer;
+var
+  I: Integer;
 begin
   Result := True;
+
   if (aIndex = LOC_RANDOM) or (aIndex = LOC_SPECTATE) then Exit;
 
   for I := 1 to fCount do
@@ -642,9 +655,11 @@ end;
 
 
 function TKMNetPlayersList.ColorAvailable(aIndex: Integer): Boolean;
-var I: Integer;
+var
+  I: Integer;
 begin
   Result := True;
+
   if aIndex = 0 then Exit;
 
   for I := 1 to fCount do
@@ -653,9 +668,11 @@ end;
 
 
 function TKMNetPlayersList.AllReady: Boolean;
-var I: Integer;
+var
+  I: Integer;
 begin
-  Result := true;
+  Result := True;
+
   for I := 1 to fCount do
     if fNetPlayers[I].Connected and fNetPlayers[I].IsHuman then
       Result := Result and fNetPlayers[I].ReadyToStart and fNetPlayers[I].HasMapOrSave;
@@ -663,9 +680,11 @@ end;
 
 
 function TKMNetPlayersList.AllReadyToPlay:boolean;
-var I: Integer;
+var
+  I: Integer;
 begin
-  Result := true;
+  Result := True;
+
   for I := 1 to fCount do
     if fNetPlayers[I].Connected and fNetPlayers[I].IsHuman then
       Result := Result and fNetPlayers[I].ReadyToPlay;
@@ -673,31 +692,39 @@ end;
 
 
 function TKMNetPlayersList.AllReadyToReturnToLobby: Boolean;
-var I: Integer;
+var
+  I: Integer;
 begin
   Result := True;
+
   for I:=1 to fCount do
     if fNetPlayers[I].Connected and fNetPlayers[I].IsHuman then
       Result := Result and fNetPlayers[I].ReadyToReturnToLobby;
 end;
 
 
-function TKMNetPlayersList.GetMaxHighestRoundTripLatency:word;
-var I: Integer; Highest, Highest2, PlayerPing: word;
+function TKMNetPlayersList.GetMaxHighestRoundTripLatency: Word;
+var
+  I:          Integer;
+  Highest,
+  Highest2,
+  PlayerPing: Word;
 begin
-  Highest := 0;
+  Highest  := 0;
   Highest2 := 0;
+
   for I := 1 to fCount do
     if fNetPlayers[I].Connected and fNetPlayers[I].IsHuman then
     begin
       PlayerPing := fNetPlayers[I].GetMaxPing;
+
       if PlayerPing > Highest then
         Highest := PlayerPing
-      else
-        if PlayerPing > Highest2 then
-          Highest2 := PlayerPing;
+      else if PlayerPing > Highest2 then
+        Highest2 := PlayerPing;
     end;
-  Result := min(Highest + Highest2, High(Word));
+
+  Result := Min(Highest + Highest2, High(Word));
 end;
 
 
@@ -706,10 +733,11 @@ var
   I, K: Integer;
 begin
   SetLength(Result, MAX_LOBBY_SLOTS);
-
   K := 0;
+
   for I := 1 to fCount do
-    if (not fNetPlayers[I].ReadyToPlay) and fNetPlayers[I].IsHuman and fNetPlayers[I].Connected then
+    if (not fNetPlayers[I].ReadyToPlay) and fNetPlayers[I].IsHuman and
+       fNetPlayers[I].Connected then
     begin
       Result[K] := I;
       Inc(K)
@@ -720,107 +748,120 @@ end;
 
 
 function TKMNetPlayersList.GetAICount: Integer;
-var I: Integer;
+var
+  I: Integer;
 begin
   Result := 0;
+
   for I := 1 to fCount do
-    if fNetPlayers[I].PlayerNetType = nptComputer then
-      inc(Result);
+    if fNetPlayers[I].PlayerNetType = nptComputer then Inc(Result);
 end;
 
 
 function TKMNetPlayersList.GetClosedCount: Integer;
-var I: Integer;
+var
+  I: Integer;
 begin
   Result := 0;
+
   for I := 1 to fCount do
-    if fNetPlayers[I].PlayerNetType = nptClosed then
-      inc(Result);
+    if fNetPlayers[I].PlayerNetType = nptClosed then Inc(Result);
 end;
 
 
 function TKMNetPlayersList.GetSpectatorCount: Integer;
-var I: Integer;
+var
+  I: Integer;
 begin
   Result := 0;
+
   for I := 1 to fCount do
-    if fNetPlayers[I].IsSpectator then
-      Inc(Result);
+    if fNetPlayers[I].IsSpectator then Inc(Result);
 end;
 
 
 function TKMNetPlayersList.GetConnectedCount: Integer;
-var I: Integer;
+var
+  I: Integer;
 begin
   Result := 0;
+
   for I := 1 to fCount do
-    if fNetPlayers[I].IsHuman and fNetPlayers[I].Connected then
-      Inc(Result);
+    if fNetPlayers[I].IsHuman and fNetPlayers[I].Connected then Inc(Result);
 end;
 
 
 function TKMNetPlayersList.GetConnectedPlayersCount: Integer;
-var I: Integer;
+var
+  I: Integer;
 begin
   Result := 0;
+
   for I := 1 to fCount do
-    if fNetPlayers[I].IsHuman
-      and fNetPlayers[I].Connected
-      and not fNetPlayers[I].IsSpectator then
-      Inc(Result);
+    if fNetPlayers[I].IsHuman and fNetPlayers[I].Connected and
+       not fNetPlayers[I].IsSpectator then Inc(Result);
 end;
 
 
 //Number of not Dropped players
 //Player could be disconnected already, but not dropped yet.
 function TKMNetPlayersList.GetNotDroppedCount: Integer;
-var I: Integer;
+var
+  I: Integer;
 begin
   Result := 0;
+
   for I := 1 to fCount do
-    if fNetPlayers[I].IsHuman and not fNetPlayers[I].Dropped then
-      Inc(Result);
+    if fNetPlayers[I].IsHuman and not fNetPlayers[I].Dropped then Inc(Result);
 end;
 
 
 function TKMNetPlayersList.FurtherVotesNeededForMajority: Integer;
 var
-  I, VotedYes, Total: Integer;
+  I,
+  VotedYes,
+  Total:         Integer;
   OnlySpecsLeft: Boolean;
 begin
-  Total := 0;
-  VotedYes := 0;
+  Total         := 0;
+  VotedYes      := 0;
   OnlySpecsLeft := HasOnlySpectators; //Store value locally
+
   for I := 1 to fCount do
-    if (fNetPlayers[I].PlayerNetType = nptHuman)
-    and (OnlySpecsLeft or (fNetPlayers[I].StartLocation <> LOC_SPECTATE))
-    and not fNetPlayers[I].Dropped then
+    if (fNetPlayers[I].PlayerNetType = nptHuman) and
+       (OnlySpecsLeft or (fNetPlayers[I].StartLocation <> LOC_SPECTATE)) and
+       not fNetPlayers[I].Dropped then
     begin
       Inc(Total);
-      if fNetPlayers[I].VotedYes then
-        Inc(VotedYes);
+
+      if fNetPlayers[I].VotedYes then Inc(VotedYes);
     end;
+
   Result := (Total div 2) + 1 - VotedYes;
 end;
 
 
 //All human players who are not dropped are spectators
 function TKMNetPlayersList.HasOnlySpectators: Boolean;
-var I: Integer;
+var
+  I: Integer;
 begin
   for I := 1 to fCount do
-    if (fNetPlayers[I].PlayerNetType = nptHuman) and (fNetPlayers[I].StartLocation <> LOC_SPECTATE)
-    and not fNetPlayers[I].Dropped then
+    if (fNetPlayers[I].PlayerNetType = nptHuman) and
+       (fNetPlayers[I].StartLocation <> LOC_SPECTATE) and
+       not fNetPlayers[I].Dropped then
     begin
       Result := False;
       Exit;
     end;
+
   Result := True;
 end;
 
 
 procedure TKMNetPlayersList.ResetLocAndReady;
-var I: Integer;
+var
+  I: Integer;
 begin
   for I := 1 to fCount do
   begin
@@ -831,24 +872,28 @@ begin
       fNetPlayers[I].StartLocation := LOC_RANDOM;
 
     //AI/closed players are always ready, spectator ready status is not reset by map change
-    if (fNetPlayers[I].PlayerNetType = nptHuman) and (fNetPlayers[I].StartLocation <> LOC_SPECTATE) then
+    if (fNetPlayers[I].PlayerNetType = nptHuman) and
+       (fNetPlayers[I].StartLocation <> LOC_SPECTATE) then
       fNetPlayers[I].ReadyToStart := false;
   end;
 end;
 
 
 procedure TKMNetPlayersList.ResetReady;
-var I: Integer;
+var
+  I: Integer;
 begin
   for I := 1 to fCount do
     //AI/closed players are always ready, spectator ready status is not reset by options change
-    if (fNetPlayers[I].PlayerNetType = nptHuman) and (fNetPlayers[I].StartLocation <> LOC_SPECTATE) then
+    if (fNetPlayers[I].PlayerNetType = nptHuman) and
+       (fNetPlayers[I].StartLocation <> LOC_SPECTATE) then
       fNetPlayers[I].ReadyToStart := False;
 end;
 
 
 procedure TKMNetPlayersList.ResetReadyToPlay;
-var I: Integer;
+var
+  I: Integer;
 begin
   for I := 1 to fCount do
     fNetPlayers[I].ReadyToPlay := False;
@@ -856,7 +901,8 @@ end;
 
 
 procedure TKMNetPlayersList.ResetReadyToReturnToLobby;
-var I: Integer;
+var
+  I: Integer;
 begin
   for I := 1 to fCount do
     fNetPlayers[I].ReadyToReturnToLobby := False;
@@ -864,54 +910,57 @@ end;
 
 
 procedure TKMNetPlayersList.ResetVote;
-var I: Integer;
+var
+  I: Integer;
 begin
   VoteActive := False;
+
   for I := 1 to fCount do
     fNetPlayers[I].VotedYes := False;
 end;
 
 
 procedure TKMNetPlayersList.SetAIReady;
-var I: Integer;
+var
+  I: Integer;
 begin
   for I := 1 to fCount do
-    if fNetPlayers[I].PlayerNetType in [nptComputer,nptClosed] then
+    if fNetPlayers[I].PlayerNetType in [nptComputer, nptClosed] then
     begin
-      fNetPlayers[I].ReadyToStart := true;
-      fNetPlayers[I].ReadyToPlay := true;
+      fNetPlayers[I].ReadyToStart := True;
+      fNetPlayers[I].ReadyToPlay  := True;
     end;
 end;
 
 
 procedure TKMNetPlayersList.RemAllAIs;
-var I: Integer;
+var
+  I: Integer;
 begin
   for I := fCount downto 1 do
-    if Player[I].IsComputer then
-      RemPlayer(I);
+    if Player[I].IsComputer then RemPlayer(I);
 end;
 
 
 procedure TKMNetPlayersList.RemDisconnectedPlayers;
-var I: Integer;
+var
+  I: Integer;
 begin
   for I := fCount downto 1 do
-    if not Player[I].Connected then
-      RemPlayer(I);
+    if not Player[I].Connected then RemPlayer(I);
 end;
 
 
 //Convert undefined/random start locations to fixed and assign random colors
 //Remove odd players
 function TKMNetPlayersList.ValidateSetup(aHumanUsableLocs, aAIUsableLocs: TKMHandIndexArray; out ErrorMsg: UnicodeString): Boolean;
-
   function IsHumanLoc(aLoc: Byte): Boolean;
-  var I: Integer;
+  var
+    I: Integer;
   begin
     Result := False;
-    for I := 0 to Length(aHumanUsableLocs)-1 do
-      if aLoc = aHumanUsableLocs[I]+1 then
+    for I := 0 to Length(aHumanUsableLocs) - 1 do
+      if aLoc = aHumanUsableLocs[I] + 1 then
       begin
         Result := True;
         Exit;
@@ -919,11 +968,13 @@ function TKMNetPlayersList.ValidateSetup(aHumanUsableLocs, aAIUsableLocs: TKMHan
   end;
 
   function IsAILoc(aLoc: Byte): Boolean;
-  var I: Integer;
+  var
+    I: Integer;
   begin
     Result := False;
-    for I := 0 to Length(aAIUsableLocs)-1 do
-      if aLoc = aAIUsableLocs[I]+1 then
+
+    for I := 0 to Length(aAIUsableLocs) - 1 do
+      if aLoc = aAIUsableLocs[I] + 1 then
       begin
         Result := True;
         Exit;
@@ -931,17 +982,22 @@ function TKMNetPlayersList.ValidateSetup(aHumanUsableLocs, aAIUsableLocs: TKMHan
   end;
 
 var
-  I, K, J: Integer;
-  UsedLoc: array[1..MAX_HANDS] of Boolean;
-  AvailableLocHuman, AvailableLocBoth: array [1..MAX_HANDS] of Byte;
-  LocHumanCount, LocBothCount: Byte;
-  TmpLocHumanCount, TmpLocBothCount: Byte;
-  TeamLocs: array of Integer;
+  I,
+  K,
+  J:                 Integer;
+  UsedLoc:           array[1..MAX_HANDS] of Boolean;
+  AvailableLocHuman,
+  AvailableLocBoth:  array [1..MAX_HANDS] of Byte;
+  LocHumanCount,
+  LocBothCount,
+  TmpLocHumanCount,
+  TmpLocBothCount:   Byte;
+  TeamLocs:          array of Integer;
 begin
   if not AllReady then
   begin
     ErrorMsg := gResTexts[TX_LOBBY_EVERYONE_NOT_READY];
-    Result := False;
+    Result   := False;
     Exit;
   end;
 
@@ -952,8 +1008,8 @@ begin
   //All wrong start locations will be reset to random (fallback since UI should block that anyway)
   for I := 1 to fCount do
     if (fNetPlayers[I].StartLocation <> LOC_RANDOM) and (fNetPlayers[I].StartLocation <> LOC_SPECTATE) then
-      if ((fNetPlayers[I].PlayerNetType = nptHuman) and not IsHumanLoc(fNetPlayers[I].StartLocation))
-      or ((fNetPlayers[I].PlayerNetType = nptComputer) and not IsAILoc(fNetPlayers[I].StartLocation)) then
+      if ((fNetPlayers[I].PlayerNetType = nptHuman) and not IsHumanLoc(fNetPlayers[I].StartLocation)) or
+         ((fNetPlayers[I].PlayerNetType = nptComputer) and not IsAILoc(fNetPlayers[I].StartLocation)) then
         fNetPlayers[I].StartLocation := LOC_RANDOM;
 
   for I := 1 to MAX_HANDS do
@@ -962,56 +1018,50 @@ begin
   //Remember all used locations and drop duplicates (fallback since UI should block that anyway)
   for I := 1 to fCount do
     if (fNetPlayers[I].StartLocation <> LOC_RANDOM) and (fNetPlayers[I].StartLocation <> LOC_SPECTATE) then
-    begin
       if UsedLoc[fNetPlayers[I].StartLocation] then
         fNetPlayers[I].StartLocation := LOC_RANDOM
       else
         UsedLoc[fNetPlayers[I].StartLocation] := true;
-    end;
 
   //Collect available locations in a list
   LocHumanCount := 0;
-  LocBothCount := 0;
+  LocBothCount  := 0;
+
   for I := 1 to MAX_HANDS do
-  if not UsedLoc[I] then
-    begin
+    if not UsedLoc[I] then
       if IsHumanLoc(I) and IsAILoc(I) then
       begin
         Inc(LocBothCount);
         AvailableLocBoth[LocBothCount] := I;
-      end
-      else
-        if IsHumanLoc(I) then
-        begin
-          Inc(LocHumanCount);
-          AvailableLocHuman[LocHumanCount] := I;
-        end;
-    end;
+      end else if IsHumanLoc(I) then
+      begin
+        Inc(LocHumanCount);
+        AvailableLocHuman[LocHumanCount] := I;
+      end;
 
   //Make sure there's enough available locations for everyone who hasn't got one yet
   TmpLocHumanCount := LocHumanCount;
-  TmpLocBothCount := LocBothCount;
+  TmpLocBothCount  := LocBothCount;
+
   for I := 1 to fCount do
     if (fNetPlayers[I].StartLocation = LOC_RANDOM) and (fNetPlayers[I].PlayerNetType <> nptClosed) then
-    begin
       if (fNetPlayers[I].PlayerNetType = nptHuman) and (TmpLocHumanCount > 0) then
         Dec(TmpLocHumanCount)
+      else if TmpLocBothCount > 0 then
+        Dec(TmpLocBothCount)
       else
-        if TmpLocBothCount > 0 then
-          Dec(TmpLocBothCount)
-        else
-        begin
-          ErrorMsg := gResTexts[TX_LOBBY_UNABLE_RANDOM_LOCS];
-          Result := False;
-          Exit;
-        end;
-    end;
+      begin
+        ErrorMsg := gResTexts[TX_LOBBY_UNABLE_RANDOM_LOCS];
+        Result   := False;
+        Exit;
+      end;
 
   RemAllClosedPlayers; //Closed players are just a marker in the lobby, delete them when the game starts
 
   //Randomize all available lists (don't use KaMRandom - we want varied results and PlayerList is synced to clients before start)
   for I := 1 to LocBothCount do
     SwapInt(AvailableLocBoth[I], AvailableLocBoth[Random(LocBothCount)+1]);
+
   for I := 1 to LocHumanCount do
     SwapInt(AvailableLocHuman[I], AvailableLocHuman[Random(LocHumanCount)+1]);
 
@@ -1041,17 +1091,21 @@ begin
     for I := 1 to 4 do //Each team
     begin
       SetLength(TeamLocs, 0); //Reset
+
       for K := 1 to fCount do
         if (fNetPlayers[K].Team = I) and not fNetPlayers[K].IsSpectator then
         begin
           SetLength(TeamLocs, Length(TeamLocs)+1);
           TeamLocs[Length(TeamLocs)-1] := fNetPlayers[K].StartLocation;
         end;
+
       //Shuffle the locations
       for K := 0 to Length(TeamLocs)-1 do
         SwapInt(TeamLocs[K], TeamLocs[Random(Length(TeamLocs))]);
+
       //Assign each location back to a player
       J := 0;
+
       for K := 1 to fCount do
         if (fNetPlayers[K].Team = I) and not fNetPlayers[K].IsSpectator then
         begin
@@ -1078,6 +1132,7 @@ begin
   aStream.Write(SpectatorSlotsOpen);
   aStream.Write(VoteActive);
   aStream.Write(fCount);
+
   for I := 1 to fCount do
     fNetPlayers[I].Save(aStream);
 end;
@@ -1093,6 +1148,7 @@ begin
   aStream.Read(SpectatorSlotsOpen);
   aStream.Read(VoteActive);
   aStream.Read(fCount);
+
   for I := 1 to fCount do
     fNetPlayers[I].Load(aStream);
 end;
@@ -1103,11 +1159,12 @@ var
   I: Integer;
 begin
   Result := '';
+
   for I := 1 to fCount do
   begin
     Result := Result + fNetPlayers[I].SlotName;
-    if I < fCount then
-      Result := Result + '|';
+
+    if I < fCount then Result := Result + '|';
   end;
 end;
 
@@ -1117,11 +1174,12 @@ var
   I: Integer;
 begin
   Result := '';
+
   for I := 1 to fCount do
   begin
     Result := Result + '   ' + IntToStr(I) + ': ' + fNetPlayers[I].NiknameU;
-    if I < fCount then
-      Result := Result + '|';
+
+    if I < fCount then Result := Result + '|';
   end;
 end;
 

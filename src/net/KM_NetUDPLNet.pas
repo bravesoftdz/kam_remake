@@ -6,25 +6,25 @@ uses
 
 
 type
-  TNotifyAddressDataEvent = procedure(aAddress: string; aData:pointer; aLength:cardinal)of object;
+  TNotifyAddressDataEvent = procedure(aAddress: string; aData: Pointer; aLength: Cardinal)of object;
 
   TKMNetUDPLNet = class
   private
     fUDP: TLUdp;
 
-    fOnError: TGetStrProc;
+    fOnError:       TGetStrProc;
     fOnRecieveData: TNotifyAddressDataEvent;
     procedure Receive(aSocket: TLSocket);
     procedure Error(const msg: string; aSocket: TLSocket);
   public
     constructor Create;
     destructor Destroy; override;
-    procedure SendPacket(const aAddress: string; const aPort: Word; aData: pointer; aLength: cardinal);
+    procedure SendPacket(const aAddress: string; const aPort: Word; aData: Pointer; aLength: Cardinal);
     procedure Listen(const aPort: Word);
     procedure StopListening;
     procedure UpdateStateIdle;
-    property OnError:TGetStrProc write fOnError;
-    property OnRecieveData:TNotifyAddressDataEvent write fOnRecieveData;
+    property OnError:       TGetStrProc             write fOnError;
+    property OnRecieveData: TNotifyAddressDataEvent write fOnRecieveData;
   end;
 
 
@@ -34,9 +34,9 @@ implementation
 constructor TKMNetUDPLNet.Create;
 begin
   Inherited Create;
-  fUDP := TLUdp.Create(nil);
-  fUDP.OnError := Error;
-  fUDP.Timeout := 1;
+  fUDP              := TLUdp.Create(nil);
+  fUDP.OnError      := Error;
+  fUDP.Timeout      := 1;
   fUDP.ReuseAddress := True;
 end;
 
@@ -63,7 +63,7 @@ begin
 end;
 
 
-procedure TKMNetUDPLNet.SendPacket(const aAddress: string; const aPort: Word; aData: pointer; aLength: cardinal);
+procedure TKMNetUDPLNet.SendPacket(const aAddress: string; const aPort: Word; aData: Pointer; aLength: Cardinal);
 begin
   fUDP.Send(aData^, aLength, Format('%s:%d', [aAddress, aPort]));
 end;

@@ -15,23 +15,23 @@ type
   private
     fIsDedicated: Boolean;
 
-    fHTTPClient: TKMHTTPClient; //To update server status and fetch server list
-    fHTTPAnnouncementsClient: TKMHTTPClient; //To fetch the annoucenemnts at the same time as the server list
-    fHTTPMapsClient: TKMHTTPClient; //To tell master server about the map we played
-    fMasterServerAddress: string;
-    fOnError: TGetStrProc;
-    fOnServerList: TGetStrProc;
-    fOnAnnouncements: TGetStrProc;
+    fHTTPClient,                             //To update server status and fetch server list
+    fHTTPAnnouncementsClient,                //To fetch the annoucenemnts at the same time as the server list
+    fHTTPMapsClient:          TKMHTTPClient; //To tell master server about the map we played
+    fMasterServerAddress:     string;
+    fOnError,
+    fOnServerList,
+    fOnAnnouncements:         TGetStrProc;
 
     procedure ReceiveServerList(const S: string);
     procedure ReceiveAnnouncements(const S: string);
     procedure Error(const S: string);
   public
-    constructor Create(const aMasterServerAddress: string; aDedicated:Boolean);
+    constructor Create(const aMasterServerAddress: string; aDedicated: Boolean);
     destructor Destroy; override;
 
-    property OnError: TGetStrProc write fOnError;
-    property OnServerList: TGetStrProc write fOnServerList;
+    property OnError:         TGetStrProc write fOnError;
+    property OnServerList:    TGetStrProc write fOnServerList;
     property OnAnnouncements: TGetStrProc write fOnAnnouncements;
     procedure AnnounceServer(aName: string; aPort: Word; aPlayerCount, aTTL: Integer);
     procedure QueryServerList;
@@ -52,7 +52,7 @@ const
   {$IFDEF FPC} COMPILER = 'FPC'; {$ENDIF}
 
 
-constructor TKMMasterServer.Create(const aMasterServerAddress: string; aDedicated:Boolean);
+constructor TKMMasterServer.Create(const aMasterServerAddress: string; aDedicated: Boolean);
 begin
   inherited Create;
   fHTTPClient := TKMHTTPClient.Create;
@@ -95,41 +95,46 @@ end;
 procedure TKMMasterServer.AnnounceServer(aName: string; aPort: Word; aPlayerCount, aTTL: Integer);
 begin
   fHTTPClient.OnReceive := nil; //We don't care about the response
-  fHTTPClient.GetURL(fMasterServerAddress+'serveradd.php?name='+UrlEncode(aName)+'&port='+UrlEncode(IntToStr(aPort))
-                     +'&playercount='+UrlEncode(IntToStr(aPlayerCount))+'&ttl='+UrlEncode(IntToStr(aTTL))
-                     +'&rev='+UrlEncode(NET_PROTOCOL_REVISON)+'&coderev='+UrlEncode(GAME_REVISION)
-                     +'&os='+UrlEncode(OS)+'&compiler='+UrlEncode(COMPILER)+'&dedicated='+UrlEncode(IntToStr(byte(fIsDedicated)))
-                     , False); //Result doesn't matter so ANSI is fine
+  fHTTPClient.GetURL(
+    fMasterServerAddress + 'serveradd.php?name=' + UrlEncode(aName) + '&port=' + UrlEncode(IntToStr(aPort)) +
+      '&playercount=' + UrlEncode(IntToStr(aPlayerCount)) + '&ttl=' + UrlEncode(IntToStr(aTTL)) +
+      '&rev=' + UrlEncode(NET_PROTOCOL_REVISON) + '&coderev=' + UrlEncode(GAME_REVISION) +
+      '&os=' + UrlEncode(OS) + '&compiler=' + UrlEncode(COMPILER) + '&dedicated=' + UrlEncode(IntToStr(byte(fIsDedicated))),
+    False
+  ); //Result doesn't matter so ANSI is fine
 end;
 
 
 procedure TKMMasterServer.QueryServerList;
 begin
   fHTTPClient.OnReceive := ReceiveServerList;
-  fHTTPClient.GetURL(fMasterServerAddress+'serverquery.php?rev='+UrlEncode(NET_PROTOCOL_REVISON)+'&coderev='+UrlEncode(GAME_REVISION)
-                     , False); //For now server list is ANSI only
+  fHTTPClient.GetURL(
+    fMasterServerAddress + 'serverquery.php?rev=' + UrlEncode(NET_PROTOCOL_REVISON) + '&coderev='+UrlEncode(GAME_REVISION),
+    False
+  ); //For now server list is ANSI only
 end;
 
 
 procedure TKMMasterServer.FetchAnnouncements(const aLang: AnsiString);
 begin
   fHTTPAnnouncementsClient.OnReceive := ReceiveAnnouncements;
-  fHTTPAnnouncementsClient.GetURL(fMasterServerAddress+'announcements.php?lang='
-       +UrlEncode(UnicodeString(aLang))+'&rev='+UrlEncode(NET_PROTOCOL_REVISON)
-       +'&coderev='+UrlEncode(GAME_REVISION)
-       , True); //Announcements are in UTF8
+  fHTTPAnnouncementsClient.GetURL(
+    fMasterServerAddress + 'announcements.php?lang=' + UrlEncode(UnicodeString(aLang)) + '&rev=' + UrlEncode(NET_PROTOCOL_REVISON) +
+      '&coderev=' + UrlEncode(GAME_REVISION),
+    True
+  ); //Announcements are in UTF8
 end;
 
 
 procedure TKMMasterServer.SendMapInfo(const aMapName: string; aCRC: Cardinal; aPlayerCount: Integer);
 begin
   fHTTPMapsClient.OnReceive := nil; //We don't care about the response
-  fHTTPMapsClient.GetURL(fMasterServerAddress+'maps.php?map='+UrlEncode(aMapName)
-                         +'&mapcrc='+IntToHex(aCRC, 8)
-                         +'&playercount='+UrlEncode(IntToStr(aPlayerCount))
-                         +'&rev='+UrlEncode(NET_PROTOCOL_REVISON)
-                         +'&coderev='+UrlEncode(GAME_REVISION)
-                         , False); //Result doesn't matter so ANSI is fine
+  fHTTPMapsClient.GetURL(
+    fMasterServerAddress + 'maps.php?map='+UrlEncode(aMapName) + '&mapcrc=' + IntToHex(aCRC, 8) +
+      '&playercount=' + UrlEncode(IntToStr(aPlayerCount)) + '&rev=' + UrlEncode(NET_PROTOCOL_REVISON) +
+      '&coderev=' + UrlEncode(GAME_REVISION),
+    False
+  ); //Result doesn't matter so ANSI is fine
 end;
 
 

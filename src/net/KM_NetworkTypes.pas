@@ -4,17 +4,17 @@ interface
 
 
 const
-  NET_ADDRESS_EMPTY = 0;    //Yet undefined
-  NET_ADDRESS_OTHERS = -1;  //Recipient
-  NET_ADDRESS_ALL = -2;     //Recipient
-  NET_ADDRESS_HOST = -3;    //Sender/Recipient
-  NET_ADDRESS_SERVER = -4;  //Sender/Recipient
+  NET_ADDRESS_EMPTY  = 0;  //Yet undefined
+  NET_ADDRESS_OTHERS = -1; //Recipient
+  NET_ADDRESS_ALL    = -2; //Recipient
+  NET_ADDRESS_HOST   = -3; //Sender/Recipient
+  NET_ADDRESS_SERVER = -4; //Sender/Recipient
 
   //Size of chunks that a file is sent in (must be smaller than MAX_PACKET_SIZE)
   //Making it less than Ethernet MTU (~1500) helps to avoids inefficient IP fragmentation
-  FILE_CHUNK_SIZE = 1024; //1kb
-  MAX_PACKET_SIZE = 20480; //20kb. Maximum length of a KM packet
-  MAX_CHUNKS_BEFORE_ACK = 80; //Number of chunks of a file that can be in flight
+  FILE_CHUNK_SIZE       = 1024;  //1kb
+  MAX_PACKET_SIZE       = 20480; //20kb. Maximum length of a KM packet
+  MAX_CHUNKS_BEFORE_ACK = 80;    //Number of chunks of a file that can be in flight
 
   //Client-Server-Client exchange packets. Each packet is a certain type
 type
@@ -166,15 +166,15 @@ const
 
 
 type
-  TMPGameState = (mgsNone, mgsLobby, mgsLoading, mgsGame);
-  TKMServerType = (mstClient, mstDedicated, mstLocal);
+  TMPGameState   = (mgsNone, mgsLobby, mgsLoading, mgsGame);
+  TKMServerType  = (mstClient, mstDedicated, mstLocal);
   TNetPlayerType = (nptHuman, nptComputer, nptClosed);
 
 const
   //Used in the dedicated server display as it does not care about translations (translated ones are in KM_TextLibrary)
-  GameStateText: array [TMPGameState] of UnicodeString = ('None', 'Lobby', 'Loading', 'Game');
+  GameStateText:     array [TMPGameState]   of UnicodeString = ('None', 'Lobby', 'Loading', 'Game');
   NetPlayerTypeName: array [TNetPlayerType] of UnicodeString = ('Human', 'AI Player', 'Closed');
-  ServerTypePic: array [TKMServerType] of Word = (74, 75, 79);
+  ServerTypePic:     array [TKMServerType]  of Word          = (74, 75, 79);
 
 
 implementation
