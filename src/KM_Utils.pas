@@ -73,7 +73,6 @@ uses
   function StrContains(aStr, aSubStr: String): Boolean;
   function StrTrimRight(aStr: String; aCharsToTrim: TKMCharArray): String;
   function StrSplit(aStr, aDelimiters: String): TStrings;
-  function StrWrapIf(aBool: Boolean; const aStr: string; const aPrefix: string; const aSuffix: string): string;
 
 {$ifdef FPC}
 type
@@ -833,18 +832,10 @@ begin
   //Do we really need it this way? Better to pass TStringList from outside in a parameter.
 
   StrArray := SplitString(aStr, aDelimiters);
-  Result := TStringList.Create;
+  Result   := TStringList.Create;
+
   for I := Low(StrArray) to High(StrArray) do
     Result.Add(StrArray[I]);
-end;
-
-
-function StrWrapIf(aBool: Boolean; const aStr: string; const aPrefix: string; const aSuffix: string): string;
-begin
-  if aBool then
-    Result := Format('%s%s%s', [aPrefix, aStr, aSuffix])
-  else
-    Result := aStr;
 end;
 
 

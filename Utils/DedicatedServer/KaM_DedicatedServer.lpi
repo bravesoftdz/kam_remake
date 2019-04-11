@@ -17,12 +17,9 @@
     <MacroValues Count="1">
       <Macro1 Name="LCLWidgetType" Value="nogui"/>
     </MacroValues>
-    <BuildModes Count="9" Active="Release Win64">
+    <BuildModes Count="9" Active="Debug Linux_x84_64">
       <Item1 Name="Default" Default="True"/>
       <Item2 Name="Debug Linux_x84_64">
-        <MacroValues Count="1">
-          <Macro1 Name="LCLWidgetType" Value="nogui"/>
-        </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
           <PathDelim Value="\"/>
@@ -116,9 +113,6 @@
         </CompilerOptions>
       </Item3>
       <Item4 Name="Debug Linux_i386">
-        <MacroValues Count="1">
-          <Macro1 Name="LCLWidgetType" Value="nogui"/>
-        </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
           <PathDelim Value="\"/>
@@ -404,7 +398,7 @@
         </CompilerOptions>
       </Item9>
       <SharedMatrixOptions Count="1">
-        <Item1 ID="665278215502" Modes="Debug Linux_x84_64,Debug Linux_i386,Default,Debug Win64,Debug Win32,Release Linux_x84_64,Release Linux_i386,Release Win64,Release Win32" Type="IDEMacro" MacroName="LCLWidgetType" Value="nogui"/>
+        <Item1 ID="665278215502" Modes="Default,Debug Win64,Debug Win32,Release Linux_x84_64,Release Linux_i386,Release Win64,Release Win32" Type="IDEMacro" MacroName="LCLWidgetType" Value="nogui"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -424,13 +418,13 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="62">
+    <Units Count="67">
       <Unit0>
         <Filename Value="KaM_DedicatedServer.dpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <CursorPos X="9" Y="18"/>
-        <UsageCount Value="46"/>
+        <TopLine Value="92"/>
+        <CursorPos X="78" Y="114"/>
+        <UsageCount Value="108"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
@@ -438,7 +432,7 @@
         <Filename Value="..\..\KaM_Remake.lpr"/>
         <TopLine Value="59"/>
         <CursorPos X="15" Y="4"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="2"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
@@ -446,59 +440,61 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="652"/>
         <CursorPos X="22" Y="665"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\..\src\KM_DedicatedServer.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <CursorPos X="27" Y="5"/>
-        <UsageCount Value="37"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="160"/>
+        <CursorPos X="3" Y="189"/>
+        <UsageCount Value="99"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
         <Filename Value="..\..\src\KM_CommonTypes.pas"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\..\src\common\dglOpenGL.pas"/>
         <TopLine Value="460"/>
         <CursorPos X="51" Y="478"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="2"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
         <Filename Value="..\..\src\KM_Utils.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <CursorPos X="7" Y="287"/>
-        <UsageCount Value="37"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="106"/>
+        <CursorPos X="58" Y="75"/>
+        <UsageCount Value="99"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
         <Filename Value="..\..\src\KM_Points.pas"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
         <Filename Value="..\..\src\KM_Settings.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="37"/>
+        <TopLine Value="309"/>
+        <CursorPos X="82" Y="264"/>
+        <UsageCount Value="99"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
         <Filename Value="KM_ServerEventHandler.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="24" Y="7"/>
-        <UsageCount Value="37"/>
+        <CursorPos X="45" Y="31"/>
+        <UsageCount Value="99"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
       <Unit10>
@@ -506,36 +502,36 @@
         <UnitName Value="WSImgList"/>
         <TopLine Value="250"/>
         <CursorPos X="10" Y="266"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="2"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
         <Filename Value="..\..\src\KM_Log.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="37"/>
+        <UsageCount Value="99"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
         <Filename Value="..\..\src\KM_CommonClasses.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="37" Y="304"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit12>
       <Unit13>
         <Filename Value="..\..\src\common\URLUtils.pas"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit13>
       <Unit14>
         <Filename Value="..\..\src\KM_Defaults.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="6"/>
-        <CursorPos X="3" Y="25"/>
-        <UsageCount Value="37"/>
+        <TopLine Value="40"/>
+        <CursorPos X="97" Y="54"/>
+        <UsageCount Value="99"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit14>
       <Unit15>
@@ -543,7 +539,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="21"/>
         <CursorPos X="23" Y="42"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit15>
       <Unit16>
@@ -552,31 +548,31 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="49"/>
         <CursorPos X="3" Y="69"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit16>
       <Unit17>
         <Filename Value="..\..\src\net\KM_NetUDP.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="143"/>
-        <CursorPos X="49" Y="166"/>
-        <UsageCount Value="32"/>
+        <TopLine Value="192"/>
+        <CursorPos X="77" Y="196"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit17>
       <Unit18>
         <Filename Value="..\..\src\net\KM_NetUDPLNet.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="53"/>
-        <CursorPos X="18" Y="70"/>
-        <UsageCount Value="32"/>
+        <TopLine Value="11"/>
+        <CursorPos X="52" Y="26"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit18>
       <Unit19>
         <Filename Value="..\..\src\KM_Resolutions.pas"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit19>
       <Unit20>
@@ -584,23 +580,23 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="232"/>
         <CursorPos X="22" Y="214"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit20>
       <Unit21>
         <Filename Value="..\..\src\common\LNet\lnet.pp"/>
         <UnitName Value="lNet"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="421"/>
-        <CursorPos X="61" Y="444"/>
-        <UsageCount Value="14"/>
+        <TopLine Value="887"/>
+        <CursorPos X="34" Y="900"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit21>
       <Unit22>
         <Filename Value="..\..\KM_TextIDs.inc"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="996"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
       <Unit23>
@@ -609,7 +605,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="440"/>
         <CursorPos X="32" Y="453"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit23>
       <Unit24>
@@ -618,7 +614,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="123"/>
         <CursorPos X="23" Y="140"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit24>
       <Unit25>
@@ -627,16 +623,16 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="80"/>
         <CursorPos X="45" Y="92"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit25>
       <Unit26>
         <Filename Value="..\..\src\KM_HTTPClientLNet.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="39"/>
-        <CursorPos Y="61"/>
-        <UsageCount Value="32"/>
+        <TopLine Value="77"/>
+        <CursorPos X="60" Y="17"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit26>
       <Unit27>
@@ -644,7 +640,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="169"/>
         <CursorPos X="23" Y="194"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit27>
       <Unit28>
@@ -653,19 +649,19 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1309"/>
         <CursorPos X="26" Y="265"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit28>
       <Unit29>
         <Filename Value="..\..\src\common\LNet\lcontainers.inc"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit29>
       <Unit30>
         <Filename Value="..\..\src\common\LNet\lcontainersh.inc"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit30>
       <Unit31>
@@ -674,23 +670,27 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="6"/>
         <CursorPos X="37" Y="116"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit31>
       <Unit32>
         <Filename Value="..\..\src\net\KM_NetServer.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="49"/>
-        <UsageCount Value="32"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="813"/>
+        <CursorPos X="54" Y="797"/>
+        <UsageCount Value="94"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit32>
       <Unit33>
         <Filename Value="..\..\src\net\KM_NetServerLNet.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="41" Y="235"/>
-        <UsageCount Value="32"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="205"/>
+        <CursorPos X="34" Y="250"/>
+        <UsageCount Value="94"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit33>
       <Unit34>
@@ -698,32 +698,30 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="955"/>
         <CursorPos X="14" Y="972"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit34>
       <Unit35>
         <Filename Value="..\..\src\KM_MasterServer.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="85"/>
-        <CursorPos Y="98"/>
-        <UsageCount Value="32"/>
+        <CursorPos Y="137"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit35>
       <Unit36>
         <Filename Value="..\..\src\KM_HTTPClient.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="35"/>
-        <CursorPos Y="53"/>
-        <UsageCount Value="32"/>
+        <CursorPos X="26" Y="35"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit36>
       <Unit37>
         <Filename Value="..\..\src\net\KM_NetServerOverbyte.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="39" Y="7"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit37>
       <Unit38>
@@ -731,94 +729,86 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1040"/>
         <CursorPos X="18" Y="1090"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit38>
       <Unit39>
         <Filename Value="..\..\src\common\Overbyte ICS 8\Include\OverbyteIcsDefs.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="206"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit39>
       <Unit40>
         <Filename Value="..\..\src\net\KM_NetAuthUnsecure.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="32"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit40>
       <Unit41>
         <Filename Value="..\..\src\net\KM_NetClient.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="32"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="40"/>
+        <CursorPos X="27" Y="61"/>
+        <UsageCount Value="94"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit41>
       <Unit42>
         <Filename Value="..\..\src\net\KM_NetClientLNet.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="32"/>
+        <TopLine Value="115"/>
+        <CursorPos X="35" Y="195"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit42>
       <Unit43>
         <Filename Value="..\..\src\net\KM_NetFileTransfer.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="32"/>
+        <CursorPos X="10" Y="71"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit43>
       <Unit44>
         <Filename Value="..\..\src\net\KM_NetPlayersList.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="32"/>
+        <TopLine Value="1153"/>
+        <CursorPos X="5" Y="1181"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit44>
       <Unit45>
         <Filename Value="..\..\src\net\KM_NetworkClasses.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="32"/>
+        <TopLine Value="133"/>
+        <CursorPos X="35" Y="150"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit45>
       <Unit46>
         <Filename Value="..\..\src\net\KM_Networking.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="32"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="1570"/>
+        <CursorPos X="21" Y="1585"/>
+        <UsageCount Value="94"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit46>
       <Unit47>
         <Filename Value="..\..\src\net\KM_NetworkTypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="32"/>
+        <TopLine Value="149"/>
+        <CursorPos X="62" Y="177"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit47>
       <Unit48>
@@ -826,27 +816,27 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="86"/>
         <CursorPos X="3" Y="103"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit48>
       <Unit49>
         <Filename Value="..\..\src\res\KM_ResWares.pas"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit49>
       <Unit50>
         <Filename Value="..\..\src\res\KM_ResHouses.pas"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit50>
       <Unit51>
         <Filename Value="..\..\src\common\LNet\lhttp.pp"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="2295"/>
-        <CursorPos X="79" Y="2308"/>
-        <UsageCount Value="13"/>
+        <TopLine Value="1921"/>
+        <CursorPos X="29" Y="1938"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit51>
       <Unit52>
@@ -854,14 +844,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="51"/>
         <CursorPos X="17" Y="70"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit52>
       <Unit53>
         <Filename Value="..\..\src\common\LNet\sys\osunits.inc"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="3" Y="3"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit53>
       <Unit54>
@@ -870,7 +860,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="340"/>
         <CursorPos X="4" Y="358"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit54>
       <Unit55>
@@ -878,7 +868,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="585"/>
         <CursorPos X="3" Y="607"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit55>
       <Unit56>
@@ -886,14 +876,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="30"/>
         <CursorPos X="84" Y="60"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit56>
       <Unit57>
         <Filename Value="..\..\src\KM_PolySimplify.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="10" Y="466"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit57>
       <Unit58>
@@ -902,7 +892,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="145"/>
         <CursorPos X="14" Y="162"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit58>
       <Unit59>
@@ -910,7 +900,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="7"/>
         <CursorPos X="3" Y="20"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit59>
       <Unit60>
@@ -918,7 +908,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="39"/>
         <CursorPos X="3" Y="52"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit60>
       <Unit61>
@@ -927,18 +917,101 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="10"/>
         <CursorPos X="3" Y="35"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="5"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit61>
+      <Unit62>
+        <Filename Value="..\..\src\res\KM_ResUnits.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="428"/>
+        <CursorPos X="25" Y="445"/>
+        <UsageCount Value="4"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit62>
+      <Unit63>
+        <Filename Value="C:\fpcupdeluxe\fpcsrc\rtl\win\wininc\defines.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1341"/>
+        <CursorPos X="6" Y="1358"/>
+        <UsageCount Value="5"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit63>
+      <Unit64>
+        <Filename Value="C:\fpcupdeluxe\fpcsrc\rtl\win\wininc\base.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="54"/>
+        <CursorPos X="6" Y="71"/>
+        <UsageCount Value="4"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit64>
+      <Unit65>
+        <Filename Value="F:\fpcupdeluxe\fpcsrc\packages\paszlib\src\zstream.pp"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="5"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit65>
+      <Unit66>
+        <Filename Value="C:\fpcupdeluxe\fpcsrc\rtl\objpas\sysutils\sysstrh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="290"/>
+        <CursorPos X="89" Y="232"/>
+        <UsageCount Value="6"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit66>
     </Units>
-    <JumpHistory Count="2" HistoryIndex="1">
+    <JumpHistory Count="13" HistoryIndex="12">
       <Position1>
-        <Filename Value="..\..\src\KM_DedicatedServer.pas"/>
-        <Caret Line="5" Column="27"/>
+        <Filename Value="KaM_DedicatedServer.dpr"/>
+        <Caret Line="22" Column="57" TopLine="10"/>
       </Position1>
       <Position2>
         <Filename Value="KaM_DedicatedServer.dpr"/>
-        <Caret Line="18" Column="9"/>
+        <Caret Line="109" Column="24" TopLine="94"/>
       </Position2>
+      <Position3>
+        <Filename Value="KaM_DedicatedServer.dpr"/>
+        <Caret Line="110" Column="6" TopLine="94"/>
+      </Position3>
+      <Position4>
+        <Filename Value="..\..\src\net\KM_NetServer.pas"/>
+        <Caret Line="779" Column="34" TopLine="756"/>
+      </Position4>
+      <Position5>
+        <Filename Value="..\..\src\net\KM_NetClient.pas"/>
+        <Caret Line="45" Column="26" TopLine="37"/>
+      </Position5>
+      <Position6>
+        <Filename Value="..\..\src\net\KM_NetClient.pas"/>
+        <Caret Line="61" Column="72" TopLine="36"/>
+      </Position6>
+      <Position7>
+        <Filename Value="..\..\src\net\KM_NetClient.pas"/>
+        <Caret Line="117" Column="47" TopLine="88"/>
+      </Position7>
+      <Position8>
+        <Filename Value="..\..\src\net\KM_NetClient.pas"/>
+        <Caret Line="144" Column="17" TopLine="118"/>
+      </Position8>
+      <Position9>
+        <Filename Value="..\..\src\net\KM_NetClient.pas"/>
+        <Caret Line="61" Column="27" TopLine="40"/>
+      </Position9>
+      <Position10>
+        <Filename Value="..\..\src\net\KM_Networking.pas"/>
+        <Caret Line="417" Column="49" TopLine="400"/>
+      </Position10>
+      <Position11>
+        <Filename Value="..\..\src\net\KM_Networking.pas"/>
+        <Caret Line="1586" Column="28" TopLine="1563"/>
+      </Position11>
+      <Position12>
+        <Filename Value="..\..\src\net\KM_Networking.pas"/>
+        <Caret Line="182" Column="28" TopLine="169"/>
+      </Position12>
+      <Position13>
+        <Filename Value="..\..\src\net\KM_Networking.pas"/>
+        <Caret Line="417" Column="49" TopLine="392"/>
+      </Position13>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

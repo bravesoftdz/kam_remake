@@ -22,7 +22,7 @@ const
   MIN_RESOLUTION_WIDTH  = 1024;         //Lowest supported resolution X
   MIN_RESOLUTION_HEIGHT = 576;          //Lowest supported resolution Y
 
-  GAME_REVISION         = 'r7000+';       //Should be updated for every release (each time save format is changed)
+  GAME_REVISION         = 'r7000Thi';       //Should be updated for every release (each time save format is changed)
   {$IFDEF USESECUREAUTH}
     GAME_VERSION_POSTFIX  = '';
   {$ELSE}
@@ -30,7 +30,8 @@ const
   {$ENDIF}
   GAME_VERSION_PREFIX   = ''; //Game version string displayed in menu corner
   GAME_VERSION          = GAME_VERSION_PREFIX + GAME_REVISION + GAME_VERSION_POSTFIX;
-  NET_PROTOCOL_REVISON  = GAME_REVISION;     //Clients of this version may connect to the dedicated server
+  //NET_PROTOCOL_REVISON  = GAME_REVISION;     //Clients of this version may connect to the dedicated server
+  NET_PROTOCOL_REVISON  = 'r2138';      // Clients of this version may connect to the dedicated server
 
   SETTINGS_FILE         = 'KaM_Remake_Settings.ini';
   FONTS_FOLDER          = 'data' + PathDelim + 'gfx' + PathDelim + 'fonts' + PathDelim;

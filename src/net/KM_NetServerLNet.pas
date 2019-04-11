@@ -82,7 +82,8 @@ procedure TClientInfo.AttemptSend(aSocket: TLSocket);
 var
   LenSent: Integer;
 begin
-  if BufferLen <= 0 then Exit;
+  if BufferLen <= 0 then
+    Exit;
 
   LenSent := aSocket.Send(Buffer[0], BufferLen);
 
@@ -122,7 +123,8 @@ destructor TKMNetServerLNet.Destroy;
 begin
   StopListening;
 
-  if fSocketServer <> nil then fSocketServer.Free;
+  if fSocketServer <> nil then
+    fSocketServer.Free;
 
   Inherited;
 end;
@@ -171,7 +173,7 @@ begin
   end;
 
   FreeAndNil(fSocketServer);
-  fLastTag := FIRST_TAG-1;
+  fLastTag   := FIRST_TAG - 1;
   fListening := False;
 end;
 
@@ -180,18 +182,20 @@ end;
 procedure TKMNetServerLNet.ClientConnect(aSocket: TLSocket);
 begin
   //Identify index of the Client, so we can address it
-  if fLastTag = GetMaxHandle then fLastTag := FIRST_TAG-1; //I'll be surprised if this is ever necessary
+  if fLastTag = GetMaxHandle then
+    fLastTag := FIRST_TAG - 1; //I'll be surprised if this is ever necessary
 
-  inc(fLastTag);
+  Inc(fLastTag);
   aSocket.UserData := TClientInfo.Create(fLastTag);
-  fOnClientConnect(fLastTag);
   aSocket.SetState(ssNoDelay, True); //Send packets ASAP (disables Nagle's algorithm)
+  fOnClientConnect(fLastTag);
 end;
 
 
 procedure TKMNetServerLNet.ClientDisconnect(aSocket: TLSocket);
 begin
-  if aSocket.UserData = nil then Exit;
+  if aSocket.UserData = nil then
+    Exit;
 
   fOnClientDisconnect(TClientInfo(aSocket.UserData).Tag);
   TClientInfo(aSocket.UserData).Free;
@@ -205,11 +209,11 @@ const
   BufferSize = 10240; //10kb
 var
   P: Pointer;
-  L: Integer; //L could be -1 when no data is available
+  L: Integer; // L could be -1 when no data is available
 begin
   if aSocket.UserData = nil then
   begin
-    aSocket.Disconnect(True); //Sometimes disconnecting them fails the first time(?) LNet bug?
+    aSocket.Disconnect(True); // Sometimes disconnecting them fails the first time(?) LNet bug?
     //fOnError('Received data from an unknown client');
     Exit;
   end;
@@ -217,7 +221,7 @@ begin
   GetMem(P, BufferSize + 1); //+1 to avoid RangeCheckError when L = BufferSize
   L := aSocket.Get(P^, BufferSize);
 
-  if L > 0 then //if L=0 then exit;
+  if L > 0 then //if L = 0 then exit;
     fOnDataAvailable(TClientInfo(aSocket.UserData).Tag, P, L);
 
   FreeMem(P);
@@ -235,7 +239,8 @@ end;
 
 procedure TKMNetServerLNet.CanSend(aSocket: TLSocket);
 begin
-  if aSocket.UserData = nil then Exit;
+  if aSocket.UserData = nil then
+    Exit;
 
   TClientInfo(aSocket.UserData).AttemptSend(aSocket);
 end;
@@ -288,6 +293,7 @@ begin
 
       Exit; //Only one client should have this handle
     end;
+
   //If we reached here we didn't find a match
   fOnError('Warning: Attempted to kick a client that has already disconnected');
   fOnClientDisconnect(aHandle); //Client has already disconnected somehow, so send the event to ensure they are removed

@@ -73,21 +73,20 @@ type
     BytesTX, //May exceed 4GB allowed by Cardinal
     BytesRX:     Int64;
 
-    fMaxRooms:       Word;
-    fHTMLStatusFile: string;
-    fWelcomeMessage: UnicodeString;
-    fServerName:     AnsiString;
-    fKickTimeout:    Word;
-    fRoomCount:      Integer;
-    fEmptyGameInfo:  TMPGameInfo;
-    fRoomInfo:       array of record
+    fMaxRooms:        Word;
+    fHTMLStatusFile:  string;
+    fWelcomeMessage:  UnicodeString;
+    fServerName:      AnsiString;
+    fKickTimeout:     Word;
+    fRoomCount:       Integer;
+    fEmptyGameInfo:   TMPGameInfo;
+    fRoomInfo:        array of record
       HostHandle: Integer;
       Password:   AnsiString;
       BannedIPs:  array of string;
       GameInfo:   TMPGameInfo;
     end;
-
-    fOnStatusMessage:TGetStrProc;
+    fOnStatusMessage: TGetStrProc;
     procedure Error(const S: string);
     procedure Status(const S: string);
     procedure ClientConnect(aHandle: Integer);
@@ -119,8 +118,8 @@ type
     procedure ClearClients;
     procedure MeasurePings;
     procedure UpdateStateIdle;
-    property OnStatusMessage:TGetStrProc write fOnStatusMessage;
-    property Listening: Boolean read fListening;
+    property OnStatusMessage: TGetStrProc                 write fOnStatusMessage;
+    property Listening:       Boolean     read fListening;
     function GetPlayerCount: Integer;
     procedure UpdateSettings(aKickTimeout: Word; const aHTMLStatusFile: UnicodeString; const aWelcomeMessage: UnicodeString;
                              const aServerName: AnsiString);
@@ -138,10 +137,10 @@ const
 constructor TKMServerClient.Create(aHandle, aRoom: Integer);
 begin
   inherited Create;
-  fHandle := aHandle;
-  fRoom   := aRoom;
-  SetLength(fBuffer, 0);
+  fHandle     := aHandle;
+  fRoom       := aRoom;
   fBufferSize := 0;
+  SetLength(fBuffer, 0);
 end;
 
 
@@ -170,7 +169,8 @@ end;
 
 procedure TKMClientsList.RemPlayer(aHandle: Integer);
 var
-  i, ID:Integer;
+  i,
+  ID: Integer;
 begin
   ID := -1; //Convert Handle to Index
 
@@ -227,7 +227,7 @@ begin
   fWelcomeMessage         := aWelcomeMessage;
   fClientList             := TKMClientsList.Create;
   fServer                 := {$IFDEF WDC} TKMNetServerOverbyte {$ELSe} TKMNetServerLNet {$ENDIF} .Create;
-  fListening              := false;
+  fListening              := False;
   fRoomCount              := 0;
 end;
 
@@ -268,7 +268,7 @@ begin
   fServer.OnDataAvailable    := DataAvailable;
   fServer.StartListening(aPort);
   Status('Listening on port ' + IntToStr(aPort));
-  fListening := true;
+  fListening := True;
   SaveHTMLStatus;
 end;
 
@@ -349,7 +349,7 @@ begin
 
   for i := 0 to fClientList.fCount - 1 do
     if fClientList.Item[i].fRoom <> -1 then
-      inc(Result);
+      Inc(Result);
 end;
 
 
@@ -368,7 +368,8 @@ end;
 
 
 procedure TKMNetServer.GetServerInfo(aList: TList);
-var I: Integer;
+var
+  I: Integer;
 begin
   Assert(aList <> nil);
 
@@ -392,7 +393,8 @@ end;
 
 
 procedure TKMNetServer.AddClientToRoom(aHandle, aRoom: Integer);
-var I: Integer;
+var
+  I: Integer;
 begin
   if fClientList.GetByHandle(aHandle).Room <> -1 then exit; //Changing rooms is not allowed yet
 
@@ -459,9 +461,9 @@ end;
 //Someone has disconnected from us.
 procedure TKMNetServer.ClientDisconnect(aHandle: Integer);
 var
-  Room: Integer;
-  Client:TKMServerClient;
-  M: TKMemoryStream;
+  Room:   Integer;
+  Client: TKMServerClient;
+  M:      TKMemoryStream;
 begin
   Client := fClientList.GetByHandle(aHandle);
 
@@ -568,7 +570,8 @@ end;
 
 
 procedure TKMNetServer.SendMessageToRoom(aKind: TKMessageKind; aRoom: Integer; aStream: TKMemoryStream);
-var I: Integer;
+var
+  I: Integer;
 begin
   //Iterate backwards because sometimes calling Send results in ClientDisconnect (LNet only?)
   for I := fClientList.Count - 1 downto 0 do
@@ -624,7 +627,8 @@ end;
 procedure TKMNetServer.RecieveMessage(aSenderHandle: Integer; aData: Pointer; aLength: Cardinal);
 var
   Kind:         TKMessageKind;
-  M, M2:        TKMemoryStream;
+  M,
+  M2:           TKMemoryStream;
   tmpInteger:   Integer;
   tmpStringA:   AnsiString;
   Client:       TKMServerClient;
@@ -754,10 +758,12 @@ end;
 //Send only complete messages to allow to add server messages inbetween
 procedure TKMNetServer.DataAvailable(aHandle: Integer; aData: Pointer; aLength: Cardinal);
 var
-  PacketSender, PacketRecipient: Integer;
-  PacketLength:                  Cardinal;
-  i, SenderRoom:                 Integer;
-  SenderClient:                  TKMServerClient;
+  PacketSender,
+  PacketRecipient: Integer;
+  PacketLength:    Cardinal;
+  i,
+  SenderRoom:      Integer;
+  SenderClient:    TKMServerClient;
 begin
   Inc(BytesRX, aLength);
   SenderClient := fClientList.GetByHandle(aHandle);
@@ -791,8 +797,8 @@ begin
       exit;
     end;
 
-    if PacketLength > SenderClient.fBufferSize-12 then
-      exit; //This message was split, so we must wait for the remainder of the message to arrive
+    if PacketLength > SenderClient.fBufferSize - 12 then
+      Exit; //This message was split, so we must wait for the remainder of the message to arrive
 
     SenderRoom := fClientList.GetByHandle(aHandle).Room;
 
@@ -832,18 +838,20 @@ end;
 
 procedure TKMNetServer.SaveToStream(aStream: TKMemoryStream);
 var
-  i, RoomsNeeded, EmptyRoomID: Integer;
-  NeedEmptyRoom:               Boolean;
+  i,
+  RoomsNeeded,
+  EmptyRoomID:   Integer;
+  NeedEmptyRoom: Boolean;
 begin
   RoomsNeeded := 0;
 
   for i := 0 to fRoomCount - 1 do
     if GetRoomClientsCount(i) > 0 then
-      inc(RoomsNeeded);
+      Inc(RoomsNeeded);
 
   if RoomsNeeded < fMaxRooms then
   begin
-    inc(RoomsNeeded); //Need 1 empty room at the end, if there is space
+    Inc(RoomsNeeded); //Need 1 empty room at the end, if there is space
     NeedEmptyRoom := true;
   end else
     NeedEmptyRoom := false;
@@ -969,7 +977,8 @@ procedure TKMNetServer.SaveHTMLStatus;
 const
   BOOL_TEXT: array[Boolean] of string = ('0', '1');
 var
-  i, k,
+  i,
+  k,
   PlayerCount,
   ClientCount,
   RoomCount:       Integer;
@@ -981,7 +990,8 @@ var
   Node:            TXmlNode;
   MyFile:          TextFile;
 begin
-  if fHTMLStatusFile = '' then Exit; //Means do not write status
+  if fHTMLStatusFile = '' then
+     Exit; //Means do not write status
 
   RoomCount   := 0;
   PlayerCount := 0;
@@ -1008,9 +1018,9 @@ begin
     for i := 0 to fRoomCount - 1 do
       if GetRoomClientsCount(i) > 0 then
       begin
-        inc(RoomCount);
-        inc(PlayerCount, fRoomInfo[i].GameInfo.PlayerCount);
-        inc(ClientCount, fRoomInfo[i].GameInfo.ConnectedPlayerCount);
+        Inc(RoomCount);
+        Inc(PlayerCount, fRoomInfo[i].GameInfo.PlayerCount);
+        Inc(ClientCount, fRoomInfo[i].GameInfo.ConnectedPlayerCount);
         //HTML room info
         HTML := HTML + '<TR><TD>' + IntToStr(i) + '</TD><TD>' + XMLEscape(GameStateText[fRoomInfo[i].GameInfo.GameState]) +
                        '</TD><TD>' + IntToStr(fRoomInfo[i].GameInfo.ConnectedPlayerCount) +
@@ -1027,7 +1037,6 @@ begin
         Node.AddChild('gametime').Text        := fRoomInfo[i].GameInfo.GetFormattedTime;
 
         with Node.AddChild('players') do
-        begin
           for k := 1 to fRoomInfo[i].GameInfo.PlayerCount do
             with AddChild('player') do
             begin
@@ -1036,7 +1045,6 @@ begin
               SetAttribute('connected', BOOL_TEXT[fRoomInfo[i].GameInfo.Players[k].Connected]);
               SetAttribute('type', NetPlayerTypeName[fRoomInfo[i].GameInfo.Players[k].PlayerType]);
             end;
-        end;
       end;
 
     //Set counts in XML

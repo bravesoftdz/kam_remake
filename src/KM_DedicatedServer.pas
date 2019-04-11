@@ -90,7 +90,7 @@ begin
   fNetServer.StartListening(fPort, fServerName);
 
   if fBroadcastLocal then
-     fUDPAnnounce.StartAnnouncing(fPort, fServerName);
+    fUDPAnnounce.StartAnnouncing(fPort, fServerName);
 end;
 
 
@@ -100,7 +100,7 @@ begin
   fNetServer.ClearClients;
 
   if fBroadcastLocal or fUDPAnnounce.Announcing then
-     fUDPAnnounce.StopAnnouncing;
+    fUDPAnnounce.StopAnnouncing;
 
   StatusMessage('Stopped listening');
 end;
@@ -114,9 +114,10 @@ begin
   fMasterServer.UpdateStateIdle;
 
   if fBroadcastLocal and fUDPAnnounce.Announcing then
-     fUDPAnnounce.UpdateStateIdle;
+    fUDPAnnounce.UpdateStateIdle;
 
-  if not fNetServer.Listening then Exit; //Do not measure pings or announce the server if we are not listening
+  if not fNetServer.Listening then
+    Exit; //Do not measure pings or announce the server if we are not listening
 
   TickCount := TimeGet;
 
@@ -128,7 +129,12 @@ begin
 
   if fPublishServer and (GetTimeSince(fLastAnnounce) >= fAnnounceInterval * 1000) then
   begin
-    fMasterServer.AnnounceServer(UnicodeString(fServerName), fPort, fNetServer.GetPlayerCount, fAnnounceInterval + 20);
+    fMasterServer.AnnounceServer(
+      UnicodeString(fServerName),
+      fPort,
+      fNetServer.GetPlayerCount,
+      fAnnounceInterval + 20
+    );
     fLastAnnounce := TickCount;
   end;
 end;
@@ -161,7 +167,8 @@ end;
 
 procedure TKMDedicatedServer.StatusMessage(const aData: string);
 begin
-  if Assigned(fOnMessage) then fOnMessage(aData);
+  if Assigned(fOnMessage) then
+    fOnMessage(aData);
 end;
 
 

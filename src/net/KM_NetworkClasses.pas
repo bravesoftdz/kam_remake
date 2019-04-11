@@ -136,6 +136,11 @@ end;
 
 //This function should do its own XML escaping
 function TMPGameInfo.HTMLPlayersList: string;
+  function WrapStrike(const aStr: string): string;
+  begin
+    Result := Format('%s%s%s', ['<strike>', aStr, '</strike>'])
+  end;
+
 var
   I: Integer;
 begin
@@ -144,14 +149,13 @@ begin
   for I := 1 to PlayerCount do
     if Players[I].PlayerType = nptHuman then
     begin
-      if Result <> '' then Result := Result + ', ';
+      if Result <> '' then
+        Result := Result + ', ';
 
-      Result := Result + StrWrapIf(
-        not Players[I].Connected,
-        XMLEscape(UnicodeString(Players[I].Name)),
-        '<strike>',
-        '</strike>'
-      );
+      if not Players[I].Connected then
+        Result := Result + WrapStrike(XMLEscape(UnicodeString(Players[I].Name)))
+      else
+        Result := Result + XMLEscape(UnicodeString(Players[I].Name));
     end;
 end;
 

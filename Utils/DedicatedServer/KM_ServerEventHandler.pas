@@ -22,7 +22,10 @@ begin
   inherited Create;
   ExeDir := ExtractFilePath(ParamStr(0));
   CreateDir(ExeDir + 'Logs');
-  gLog := TKMLog.Create(ExeDir+'Logs'+PathDelim+'KaM_Server_'+FormatDateTime('yyyy-mm-d_hh-nn-ss-zzz',Now)+'.log'); //Don't delete old logs
+  gLog := TKMLog.Create(
+    ExeDir + 'Logs' + PathDelim + 'KaM_Server_' +
+    FormatDateTime('yyyy-mm-d_hh-nn-ss-zzz', Now) + '.log'
+  ); //Don't delete old logs
   gLog.AddTime('Dedicated server event handler created');
 end;
 
